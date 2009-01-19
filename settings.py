@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'registration',
     'users',
     'news',
+    'location',
 )
 
 AUTH_PROFILE_MODULE = 'users.userprofile'
