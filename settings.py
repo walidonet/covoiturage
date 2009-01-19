@@ -89,6 +89,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'registration',
     'users',
+    'news',
 )
 
 AUTH_PROFILE_MODULE = 'users.userprofile'
