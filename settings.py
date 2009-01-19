@@ -1,3 +1,4 @@
+import os
 # Django settings for covoiturage project.
 
 DEBUG = True
@@ -5,12 +6,13 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
+    ('Van Herpe Jerome', 'vhj2002@gmail.com')
 )
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = ''           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = ''             # Or path to database file if using sqlite3.
+DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = 'covoiturage_db'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -21,7 +23,7 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Brussels'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -48,7 +50,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 's5^n70xcvf1991vyq_0ny83-h)@_)8h^r5h!702b4(x@j@d#ay'
+SECRET_KEY = 'ewfa^x7_hgpf3hc7^he$m7o=qkck!x-xio%_2gi&6c5@egu!xj'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -65,10 +67,18 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'covoiturage.urls'
 
+#Settings for registration application
+ACCOUNT_ACTIVATION_DAYS = 15
+EMAIL_HOST = 'mail.gandi.net'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'webmaster@iracing-france.com'
+EMAIL_HOST_PASSWORD = 'gnzEVz'
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__), 'templates')
 )
 
 INSTALLED_APPS = (
@@ -76,4 +86,9 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.admin',
+    'registration',
+    'users',
 )
+
+AUTH_PROFILE_MODULE = 'users.userprofile'
