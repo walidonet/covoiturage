@@ -94,3 +94,4 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE = 'users.userprofile'
+LOGIN_URL = '/accounts/login/'
