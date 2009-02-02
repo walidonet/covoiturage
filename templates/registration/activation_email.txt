@@ -1,0 +1,11 @@
+Bonjour,
+
+Vous avez reçu ce mail suite à votre inscription sur http://www.covoiturage.com.
+Votre compte utilisateur nouvellement créé est actuellement inactif.
+
+Il vous suffit de cliquer sur le lien ci-dessous ou de le copier dans la barre d'adresse votre navigateur web : 
+	
+	http://127.0.0.1:8000/accounts/activate/{{ activation_key }}/
+	
+Si vous n'avez pas créé de compte sur http://www.covoiturage.com, veuillez nous excuser pour le dérangement occasionné.
+Vous ne recevrez plus d'autres emails de notre part et le compte expirera automatiquement dans {{ expiration_days }} jours.

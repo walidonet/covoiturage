@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load users_extras %}
+{% block content %}
+<ul>
+	{% for u in users_list %}
+	<li> {{u.username }} <br/> 
+		{% ifnotequal u.id user.id %}
+			{% if u|IN:favorites %}
+			<a href="/users/delete_favorite/{{u.id}}/">-</a>
+			{% else %}
+			<a href="/users/add_favorite/{{u.id}}/">+</a>
+			{% endif %}
+		{% endifnotequal %}
+	</li>
+	{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Compte activé.{% endblock %}
+
+{% block content %}  
+  {% if account %}
+	<h1>Votre compte a été activé !</h1>
+    <p>Merci de votre inscription ! Vous pouvez dorénavant vous <a href="/accounts/login/">authentifier</a>.</p>
+  {% else %}
+    <p>Un problème est survenu. Soit votre lien d'activation était incorrect, soit le délai d'activation a expiré. Pour rappel, les liens d'activation sont uniquement valable pendant {{expiration_days }}jours.</p>
+  {% endif %}
+{% endblock %}

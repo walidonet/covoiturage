@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title%}Ajouter un avis{% endblock %}
+
+{% block content %}
+{% if perms.news.add_news%}
+<h1>Ecrivez ici le nouvel avis :</h1>
+<form action="add" method="POST">
+    <table>
+        {{ form.as_table }}
+    </table>
+    <p><input type="submit" value="Submit"></p>
+</form>
+{% endif %}
+{% endblock %}

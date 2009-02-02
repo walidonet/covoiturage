@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title%}Editer un avis{% endblock %}
+
+{% block content %} 
+ref = {{ref}}
+{%if message %}
+<h2>{{message}}</h2>
+{% endif%}
+<h1>Entrez les modifications que vous voulez apporter à l'avis :</h1>
+<form action="." method="POST">
+    <table>
+        {{ form.as_table }}
+    </table>
+    <p><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

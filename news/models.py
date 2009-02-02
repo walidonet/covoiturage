@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 # Create your models here.
 
 class News(models.Model):
@@ -14,3 +15,8 @@ class News(models.Model):
 		return self.title
 	class Meta:
 	    verbose_name_plural = "news"
+
+class NewsForm(ModelForm):
+    class Meta:
+        model = News
+        fields = ('title', 'content', 'is_public')
