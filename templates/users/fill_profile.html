@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{%if message %}
+{{message}}
+{% endif %}
+<form action="." method="POST">
+    <table>
+        <tr><th><label for="id_phone_number">Phone number:</label></th><td><input id="id_phone_number" type="text" name="phone_number" maxlength="9" value="{{profile.phone_number}}"/></td></tr>
+		<tr><th><label for="id_mobile_phone_number">Mobile phone number:</label></th><td><input id="id_mobile_phone_number" type="text" name="mobile_phone_number" maxlength="10" value="{{profile.mobile_phone_number}}"/></td></tr>
+		<tr><th><label for="id_house_number">House number:</label></th><td><input type="text" name="house_number" id="id_house_number" value="{{profile.location.house_number}}"/></td></tr>
+		<tr><th><label for="id_street">Street:</label></th><td><input id="id_street" type="text" name="street" maxlength="255" value="{{profile.location.street}}"/></td></tr>
+		<tr><th><label for="id_city_name">City name:</label></th><td><input id="id_city_name" type="text" name="city_name" maxlength="255" value="{{profile.location.city_name}}"/></td></tr>
+		<tr><th><label for="id_zip_code">Zip code:</label></th><td><input type="text" name="zip_code" id="id_zip_code"  value="{{profile.location.zip_code}}"/></td></tr>
+    </table>
+    <p><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

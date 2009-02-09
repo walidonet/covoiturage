@@ -3,7 +3,9 @@
 {% block title%}Derniers Avis{% endblock %}
 
 {% block content %} 
-
+{% if perms.news.add_news %}
+<a href="/news/add">Ajouter un avis</a>
+{% endif %}
 <ul>
 	{% for n in news %}
 		<h3>{{n.title}}</h3>{{ n.pub_date|date:"j F Y" }}

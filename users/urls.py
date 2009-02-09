@@ -4,5 +4,6 @@ from views import *
 urlpatterns = patterns('',
     (r'^add_favorite/(?P<user_id>\d)+/$', add_favorite),
     (r'^delete_favorite/(?P<user_id>\d)+/$', delete_favorite),
+    (r'^profile/$', user_profile),
     (r'^$', users_list),
 )

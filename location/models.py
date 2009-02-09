@@ -8,21 +8,15 @@ STAGE_CHOICES = (
 
 # Create your models here.
 class Location(models.Model):
+    street = models.CharField(max_length=255)
+    house_number = models.IntegerField()
     zip_code = models.IntegerField()
     city_name = models.CharField(max_length=255)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    
-    def __unicode__(self):
-        return  self.city_name
 
-class Address(models.Model):
-    street = models.CharField(max_length=60)
-    number = models.IntegerField()
-    location = models.ForeignKey(Location)
-    
     def __unicode__(self):
-        return "%d ,%s" % (self.number,self.street,)
+        return  "%s , %s - %d, %s" % (self.house_number, self.street, self.zip_code, self.city_name)
 
 class Ride(models.Model):
     user = models.ForeignKey(User)
@@ -33,10 +27,10 @@ class Ride(models.Model):
 
 class Stage(models.Model):
     ride = models.ForeignKey(Ride)
-    address = models.ForeignKey(Address)
+    location = models.ForeignKey(Location)
     stage_type = models.CharField(max_length=7, choices=STAGE_CHOICES)
     time = models.TimeField()
     
     def __unicode__(self):
-        return "%s : %s" %(self.stage_type,self.address,)
+        return "%s - %s : %s" %(self.ride.user.username, self.stage_type, self.location)
 

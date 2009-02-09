@@ -30,23 +30,29 @@ def add(request):
 @user_passes_test(lambda u: u.has_perm('news.change_news'), login_url='/news/')
 def edit(request, news_id):
     #lance News.doesnotexist exception
-    ref = request.META.get('HTTP_REFERER')
-    n = News.objects.get(pk=news_id)
-    if request.method == 'POST':
-        form = NewsForm(request.POST, instance=n)
-        if form.is_valid():
-            form.save()
-            message = 'L\'avis a bien été modifié'
+    try:
+        ref = request.META.get('HTTP_REFERER')
+        n = News.objects.get(pk=news_id)
+        if request.method == 'POST':
+            form = NewsForm(request.POST, instance=n)
+            if form.is_valid():
+                form.save()
+                message = 'L\'avis a bien été modifié'
+            else:
+                message = 'L\'avis n a pas été modifié'
+            return render_to_response('news/edit_news.html', {'form': form,'message':message,})
         else:
-            message = 'L\'avis n a pas été modifié'
-        return render_to_response('news/edit_news.html', {'form': form,'message':message,})
-    else:
-        form = NewsForm(instance=n)
-        return render_to_response('news/edit_news.html', {'form': form,'ref': ref})
+            form = NewsForm(instance=n)
+            return render_to_response('news/edit_news.html', {'form': form,'ref': ref})
+    except News.DoesNotExist:
+        return HttpResponseRedirect('/news/')
 
 @user_passes_test(lambda u: u.has_perm('news.delete_news'), login_url='/news/')
 def delete(request, news_id):
-    n = News.objects.get(pk=news_id)
-    n.delete()
-    return HttpResponseRedirect('/news/')
+    try:
+        n = News.objects.get(pk=news_id)
+        n.delete()
+        return HttpResponseRedirect('/news/')
+    except News.DoesNotExist:
+        return HttpResponseRedirect('/news/')    
         
