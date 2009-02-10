@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 STAGE_CHOICES = (
     ('Start', 'Depart'),
     ('Stage', 'Etape'),

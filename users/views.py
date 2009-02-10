@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from users.models import Favorites, UserProfile
 from location.models import Location
+from location.views import find_coordinates
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from forms import UserForm
-import urllib
 
 @login_required
 def users_list(request):
@@ -34,12 +34,10 @@ def delete_favorite(request,user_id):
     Favorites.objects.get(user=request.user,favorite=u).delete()
     return HttpResponseRedirect(ref)
 
+
 def extract(form, profile):
     if form.is_valid():
-        query = '%d+%s,+%d,+%s,+Belgium' % (form.cleaned_data['house_number'],form.cleaned_data['street'].replace(' ','+'),form.cleaned_data['zip_code'],form.cleaned_data['city_name'].replace(' ','+'))
-        url = 'http://maps.google.com/maps/geo?q=%s&output=csv&oe=utf8&sensor=true_or_false&key=your_api_key' % (query)
-        req = urllib.urlopen(url).read()
-        print url
+        req = find_coordinates(form.cleaned_data['house_number'],form.cleaned_data['street'],form.cleaned_data['zip_code'],form.cleaned_data['city_name'])
         try:
             if not profile.location == None:
                 profile.location.street = form.cleaned_data['street']
