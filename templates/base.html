@@ -5,6 +5,11 @@
     <title>{% block title %}Covoiturage{% endblock %}</title>
 </head>
 <body>
+    {% block message %}
+    {% if message %}
+    <div height="25px" width="300px"><h1>{{message}}</h1></div>
+    {% endif %}
+    {% endblock %}
 	{% block content %}
 	{% endblock %}
 	{% block footer %}{% endblock %}

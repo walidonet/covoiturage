@@ -1,0 +1,16 @@
+la fonction getDistance (location/script.py) calcule la distance à vol d'oiseau entre deux points selon la formule d'Haversine
+Haversine formula:
+
+R = earth’s radius (mean radius = 6,371km)
+Δlat = lat2− lat1
+Δlong = long2− long1
+a = sin²(Δlat/2) + cos(lat1).cos(lat2).sin²(Δlong/2)
+c = 2.atan2(√a, √(1−a))
+d = R.c
+
+formule extraite de : http://www.movable-type.co.uk/scripts/latlong.html
+
+The haversine formula is an equation important in navigation, giving great-circle distances between two points on a sphere from their longitudes and latitudes. It is a special case of a more general formula in spherical trigonometry, the law of haversines, relating the sides and angles of spherical "triangles".
+
+Dans mon cas, j ai choisi l'entier supérieur pour le retour de la valeur.
+-----

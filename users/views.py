@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from users.models import Favorites, UserProfile
@@ -25,7 +25,6 @@ def add_favorite(request,user_id):
         fav = Favorites(user=request.user,favorite=u)
         fav.save()
     return HttpResponseRedirect(ref)
-#TODO ajouter une redirection vers la page d'ou on vient -> Trouver cette page (http referer)
 
 @login_required
 def delete_favorite(request,user_id):
@@ -62,8 +61,9 @@ def extract(form, profile):
         return 'Vos données ont bien été modifiées'
     else:
         return 'Une erreur s\'est produite'
+
 @login_required
-def user_profile(request):
+def own_profile(request):
     try:
         profile = request.user.get_profile()
         if request.method == 'POST':
@@ -83,3 +83,17 @@ def user_profile(request):
         else:
             form = UserForm()
             return render_to_response('users/fill_profile.html',{'form':form})
+
+@login_required
+def user_profile(request,user_id):
+    visited_user = get_object_or_404(User,pk=user_id)
+    ref = request.META.get('HTTP_REFERER')
+    try:
+        visited_user_profile = visited_user.get_profile()
+        user_fav_list = request.user.favorites_owner.all()
+        favorites = [fav.favorite for fav in user_fav_list]
+        return render_to_response('users/details.html',{'visited_user':visited_user, 'visited_user_profile':visited_user_profile,'favorites':favorites,'referer':ref},RequestContext(request))
+    except UserProfile.DoesNotExist:
+        message = "L'utilisateur "+visited_user.username+" n\'a pas encore rempli son profil"
+        return render_to_response('users/details.html',{'referer':ref,'message':message})
+            

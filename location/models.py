@@ -18,7 +18,7 @@ class Location(models.Model):
 
     def __unicode__(self):
         return  "%s , %s - %d, %s" % (self.house_number, self.street, self.zip_code, self.city_name)
-
+#ecrire methode update coordinates en fonction du callback
 class Ride(models.Model):
     user = models.ForeignKey(User)
     date = models.DateTimeField()

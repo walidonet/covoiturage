@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-{%if message %}
-{{message}}
-{% endif %}
 <form action="." method="POST">
     <table>
         <tr><th><label for="id_phone_number">Phone number:</label></th><td><input id="id_phone_number" type="text" name="phone_number" maxlength="9" value="{{profile.phone_number}}"/></td></tr>
