@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Mes trajets{% endblock %}
+
+{% block content %}
+<a href="/location/ride/add">Ajouter un trajet</a>
+<ul>
+{% for ride in rides %}
+<li>
+    {{ride.date}}     {{ride.time}}
+    Trajet de : {{ride.start.city_name}} <br/>
+    jusqu'à : {{ride.dest.location}}  <br/>
+    Distance : {{ride.distance}} Km<br/>
+    Durée : {{ride.duration}} Minutes<br/>
+    <a href="/location/ride/edit/{{ride.id}}">editer</a>
+    <a href="/location/ride/delete/{{ride.id}}">supprimer</a>
+</li>
+{% endfor %}
+</ul>
+<!-- <br/>Vos demandes <br/>
+<ul>
+{% for passenger in passengers %}
+<li>
+    {{passenger.date}}     {{passenger.time}}
+    Trajet de : {{passenger.start.city_name}} <br/>
+    jusqu'à : {{passenger.destination.city_name }}
+</li>
+{% endfor %}
+</ul> -->
+{% endblock %} 

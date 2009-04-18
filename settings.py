@@ -70,9 +70,11 @@ ROOT_URLCONF = 'covoiturage.urls'
 #Settings for registration application
 ACCOUNT_ACTIVATION_DAYS = 15
 EMAIL_HOST = 'mail.gandi.net'
-EMAIL_PORT = 25
+#avant port 25 mais ne fonctionne plus, note : travailler avec TLS
+EMAIL_PORT = 587
 EMAIL_HOST_USER = 'webmaster@iracing-france.com'
 EMAIL_HOST_PASSWORD = 'gnzEVz'
+EMAIL_USE_TLS = True
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

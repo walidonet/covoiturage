@@ -14,3 +14,15 @@ The haversine formula is an equation important in navigation, giving great-circl
 
 Dans mon cas, j ai choisi l'entier supérieur pour le retour de la valeur.
 -----
+
+Ellipse : 
+
+Soit A et B les deux foyers de l'ellipse, et dans mon cas les deux extrémités du trajet
+
+Soit [AB] la distance à vol d oiseau entre ces deux points.
+Soit DMAX la distance supplémentaire que le conducteur veuille bien effectuer
+
+Tout point M tel que : [AM]+[MB] <= [AB] + DMAX appartient à l'ellipse et sera donc un choix possible pour l'algorithme
+Il suffira de passer ce point par google map et comparer les distances/durées avec et sans cette étape pour savoir si cette personne est potentiellement capable de répondre au besoin du demandeur.
+
+http://fr.wikipedia.org/wiki/Ellipse_(mathématiques)

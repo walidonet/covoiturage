@@ -1,13 +1,35 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response, get_object_or_404
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from users.models import Favorites, UserProfile
-from location.models import Location
-from location.views import find_coordinates
-from django.template import RequestContext
+from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponseRedirect
-from forms import UserForm
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
+from forms import UserForm, pre_fill
+from location.models import Location
+from location.script import find_coordinates
+from users.models import Favorites, UserProfile
+
+
+@login_required
+def send_email(request, user_id):
+    dest = get_object_or_404(User,pk=user_id)
+    if request.method == 'POST':
+        subject = request.POST.get('subject', '')
+        message= ''+request.user.username + ' vous a envoye ce message. Pour lui repondre, rendez vous sur http://127.0.0.1:8000/users/%d/ .\n' % (request.user.id)
+        message += request.POST.get('message', '')
+        print message
+        if subject and message:
+            try:
+                send_mail(subject,message,'nawak@test.com',[dest.email])
+            except  BadHeaderError:
+                request.user.message_set.create(message='Veuillez compléter les champs demandés correctement')
+                return HttpResponseRedirect('/users/'+user_id+'/mail')
+            request.user.message_set.create(message='Message envoyé')
+            return HttpResponseRedirect('/users/'+user_id)
+    else:
+        return render_to_response('users/mail.html', {'dest':dest}, RequestContext(request))
 
 @login_required
 def users_list(request):
@@ -69,20 +91,22 @@ def own_profile(request):
         if request.method == 'POST':
             form = UserForm(request.POST)
             profile.user = request.user
-            message = extract(form,profile)
-            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile,'message':message})
+            request.user.message_set.create(message=extract(form,profile))
+            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile}, RequestContext(request))
         else:
-            form = UserForm()
+            data = pre_fill(profile)
+            form = UserForm(data)
             return render_to_response('users/fill_profile.html',{'form':form,'profile':profile})
     except UserProfile.DoesNotExist:
         if request.method == 'POST':
             form = UserForm(request.POST)
             profile = UserProfile(user=request.user)
-            message = extract(form,profile)
-            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile,'message':message})
+            request.user.message_set.create(message=extract(form,profile))
+            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile}, RequestContext(request))
         else:
             form = UserForm()
-            return render_to_response('users/fill_profile.html',{'form':form})
+            request.user.message_set.create(message="Veuillez compléter vos informations personnelles")
+            return render_to_response('users/fill_profile.html',{'form':form}, RequestContext(request))
 
 @login_required
 def user_profile(request,user_id):
@@ -94,6 +118,6 @@ def user_profile(request,user_id):
         favorites = [fav.favorite for fav in user_fav_list]
         return render_to_response('users/details.html',{'visited_user':visited_user, 'visited_user_profile':visited_user_profile,'favorites':favorites,'referer':ref},RequestContext(request))
     except UserProfile.DoesNotExist:
-        message = "L'utilisateur "+visited_user.username+" n\'a pas encore rempli son profil"
-        return render_to_response('users/details.html',{'referer':ref,'message':message})
+        request.user.message_set.create(message="L'utilisateur "+visited_user.username+" n\'a pas encore rempli son profil")
+        return render_to_response('users/details.html',{'referer':ref}, RequestContext(request))
             

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="." method="POST">
+    <table>
+        <tr>
+            <th><label for="subject">Objet:</label></th>
+            <td>
+                <input type="text" name="subject" id="id_subject"/>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="message">Message:</label></th>
+            <td>
+                <textarea name="message" id="id_message" cols=60 rows=6></textarea>
+            </td>
+        </tr>
+     </table>
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>    
+{% endblock %}

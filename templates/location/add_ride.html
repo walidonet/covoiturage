@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title%}Editer un trajet{% endblock %}
+{% block script%}
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw"
+      type="text/javascript"></script>
+    <script type="text/javascript"> 
+	// Create a directions object and register a map and DIV to hold the 
+    // resulting computed directions
+    function addAddressAsStart(){
+        start_house_number_panel = document.getElementById("id_start_house_number");
+        start_house_number_panel.value = '{{user_profile.location.house_number}}';
+        start_street_panel = document.getElementById("id_start_street");
+        start_street_panel.value = '{{user_profile.location.street}}';
+        start_city_panel = document.getElementById("id_start_city_name");
+        start_city_panel.value = '{{user_profile.location.city_name}}';
+        start_zip_panel = document.getElementById("id_start_zip_code");
+        start_zip_panel.value = '{{user_profile.location.zip_code}}';
+    }
+    
+    var map;
+    var distPanel;
+    var durPanel;
+    var directions;
+
+    function initialize() {
+      map = new GMap2(document.getElementById("map_canvas"));
+      map.setCenter(new GLatLng(42.351505,-71.094455), 15);
+      directions = new GDirections();
+      
+      start_house_number_panel = document.getElementById("id_start_house_number");
+      start_street_panel = document.getElementById("id_start_street");
+      start_city_panel = document.getElementById("id_start_city_name");
+      start_zip_panel = document.getElementById("id_start_zip_code");
+      
+      dest_house_number_panel = document.getElementById("id_dest_house_number");
+      dest_street_panel = document.getElementById("id_dest_street");
+      dest_city_panel = document.getElementById("id_dest_city_name");
+      dest_zip_panel = document.getElementById("id_dest_zip_code");
+      
+      directions.load("from: "+start_house_number_panel.value +" "+ start_street_panel.value +" , "+start_city_panel.value+ " ,"+start_zip_panel.value +", Belgique to: "+dest_house_number_panel.value +" "+ dest_street_panel.value +" , "+dest_city_panel.value+ " ,"+dest_zip_panel.value +", Belgique");
+      
+      GEvent.addListener(directions,"load",setDistance);
+    }
+    function setDistance(){
+        var dist = Math.round(directions.getDistance().meters/1000.0);
+        var dur = Math.round(directions.getDuration().seconds /60.0);
+        distP = document.getElementById("id_distance");
+        distP.value = dist;
+        distD = document.getElementById("id_duration");
+        distD.value = dur;
+        button = document.getElementById("id_button");
+        replaceT(button);
+    }
+    function replaceT(obj){
+    var newO=document.createElement('input');
+    newO.setAttribute('type','submit');
+    newO.setAttribute('id','id_button');
+    newO.setAttribute('value', 'Submit');
+    obj.parentNode.replaceChild(newO,obj);
+    newO.click();
+    }
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <input type="submit" onclick="addAddressAsStart()" value="Utiliser votre adresse comme addresse de départ">
+    <div id="map_canvas" style="width: 0px; height: 0px;"></div>
+    <div id="route" style="width: 25%; height:480px; float:left; border; 1px solid black;">
+        
+    </div>
+    <form action="." method="POST" >
+        <table>
+            {{form.as_table}}
+        </table>
+        <p>
+            <input type="button" value="Submit" id="id_button" onclick="initialize()"/>
+        </p>
+    </form>
+{% endblock %}

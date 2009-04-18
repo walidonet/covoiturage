@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% if message %}
+{% if messages %}
 {% else %}
 
 {{visited_user.username}}
@@ -21,6 +21,7 @@
 	{% endif %}
 {% endifnotequal %}
 
+<a href='/users/{{visited_user.id}}/mail/'>Envoyer un mail à cette personne</a>
 {% endif%}
-<a href="{{referer}}">Retour a la page precedente</a>
+<a href="/users/">Retour a la page precedente</a>
 {% endblock %}

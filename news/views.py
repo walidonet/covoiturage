@@ -22,6 +22,7 @@ def add(request):
         news = form.save(commit=False)
         news.author = request.user
         news.save()
+        request.user.message_set.create(message='L\'avis a bien été ajouté')
         return HttpResponseRedirect('/news/')
     else:    
         form = NewsForm()
@@ -37,14 +38,15 @@ def edit(request, news_id):
             form = NewsForm(request.POST, instance=n)
             if form.is_valid():
                 form.save()
-                message = 'L\'avis a bien été modifié'
+                request.user.message_set.create(message='L\'avis a bien été modifié')
             else:
-                message = 'L\'avis n a pas été modifié'
-            return render_to_response('news/edit_news.html', {'form': form,'message':message,})
+                request.user.message_set.create(message='L\'avis n a pas été modifié')
+            return HttpResponseRedirect('/news/')
         else:
             form = NewsForm(instance=n)
             return render_to_response('news/edit_news.html', {'form': form,'ref': ref})
     except News.DoesNotExist:
+        request.user.message_set.create(message='L\'avis demandé n\'existe pas')
         return HttpResponseRedirect('/news/')
 
 @user_passes_test(lambda u: u.has_perm('news.delete_news'), login_url='/news/')
@@ -52,7 +54,9 @@ def delete(request, news_id):
     try:
         n = News.objects.get(pk=news_id)
         n.delete()
+        request.user.message_set.create(message="L\'avis a bien été supprimé")
         return HttpResponseRedirect('/news/')
     except News.DoesNotExist:
-        return HttpResponseRedirect('/news/')    
+        request.user.message_set.create(message="Une erreur est survenue pendant la suppression de cet avis")
+        return HttpResponseRedirect('/news/')  
         
