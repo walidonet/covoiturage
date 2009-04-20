@@ -1,0 +1,9 @@
+{% block content %}
+<ul>
+{% for ride in rides%}
+    <li>{{ride.driver.username}}<br/>
+        {{ride.start}}
+    </li>    
+{% endfor %}    
+</ul>    
+{% endblock %}

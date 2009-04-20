@@ -20,42 +20,6 @@
     var distPanel;
     var durPanel;
     var directions;
-
-    function initialize() {
-      map = new GMap2(document.getElementById("map_canvas"));
-      map.setCenter(new GLatLng(42.351505,-71.094455), 15);
-      directions = new GDirections();
-      
-      start_house_number_panel = document.getElementById("id_start_house_number");
-      start_street_panel = document.getElementById("id_start_street");
-      start_city_panel = document.getElementById("id_start_city_name");
-      start_zip_panel = document.getElementById("id_start_zip_code");
-      
-      mySelect = document.getElementById("id_destination");
-      dest = mySelect.options[mySelect.selectedIndex].text
-      
-      directions.load("from: "+start_house_number_panel.value +" "+ start_street_panel.value +" , "+start_city_panel.value+ " ,"+start_zip_panel.value +", Belgique to: "+ dest +", Belgique");
-      
-      GEvent.addListener(directions,"load",setDistance);
-    }
-    function setDistance(){
-        var dist = Math.round(directions.getDistance().meters/1000.0);
-        var dur = Math.round(directions.getDuration().seconds /60.0);
-        distP = document.getElementById("id_distance");
-        distP.value = dist;
-        distD = document.getElementById("id_duration");
-        distD.value = dur;
-        button = document.getElementById("id_button");
-        replaceT(button);
-    }
-    function replaceT(obj){
-    var newO=document.createElement('input');
-    newO.setAttribute('type','submit');
-    newO.setAttribute('id','id_button');
-    newO.setAttribute('value', 'Submit');
-    obj.parentNode.replaceChild(newO,obj);
-    newO.click();
-    }
     </script>
 {% endblock %}
 
@@ -70,7 +34,7 @@
             {{form.as_table}}
         </table>
         <p>
-            <input type="button" value="Submit" id="id_button" onclick="initialize()"/>
+            <input type="submit" value="Submit" id="id_button"/>
         </p>
     </form>
 {% endblock %}

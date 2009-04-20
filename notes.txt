@@ -26,3 +26,7 @@ Tout point M tel que : [AM]+[MB] <= [AB] + DMAX appartient à l'ellipse et sera 
 Il suffira de passer ce point par google map et comparer les distances/durées avec et sans cette étape pour savoir si cette personne est potentiellement capable de répondre au besoin du demandeur.
 
 http://fr.wikipedia.org/wiki/Ellipse_(mathématiques)
+
+
+------
+Arrivals : ATTENTION GENERATION DU CHOICEFIELD DEPUIS LA PRIMARY KEY !!! ATTENTION DE NE PAS SUPPRIMER LES DESTINATIONS !!!!!

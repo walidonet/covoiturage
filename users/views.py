@@ -17,9 +17,8 @@ def send_email(request, user_id):
     dest = get_object_or_404(User,pk=user_id)
     if request.method == 'POST':
         subject = request.POST.get('subject', '')
-        message= ''+request.user.username + ' vous a envoye ce message. Pour lui repondre, rendez vous sur http://127.0.0.1:8000/users/%d/ .\n' % (request.user.id)
+        message= ''+request.user.username + ' vous a envoye ce message. Pour lui repondre, rendez vous sur http://127.0.0.1:8000/users/%d/ .\n\n\n\n' % (request.user.id)
         message += request.POST.get('message', '')
-        print message
         if subject and message:
             try:
                 send_mail(subject,message,'nawak@test.com',[dest.email])

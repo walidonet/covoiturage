@@ -2,28 +2,34 @@
 {% block title %}Mes trajets{% endblock %}
 
 {% block content %}
-<a href="/location/ride/add">Ajouter un trajet</a>
+<a href="/location/ride/add">Ajouter un trajet</a><br/>
+<a href="/location/passenger/add">Ajouter une demande de covoiturage</a>
+<br/><br/>
+Vos Trajets :<br/>
 <ul>
 {% for ride in rides %}
 <li>
-    {{ride.date}}     {{ride.time}}
+    {{ride.dateTime}}
     Trajet de : {{ride.start.city_name}} <br/>
     jusqu'à : {{ride.dest.location}}  <br/>
     Distance : {{ride.distance}} Km<br/>
     Durée : {{ride.duration}} Minutes<br/>
-    <a href="/location/ride/edit/{{ride.id}}">editer</a>
-    <a href="/location/ride/delete/{{ride.id}}">supprimer</a>
+    <a href="/location/ride/edit/{{ride.id}}">Editer</a>
+    <a href="/location/ride/delete/{{ride.id}}">Supprimer</a>
 </li>
 {% endfor %}
 </ul>
-<!-- <br/>Vos demandes <br/>
+<br/>Vos demandes :<br/>
 <ul>
 {% for passenger in passengers %}
 <li>
-    {{passenger.date}}     {{passenger.time}}
+    {{passenger.dateTime}}  <br/>
     Trajet de : {{passenger.start.city_name}} <br/>
-    jusqu'à : {{passenger.destination.city_name }}
+    jusqu'à : {{passenger.dest.location }}<br/>
+    <a href="/location/passenger/edit/{{passenger.id}}">Editer</a>
+    <a href="/location/passenger/delete/{{passenger.id}}">Supprimer</a><br/>
+    <a href="/location/passenger/search/{{passenger.id}}"> Trouver covoiturage</a>
 </li>
 {% endfor %}
-</ul> -->
+</ul>
 {% endblock %} 
