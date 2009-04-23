@@ -10,16 +10,22 @@ from location.models import *
 from location.script import *
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.core.serializers import serialize
+from django.utils import simplejson
+
 from forms import RideForm, pre_fill_ride, PassengerForm, pre_fill_passenger
 def search(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        potential_rides = Ride.objects.filter(dest=passenger.dest)
-        rides = []
-        for ride in potential_rides:
-            if isPotentialDriver(ride,passenger):
-                rides.append(ride)
-        return render_to_response('location/matching.html',{'rides':rides,'passenger':passenger}, RequestContext(request))
+        # potential_rides = Ride.objects.select_related().filter(dest=passenger.dest)
+        # rides = []
+        # for ride in potential_rides:
+        #     if isPotentialDriver(ride,passenger):
+        #         rides.append(ride)
+        rides = [ride for ride in Ride.objects.select_related().filter(dest=passenger.dest) if isPotentialDriver(ride, passenger)]
+        foo = [{'start': ride.start_loc, 'driverMaxDistance': ride.driverMaxDistance, 'driverMaxDuration': ride.driverMaxDuration} for ride in rides]
+        
+        return render_to_response('location/matching.html',{'rides':rides,'passenger':passenger, 'json': simplejson.dumps(foo)}, RequestContext(request))
     except Passenger.DoesNotExist:    
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/')

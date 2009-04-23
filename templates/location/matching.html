@@ -1,8 +1,56 @@
+{% extends "base.html" %}
+{% block extra_script%}
+    <script type="text/javascript"> 
+	// Create a directions object and register a map and DIV to hold the 
+    // resulting computed directions
+    var distPanel;
+    var durPanel;
+    var directions;
+    var rides = {{ json|safe }}
+    
+    function initialize(index) {
+        // rides.each(function(item, index) {
+            if(index < {{rides|length}}){
+            item = rides[index];
+            map = new GMap2($("map_canvas"+index));
+                map.setCenter(new GLatLng(42.351505,-71.094455), 15);
+                directions = new GDirections();
+                var fr = item['start'];
+                var to1 = "{{passenger.start}}";
+                var to2 = "{{passenger.dest}}";
+                directions.load("from: "+ fr +", Belgique to: "+to1+", Belgique to:"+ to2+", Belgique");
+                GEvent.addListener(directions,"load", function() {
+                    console.log("Rides: " + rides);
+                    console.log("index: " + index);
+                    console.log(directions);
+                    var dist = Math.round(directions.getDistance().meters/1000.0);
+                    var dur = Math.round(directions.getDuration().seconds /60.0);
+                    if(dist <= dist+rides[index].driverMaxDistance){
+                        var test = $("id_check"+index);
+                        test.disabled = false;
+                        test.checked = true;
+                        var panel = $("test"); 
+                        panel.innerHTML = "GOOD + taille {{size}}";
+                    }
+                    initialize(index+1);
+                });}
+
+        // })
+    }
+    </script>
+{% endblock %}
+{% block bodyBalise%}
+<body onload="initialize(0)">
+{% endblock %}
 {% block content %}
-<ul>
+<!-- <div id="map_canvas" style="width: 0px; height: 0px;"></div> -->
+<div id="test">LALA</div>
+<ul>    
 {% for ride in rides%}
+<div id="map_canvas{{forloop.counter0}}" style="width: 0px; height: 0px;"></div>
     <li>{{ride.driver.username}}<br/>
         {{ride.start}}
+        <input type="checkbox" id="id_check{{forloop.counter0}}" disabled="true" />
     </li>    
 {% endfor %}    
 </ul>    

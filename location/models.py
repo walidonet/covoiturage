@@ -11,7 +11,7 @@ class Location(models.Model):
     longitude = models.FloatField(null=True)
 
     def __unicode__(self):
-        return  "%d , %s - %d, %s" % (self.house_number, self.street, self.zip_code, self.city_name)
+       return "%d  %s , %s, %d" % (self.house_number, self.street, self.city_name, self.zip_code)
 #ecrire methode update coordinates en fonction du callback
 
 class Arrivals(models.Model):
@@ -54,6 +54,10 @@ class Ride(models.Model):
     driverMaxDuration = models.IntegerField(blank=True,null=True)
     freeSeats = models.IntegerField(blank=True,null=True)
     everyDay = models.BooleanField(default=False)
+    
+    @property
+    def start_loc(self):
+        return '%s' % self.start
     
     def __unicode__(self):
         return self.driver.username
