@@ -1,31 +1,41 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response, get_object_or_404
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
-from datetime import datetime
-from users.models import *
+from django.core.serializers import serialize
+from django.http import HttpResponseRedirect
+from django.template import RequestContext
+from django.utils import simplejson
+from django.shortcuts import render_to_response, get_object_or_404
+from forms import RideForm, pre_fill_ride, PassengerForm, pre_fill_passenger
 from location.models import *
 from location.script import *
-from django.template import RequestContext
-from django.http import HttpResponseRedirect
-from django.core.serializers import serialize
-from django.utils import simplejson
+from users.models import *
 
-from forms import RideForm, pre_fill_ride, PassengerForm, pre_fill_passenger
+@login_required
+def list_matches(request):
+    passenger_rides = request.user.passenger_set.filter(dateTime__gte=datetime.today)
+    return render_to_response('location/matches.html',{'passenger_rides':passenger_rides},RequestContext(request))
+
+@login_required
 def search(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        # potential_rides = Ride.objects.select_related().filter(dest=passenger.dest)
-        # rides = []
-        # for ride in potential_rides:
-        #     if isPotentialDriver(ride,passenger):
-        #         rides.append(ride)
         rides = [ride for ride in Ride.objects.select_related().filter(dest=passenger.dest) if isPotentialDriver(ride, passenger)]
-        foo = [{'start': ride.start_loc, 'driverMaxDistance': ride.driverMaxDistance, 'driverMaxDuration': ride.driverMaxDuration} for ride in rides]
-        
-        return render_to_response('location/matching.html',{'rides':rides,'passenger':passenger, 'json': simplejson.dumps(foo)}, RequestContext(request))
+        if request.method == 'POST':
+            drivers = [ride for ride in rides if request.POST.get('check%d' % ride.id) == "on" if RideMatches.objects.filter(driver_ride=ride,passenger_ride=passenger).count() == 0]
+            for driver in drivers:
+                match = RideMatches(driver_ride=driver,
+                                    passenger_ride=passenger,
+                                    newDistance=request.POST.get('dist%d' % ride.id),
+                                    newDuration=request.POST.get('dur%d' % ride.id),
+                                    accepted=False)
+                match.save()
+            return HttpResponseRedirect('/location/ride/matches')
+        else:
+            to_serialize = [{'start': ride.start_loc, 'driverMaxDistance': ride.driverMaxDistance, 'driverMaxDuration': ride.driverMaxDuration, 'initialDist': ride.distance, 'initialDur': ride.duration} for ride in rides]
+            return render_to_response('location/matching.html',{'rides':rides,'passenger':passenger, 'json': simplejson.dumps(to_serialize)}, RequestContext(request))
     except Passenger.DoesNotExist:    
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/')
@@ -60,6 +70,7 @@ def delete_passenger(request, passenger_id):
     except Passenger.DoesNotExist:
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/')
+@login_required
 def edit_passenger(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)

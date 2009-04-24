@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+{% block content %}
+{% for p in passenger_rides %}
+{{p}}
+    <ul>
+        {% for match in p.ridematches_set.all %}
+           <li>Conducteur : <a href="/users/{{match.driver_ride.driver.id}}/mail/">{{match.driver_ride.driver.username}}</a> </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+
+{% endblock %}

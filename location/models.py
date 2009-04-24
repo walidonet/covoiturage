@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 # Create your models here.
 class Location(models.Model):
@@ -64,13 +64,14 @@ class Ride(models.Model):
 
 class RideMatches(models.Model):
     driver_ride = models.ForeignKey(Ride)
-    passengner_ride = models.ForeignKey(Passenger)
+    passenger_ride = models.ForeignKey(Passenger)
     newDistance = models.IntegerField()
     newDuration = models.IntegerField()
     accepted = models.BooleanField(blank=True,null=True)
 
     def __unicode__(self):
-        return "Conducteur : %s - Passager : %s " % (driverRide.driver.username, passengerRide.passenger.username)
+        return "Conducteur : %s - Passager : %s " % (self.driver_ride.driver.username, self.passenger_ride.passenger.username)
+        
 class Stage(models.Model):
     ride = models.ForeignKey(Ride)
     location = models.ForeignKey(Location)

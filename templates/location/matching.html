@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block extra_script%}
     <script type="text/javascript"> 
-	// Create a directions object and register a map and DIV to hold the 
-    // resulting computed directions
     var distPanel;
     var durPanel;
     var directions;
@@ -20,17 +18,16 @@
                 var to2 = "{{passenger.dest}}";
                 directions.load("from: "+ fr +", Belgique to: "+to1+", Belgique to:"+ to2+", Belgique");
                 GEvent.addListener(directions,"load", function() {
-                    console.log("Rides: " + rides);
-                    console.log("index: " + index);
-                    console.log(directions);
                     var dist = Math.round(directions.getDistance().meters/1000.0);
                     var dur = Math.round(directions.getDuration().seconds /60.0);
-                    if(dist <= dist+rides[index].driverMaxDistance){
+                    console.log("Nouvelle distance : "+ dist +" inferieure a : "+ (rides[index].initialDist+rides[index].driverMaxDistance)+"?");
+                    console.log("Nouvelle duree : "+ dur +" inferieure a : "+ (rides[index].initialDur+rides[index].driverMaxDuration)+"?");
+                    if(dist <= rides[index].initialDist + rides[index].driverMaxDistance && dur <= rides[index].initialDur + rides[index].driverMaxDuration){
                         var test = $("id_check"+index);
                         test.disabled = false;
-                        test.checked = true;
-                        var panel = $("test"); 
-                        panel.innerHTML = "GOOD + taille {{size}}";
+                        test.checked = true
+                        $("id_ride"+index+"_newDist").value = dist;
+                        $("id_ride"+index+"_newDur").value = dur;
                     }
                     initialize(index+1);
                 });}
@@ -43,15 +40,18 @@
 <body onload="initialize(0)">
 {% endblock %}
 {% block content %}
-<!-- <div id="map_canvas" style="width: 0px; height: 0px;"></div> -->
-<div id="test">LALA</div>
+<form action="." method="POST">
 <ul>    
 {% for ride in rides%}
 <div id="map_canvas{{forloop.counter0}}" style="width: 0px; height: 0px;"></div>
     <li>{{ride.driver.username}}<br/>
         {{ride.start}}
-        <input type="checkbox" id="id_check{{forloop.counter0}}" disabled="true" />
+        <input type="checkbox" id="id_check{{forloop.counter0}}" name="check{{ride.id}}"disabled="true" />
+        <input type="hidden" id="id_ride{{forloop.counter0}}_newDist"  name="dist{{ride.id}}" value="0"/>
+        <input type="hidden" id="id_ride{{forloop.counter0}}_newDur"  name="dur{{ride.id}}" value="0"/>
     </li>    
 {% endfor %}    
-</ul>    
+</ul>
+<input type="submit" value="Confirmez">
+</form>
 {% endblock %}

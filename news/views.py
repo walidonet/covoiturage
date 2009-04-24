@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
 from covoiturage.news.models import News
-from news.models import NewsForm
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.template import RequestContext
+from news.models import NewsForm
 
 def news_view(request):
     # du plus recent au plus vieux, limite a 5, peut etre prevoir une configuration
