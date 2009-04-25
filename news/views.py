@@ -44,7 +44,7 @@ def edit(request, news_id):
             return HttpResponseRedirect('/news/')
         else:
             form = NewsForm(instance=n)
-            return render_to_response('news/edit_news.html', {'form': form,'ref': ref})
+            return render_to_response('news/edit_news.html', {'form': form,'ref': ref},RequestContext(request))
     except News.DoesNotExist:
         request.user.message_set.create(message='L\'avis demandé n\'existe pas')
         return HttpResponseRedirect('/news/')

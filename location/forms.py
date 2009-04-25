@@ -17,6 +17,7 @@ class PassengerForm(forms.Form):
     start_zip_code = forms.IntegerField()
     destination = forms.ModelChoiceField(Arrivals.objects.all(),empty_label=None)
     maxDelay = forms.IntegerField(initial=0)
+    seatsNeeded = forms.IntegerField(initial=1)
     everyDay = forms.BooleanField(required=False)
     
 def pre_fill_passenger(passenger):
@@ -28,6 +29,7 @@ def pre_fill_passenger(passenger):
             'start_zip_code': passenger.start.zip_code,
             'destination': passenger.dest.id,
             'maxDelay': passenger.maxDelay,
+            'seatsNeeded': passenger.seatsNeeded,
             'everyDay': passenger.everyDay}
 
 class RideForm(forms.Form):

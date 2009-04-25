@@ -30,3 +30,14 @@ http://fr.wikipedia.org/wiki/Ellipse_(mathématiques)
 
 ------
 Arrivals : ATTENTION GENERATION DU CHOICEFIELD DEPUIS LA PRIMARY KEY !!! ATTENTION DE NE PAS SUPPRIMER LES DESTINATIONS !!!!!
+-------
+Framework Javascript Mootools
+-------
+Framework CSS : blueprint
+------
+Markup language : utilisé pour permettre l'affichage des news comme elles ont été entrées
+-> http://www.freewisdom.org/projects/python-markdown/Django
+
+MARKUPFIELD : http://www.djangosnippets.org/snippets/1169/
+----
+Markdown toolbar : http://code.c7.se/js/markdown_toolbar/

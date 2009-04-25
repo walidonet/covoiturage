@@ -5,15 +5,38 @@
     <title>{% block title %}Covoiturage{% endblock %}</title>
     {% block script%}
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}/css/design.css" />	
+    <link rel="stylesheet" href="{{MEDIA_URL}}/css/blueprint/screen.css" type="text/css" media="screen, projection"/>
+    <link rel="stylesheet" href="{{MEDIA_URL}}/css/blueprint/print.css" type="text/css" media="print"/>
+    <!--[if IE]><link rel="stylesheet" href="{{MEDIA_URL}}/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <link rel="stylesheet" href="{{MEDIA_URL}}/css/markdown.css" type="text/css"/>
+    
     <script type="text/javascript" charset="utf-8"  src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>
-    <script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw"
-      type="text/javascript"></script>
+    <script type="text/javascript" charset="utf-8"  src="{{MEDIA_URL}}/js/markdown_toolbar.0.0.1.js"></script>
     {% endblock %}
     {% block extra_script %}{% endblock %}
+    {% block extra_head %}{% endblock %}
 </head>
 {% block bodyBalise %}
 <body>
-{% endblock %}    
+{% endblock %}
+<div class="container">
+{% block header %}
+<div id="header_wrap">
+    <div id="header"></div><p class="small">LALA</p>
+</div>
+<div id="navigation_menu_wrap">
+    <div id="nav_menu">
+        <ul id="nav">
+            <li><a href="/news/">News</a></li>
+            <li><a href="/users/profile/">Profil</a></li>
+            <li><a href="/location/ride/">Trajets</a></li>
+            <li><a href="/users/">Membres</a></li>
+            <li><a>Contact</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %} 
     {% block message %}
     {% if messages %}
     <div height="25px" width="300px">
@@ -27,6 +50,19 @@
     {% endblock %}
 	{% block content %}
 	{% endblock %}
-	{% block footer %}{% endblock %}
+	<div class="span-16"></div> 
+	<div class="span-8 last"> 
+	{% block right %}
+	TEST SPAN-8 LAST
+	{% endblock %}
+	</div>
+	{% block footer %}
+	<div id="footer_wrap">
+	   <div id="footer">
+	       <p class="small">Ce site a été réalisé grâce à <a href="http://www.djangoproject.com/">django</a></p>
+	   </div>
+	</div>
+	{% endblock %}
+</div>
 </body>	
 </html>

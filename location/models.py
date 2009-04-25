@@ -32,6 +32,7 @@ class Passenger(models.Model):
     # heure d'arrivee
     dateTime = models.DateTimeField(blank=True, null=True)
     maxDelay = models.IntegerField(blank=True,null=True)
+    seatsNeeded = models.IntegerField(blank=True,null=True,default=1)
     everyDay = models.BooleanField(default=False)
     
     def __unicode__(self):

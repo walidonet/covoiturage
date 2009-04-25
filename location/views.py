@@ -22,7 +22,7 @@ def list_matches(request):
 def search(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        rides = [ride for ride in Ride.objects.select_related().filter(dest=passenger.dest,freeSeats__gte=1) if isPotentialDriver(ride, passenger)]
+        rides = [ride for ride in Ride.objects.select_related().filter(dest=passenger.dest,freeSeats__gte=passenger.seatsNeeded) if isPotentialDriver(ride, passenger)]
         if request.method == 'POST':
             drivers = [ride for ride in rides if request.POST.get('check%d' % ride.id) == "on" if RideMatches.objects.filter(driver_ride=ride,passenger_ride=passenger).count() == 0]
             for driver in drivers:
@@ -52,6 +52,7 @@ def add_passenger(request):
             else:    
                 request.user.message_set.create(message=extract(form,passenger))
                 passenger.maxDelay = form.cleaned_data['maxDelay']
+                passenger.seatsNeeded = form.cleaned_data['seatsNeeded']
                 passenger.save()
             return HttpResponseRedirect('/location/ride/')
         else:
@@ -82,6 +83,7 @@ def edit_passenger(request,passenger_id):
             else: 
                 request.user.message_set.create(message=extract(form,passenger))
                 passenger.maxDelay = form.cleaned_data['maxDelay']
+                passenger.seatsNeeded = form.cleaned_data['seatsNeeded']
                 passenger.save()
             return HttpResponseRedirect('/location/ride/')
         else:

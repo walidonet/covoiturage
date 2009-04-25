@@ -13,3 +13,10 @@
 </form>
 {% endif %}
 {% endblock %}
+{% block extra_head %}
+<script type="text/javascript">
+window.addEvent('domready', function() {
+    MarkdownToolbar.add('id_content');
+});
+</script>
+{% endblock %}

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block extra_script%}
+    <script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw"
+      type="text/javascript"></script>
     <script type="text/javascript"> 
     var distPanel;
     var durPanel;
@@ -10,7 +12,7 @@
         // rides.each(function(item, index) {
             if(index < {{rides|length}}){
             item = rides[index];
-            map = new GMap2($("map_canvas"+index));
+            map = new GMap2($("map_canvas"));
                 map.setCenter(new GLatLng(42.351505,-71.094455), 15);
                 directions = new GDirections();
                 var fr = item['start'];
@@ -40,10 +42,10 @@
 <body onload="initialize(0)">
 {% endblock %}
 {% block content %}
+<div id="map_canvas" style="width: 0px; height: 0px;"></div>
 <form action="." method="POST">
 <ul>    
 {% for ride in rides%}
-<div id="map_canvas{{forloop.counter0}}" style="width: 0px; height: 0px;"></div>
     <li>{{ride.driver.username}}<br/>
         {{ride.start}}
         <input type="checkbox" id="id_check{{forloop.counter0}}" name="check{{ride.id}}"disabled="true" />

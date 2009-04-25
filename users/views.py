@@ -79,7 +79,7 @@ def extract(form, profile):
         profile.phone_number = form.cleaned_data['phone_number']
         profile.mobile_phone_number = form.cleaned_data['mobile_phone_number']
         profile.save()
-        return 'Vos données ont bien été modifiées'
+        return 'Vos données personnelles ont bien été modifiées'
     else:
         return 'Une erreur s\'est produite'
 
@@ -87,15 +87,17 @@ def extract(form, profile):
 def own_profile(request):
     try:
         profile = request.user.get_profile()
+        ref = request.META.get('HTTP_REFERER')
         if request.method == 'POST':
             form = UserForm(request.POST)
             profile.user = request.user
             request.user.message_set.create(message=extract(form,profile))
-            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile}, RequestContext(request))
+            return HttpResponseRedirect(ref)
+#            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile}, RequestContext(request))
         else:
             data = pre_fill(profile)
             form = UserForm(data)
-            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile})
+            return render_to_response('users/fill_profile.html',{'form':form,'profile':profile}, RequestContext(request))
     except UserProfile.DoesNotExist:
         if request.method == 'POST':
             form = UserForm(request.POST)

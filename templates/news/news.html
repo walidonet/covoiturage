@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title%}Derniers Avis{% endblock %}
 
 {% block content %} 
@@ -9,7 +8,8 @@
 <ul>
     {% for n in news %}
         <h3>{{n.title}}</h3>{{ n.pub_date|date:"j F Y" }}
-            <li><p>{{n.content}}<br/>écrit par {{n.author}}</p></li>
+        {{ n.content_markup_choices}}
+            <li><p>{{n.content_html|safe}}<br/>écrit par {{n.author}}</p></li>
             {% if perms.news.change_news %}
             <a href="/news/edit/{{n.id}}">Editer</a>
             {% endif %}

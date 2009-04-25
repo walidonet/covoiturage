@@ -11,3 +11,10 @@
     <p><input type="submit" value="Submit"></p>
 </form>
 {% endblock %}
+{% block extra_head %}
+<script type="text/javascript">
+window.addEvent('domready', function() {
+    MarkdownToolbar.add('id_content');
+});
+</script>
+{% endblock %}
