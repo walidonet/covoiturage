@@ -25,3 +25,6 @@ def IS(value,arg): return value is arg
 
 @register.filter
 def IN(value,arg): return value in arg
+
+@register.filter
+def SUBSTR(value,arg): return value[0:300]

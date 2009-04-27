@@ -10,10 +10,10 @@ def news_view(request):
     # du plus recent au plus vieux, limite a 5, peut etre prevoir une configuration
     # a propos du nb max de news a garder, le reste dans les archives.
     if request.user.is_authenticated():
-        news_list = News.objects.order_by('-pub_date')[:5]
+        news_list = News.objects.order_by('-pub_date')[:3]
     else:
-        news_list = News.objects.filter(is_public=True).order_by('-pub_date')[:5]
-    return render_to_response('news/news.html',{ 'news': news_list, 'user': request.user}, RequestContext(request))
+        news_list = News.objects.filter(is_public=True).order_by('-pub_date')[:3]
+    return render_to_response('news/news.html',{'news': news_list}, RequestContext(request))
 
 @user_passes_test(lambda u: u.has_perm('news.add_news'), login_url='/news/')
 def add(request):
@@ -59,4 +59,11 @@ def delete(request, news_id):
     except News.DoesNotExist:
         request.user.message_set.create(message="Une erreur est survenue pendant la suppression de cet avis")
         return HttpResponseRedirect('/news/')  
-        
+
+def show(request, news_id):
+    try:
+        n = News.objects.get(pk=news_id)
+        return render_to_response('news/show.html', {'news':n}, RequestContext(request))
+    except News.DoesNotExist:
+        request.user.message_set.create(message='L\'avis demandé n\'existe pas')
+        return HttpResponseRedirect('/news/')

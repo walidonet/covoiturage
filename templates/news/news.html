@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load users_extras %}
 {% block title%}Derniers Avis{% endblock %}
 
 {% block content %} 
@@ -6,18 +7,19 @@
 <a href="/news/add">Ajouter un avis</a>
 {% endif %}
 {% for n in news %}
-<div id="news">
-    <div id="news_title"><h3 class='title span-11'>{{n.title}}</h3><p>{{ n.pub_date|date:"j F Y" }}</p></div>
+<div id="news_one">
+    <div id="news_title"><h3 class='title'>{{n.title}}</h3><p>{{ n.pub_date|date:"j F Y" }}</p></div>
     <div id="news_content">
-        <p>{{n.content_html|safe}}</p>
-        <br/>
-        <p class="prepend-8">écrit par {{n.author}}</p>
+        {{n.content_html|safe|linebreaksbr|truncatewords_html:100}}<a class="small" id="news_suite" href="/news/show/{{n.id}}/">Lire la suite</a>
+    </div>
+    <div id="news_footer">
         {% if perms.news.change_news %}
         <a href="/news/edit/{{n.id}}">Editer</a>
         {% endif %}
         {%if perms.news.delete_news %}
         <a href="/news/delete/{{n.id}}">Supprimer</a>
         {% endif %}
+        <p>écrit par <a href="/users/{{n.author.id}}/">{{n.author.username}}</a></p>
     </div>
 </div>    
 {% endfor %}
