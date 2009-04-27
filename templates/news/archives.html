@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load users_extras %}
+{% block content%}
+{% if news_list|length|EQ:0 %}
+<div class="notice">Il n'y a pas encore de news</div>
+{% endif %}
+{% for news in news_list %}
+<div id="news_one">
+    <div id="news_title_all">
+        <a href="/news/show/{{news.id}}"><h5 class='title'>{{news.title}}</h5><p>{{ news.pub_date|date:"j F Y" }}</p></a>
+    </div>
+</div>
+{% endfor%}
+{% endblock %}

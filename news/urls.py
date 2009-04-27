@@ -6,5 +6,6 @@ urlpatterns = patterns('',
     (r'^delete/(?P<news_id>\d)+/$', delete),
     (r'^add$', add),
     (r'^show/(?P<news_id>\d)+/$',show),
+    (r'^archives/', list_all),
 	(r'^$', news_view),
 )

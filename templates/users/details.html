@@ -1,12 +1,24 @@
 {% extends "base.html" %}
-
 {% load users_extras %}
-
 {% block content %}
-
-{% if messages %}
-{% else %}
-
+<div id="profil">
+    <div id="profil_title"><h3 class='title'>Profil de {{visited_user.username}}</h3></div>
+    <div id="profil_photo">PHOTO</div>
+    <div id="profil_info1">
+        <div class="large"><label>Nom : </label> {{visited_user.last_name|capfirst}}<br/>
+        <label>Prénom : </label> {{visited_user.first_name|capfirst}}<br/>
+        <label>E-mail : </label><a href="/users/{{visited_user.id}}/mail/">Envoyer un mail</a><br/></div>
+    </div>
+    <div id="profil_info2_left">
+        <label>Adresses : </label>
+        <div id="tab-set">
+        </div>
+    </div>
+    <div id="profil_info2_right">
+        <label>Telephone : </label>
+    </div>
+</div>
+{% endblock %}
 {{visited_user.username}}
 {{visited_user_profile.location.street}}
 {{visited_user_profile.location.house_number}}
@@ -22,6 +34,4 @@
 {% endifnotequal %}
 
 <a href='/users/{{visited_user.id}}/mail/'>Envoyer un mail à cette personne</a>
-{% endif%}
 <a href="/users/">Retour a la page precedente</a>
-{% endblock %}

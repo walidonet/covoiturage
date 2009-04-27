@@ -3,6 +3,9 @@
 {% block title%}Derniers Avis{% endblock %}
 
 {% block content %} 
+{% if news|length|EQ:0 %}
+<div class="notice">Il n'y a pas encore de news</div>
+{% endif %}
 {% if perms.news.add_news %}
 <a href="/news/add">Ajouter un avis</a>
 {% endif %}
@@ -23,4 +26,5 @@
     </div>
 </div>    
 {% endfor %}
+<div id="news_old"><a class="small" href="/news/archives">Consulter les anciennes news</a></div>
 {% endblock %} 

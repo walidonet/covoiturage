@@ -40,15 +40,6 @@ height:101px;
     background-color:#000000;
     width:60px;
 }
-/*#header_login input.password{
-    position:relative;
-    top:-37px;
-    left:60px;
-    color:#8cc744;
-    border:none;
-    background-color:#000000;
-    width:60px;
-}*/
 #header_login input.submit{
     position:relative;
        top:-37px;
@@ -57,8 +48,6 @@ height:101px;
        border:none;
        background-color:#000000;
 }
-
-
 /* FOOTER*/
 #footer_wrap{
     bottom:5px;
@@ -68,8 +57,10 @@ height:101px;
 #footer {
     text-align:center;
 }
-
-
+#footer a {
+    color:#8cc744;
+    text-decoration:none;
+}
 /* NAVIGATION_MENU*/
 #navigation_menu_wrap {
     border-bottom:1px groove #322820;
@@ -106,8 +97,6 @@ height:101px;
     text-decoration:none;
     text-transform:uppercase;
 }
-
-
 /* RIGHT PANEL */
 #right_container{
     float:right;
@@ -160,7 +149,13 @@ height:101px;
     height:20px;
     border-bottom: 1px solid #FFFFFF;
 }
+#news_title_all{
+    margin-top:10px;
+    width: 520px;
+    height:20px;
+}
 #news_one .title {
+    position:absolute;
     color:#CDBA8D;
     float:left;
     font-family:Verdana,Arial,Helvetica,sans-serif;
@@ -171,6 +166,11 @@ height:101px;
     float:right;
     margin-bottom:-2px;
 }
+#news_title_all p {
+    color:#FFFFFF;
+    float:right;
+    margin-bottom:-2px;
+}
 #news_content {
     padding-top:10px;
     margin-left:10px;
@@ -178,4 +178,59 @@ height:101px;
 }
 #news_suite{
     float:right;
+}
+#news_old {
+    text-align:center;
+    width: 520px;
+}
+/*PROFIL*/
+#profil {
+    margin-left:10px;
+    width:540px;
+}
+#profil_title{
+    margin-top:10px;
+    height:20px;
+}
+#profil .title {
+    position:absolute;
+    color:#CDBA8D;
+    float:left;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    letter-spacing:-0.02em;
+    margin-top:-3px;
+    padding-bottom:2px;
+    border-bottom: 1px solid #FFFFFF;
+}
+#profil_photo {
+    float:left;
+    width:250px;
+    height:260px;
+    border:1px solid #FFFFFF;
+}
+#profil_info1 {
+    float:right;
+    width:280px;
+    height:260px;
+    border:1px solid #FFFFFF;
+}
+#profil_info1 div {
+    margin-left:8px;
+}
+#profil_info2_left{
+    margin-top:5px;
+    float:left;
+    width:330px;
+    height:260px;
+    border:1px solid #FFFFFF;
+}
+#profil_info2_left label {
+    vertical-align:center;
+}
+#profil_info2_right{
+    margin-top:5px;
+    float:right;
+    width:200px;
+    height:260px;
+    border:1px solid #FFFFFF;
 }

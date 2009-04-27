@@ -15,6 +15,13 @@ def news_view(request):
         news_list = News.objects.filter(is_public=True).order_by('-pub_date')[:3]
     return render_to_response('news/news.html',{'news': news_list}, RequestContext(request))
 
+def list_all(request):
+    if request.user.is_authenticated():
+        news_list = News.objects.order_by('-pub_date')
+    else:
+        news_list = News.objects.filter(is_public=True).order_by('-pub_date')
+    return render_to_response('news/archives.html',{'news_list': news_list}, RequestContext(request))
+
 @user_passes_test(lambda u: u.has_perm('news.add_news'), login_url='/news/')
 def add(request):
     if request.method == 'POST':
