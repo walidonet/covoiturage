@@ -6,11 +6,22 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from forms import UserForm, pre_fill
+from forms import UserForm, pre_fill, MailForm
 from location.models import Location
 from location.script import find_coordinates
 from users.models import Favorites, UserProfile
 
+
+def email_me(request):
+    if request.method == 'POST':
+        mailForm = MailForm(request.POST)
+        if mailForm.is_valid():
+            send_mail(mailForm.cleaned_data['subject'],mailForm.cleaned_data['message'],mailForm.cleaned_data['email'],['vhj2002@gmail.com'])
+            return HttpResponseRedirect('/news/')
+        else:
+            return render_to_response('mail_me.html',{'mailForm':mailForm}, RequestContext(request))
+    else:
+        return render_to_response('mail_me.html',{'mailForm':MailForm()}, RequestContext(request))
 
 @login_required
 def send_email(request, user_id):

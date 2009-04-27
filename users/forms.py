@@ -15,3 +15,9 @@ def pre_fill(profile):
             'street': profile.location.street,
             'city_name': profile.location.city_name,
             'zip_code': profile.location.zip_code}
+
+class MailForm(forms.Form):
+    email = forms.EmailField(required=True)
+    subject = forms.CharField(max_length=255,required=True)
+    message = forms.CharField(widget=forms.Textarea,required=True)
+    

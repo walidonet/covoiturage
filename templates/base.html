@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  xmlns:v="urn:schemas-microsoft-com:vml">
-  <head>
+<head>
     <title>{% block title %}Covoiturage{% endblock %}</title>
     {% block script%}
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{MEDIA_URL}}/css/blueprint/print.css" type="text/css" media="print"/>
     <!--[if IE]><link rel="stylesheet" href="{{MEDIA_URL}}/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     <link rel="stylesheet" href="{{MEDIA_URL}}/css/markdown.css" type="text/css"/>
-    
+
     <script type="text/javascript" charset="utf-8"  src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.1/mootools-yui-compressed.js"></script>
     <script type="text/javascript" charset="utf-8"  src="{{MEDIA_URL}}/js/markdown_toolbar.0.0.1.js"></script>
     {% endblock %}
@@ -19,50 +19,105 @@
 </head>
 {% block bodyBalise %}
 <body>
-{% endblock %}
-<div class="container">
-{% block header %}
-<div id="header_wrap">
-    <div id="header"></div><p class="small">LALA</p>
-</div>
-<div id="navigation_menu_wrap">
-    <div id="nav_menu">
-        <ul id="nav">
-            <li><a href="/news/">News</a></li>
-            <li><a href="/users/profile/">Profil</a></li>
-            <li><a href="/location/ride/">Trajets</a></li>
-            <li><a href="/users/">Membres</a></li>
-            <li><a>Contact</a></li>
-        </ul>
-    </div>
-</div>
-{% endblock %} 
-    {% block message %}
-    {% if messages %}
-    <div height="25px" width="300px">
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    </div>
-    {% endif %}
     {% endblock %}
-	{% block content %}
-	{% endblock %}
-	<div class="span-16"></div> 
-	<div class="span-8 last"> 
-	{% block right %}
-	TEST SPAN-8 LAST
-	{% endblock %}
-	</div>
-	{% block footer %}
-	<div id="footer_wrap">
-	   <div id="footer">
-	       <p class="small">Ce site a été réalisé grâce à <a href="http://www.djangoproject.com/">django</a></p>
-	   </div>
-	</div>
-	{% endblock %}
-</div>
-</body>	
-</html>
+    <div class="container">
+        {% block header %}
+        <div id="header_wrap">
+            <div id="header_logo">
+                <img class="logo_base" src="{{MEDIA_URL}}/img/logo_base/vert.png"/>
+            </div>
+            <div id="header_right">
+                <img class="logo_right" src="{{MEDIA_URL}}/img/logo_right/vert.png"/>
+            </div>
+            <div id="header_login">
+                {% if user.is_authenticated %}
+                <label>{{user.username}}</label><br/>
+                <a href="/accounts/logout">Déconnecter</a>
+                {% else %}
+                <form action="/accounts/login/?next={{ next|default:"/news/" }}" method="post">
+                    <input class="login" id="id_username" type="text" maxlength="255" name="username" value="Username"/><br/>
+                    <input class="password" id="id_password" type="password" name="password" value="Password"/>
+                    <input type="submit" class="submit" value="Go">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        <div id="navigation_menu_wrap">
+            <div id="nav_menu">
+                <ul id="nav">
+                    <li><a href="/news/">News</a></li>
+                    <li><a href="/users/profile/">Profil</a></li>
+                    <li><a href="/location/ride/">Trajets</a></li>
+                    <li><a href="/users/">Membres</a></li>
+                    <li><a>Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="content">
+            {% endblock %} 
+            <div class="span-18 ">
+                {% block message %}
+                {% if messages %}
+                <div id="message">
+                    {% for message in messages %}
+                    <div class="success">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endblock %}
+                
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div class="span-6 last">
+                <div id="right_container">
+                    <img src="{{MEDIA_URL}}/img/right_panel/vert.png"/>
+                    <div id="inside_right">
+                        {% block right_upper %}
+                        <div class="right_title">Vos prochains trajets</div>
+                        <div class="right_content">
+                            {% if user.is_authenticated %}
+                            <ul>
+                                {% for ride in user.ride_set.all %}
+                                <li><a href="/location/ride/edit/{{ride.id}}">{{ride.dateTime|date:"j F Y"}}<br/>
+                                    {{ride.dest.name}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                Vous n'êtes pas loggué.<br/>
+                                {% endif %}
+                            </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                    <div id="right_container">
+                        <img src="{{MEDIA_URL}}/img/right_panel/vert.png"/>
+                        <div id="inside_right">
+                            {% block right_lower %}
+                            <div class="right_title">Vos membres favoris</div>
+                            <div class="right_content">
+                                {% if user.is_authenticated %}
+                                <ul>
+                                    {% for fav in user.favorites_owner.all%}
+                                    <li><a href="/users/{{fav.favorite.id}}/">{{fav.favorite.username}}</a> - <a href="/users/delete_favorite/{{fav.favorite.id}}/">enlever</a></li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                Vous n'êtes pas loggué.<br/>
+                                {% endif %}
+                            </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="span-24" id="footer_wrap">
+                    <div id="footer">
+                        {% block footer %}
+                        <p class="small">Site réalisé par <a href="/users/mail_me/">Van Herpe Jérôme</a></p>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </body>	
+        </html>

@@ -41,3 +41,6 @@ Markup language : utilisé pour permettre l'affichage des news comme elles ont �
 MARKUPFIELD : http://www.djangosnippets.org/snippets/1169/
 ----
 Markdown toolbar : http://code.c7.se/js/markdown_toolbar/
+
+--------
+em = taille d'un texte normal (non stylisé)

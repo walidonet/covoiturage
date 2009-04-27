@@ -16,7 +16,8 @@ from users.models import *
 @login_required
 def list_matches(request):
     passenger_rides = request.user.passenger_set.filter(dateTime__gte=datetime.today)
-    return render_to_response('location/matches.html',{'passenger_rides':passenger_rides},RequestContext(request))
+    old_rides_matches = request.user.passenger_set.filter(dateTime__lte=datetime.today)
+    return render_to_response('location/matches.html',{'passenger_rides':passenger_rides,'old_rides_matches':old_rides_matches},RequestContext(request))
 
 @login_required
 def search(request,passenger_id):

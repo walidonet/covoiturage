@@ -5,17 +5,20 @@
 {% if perms.news.add_news %}
 <a href="/news/add">Ajouter un avis</a>
 {% endif %}
-<ul>
-    {% for n in news %}
-        <h3>{{n.title}}</h3>{{ n.pub_date|date:"j F Y" }}
-        {{ n.content_markup_choices}}
-            <li><p>{{n.content_html|safe}}<br/>écrit par {{n.author}}</p></li>
-            {% if perms.news.change_news %}
-            <a href="/news/edit/{{n.id}}">Editer</a>
-            {% endif %}
-            {%if perms.news.delete_news %}
-            <a href="/news/delete/{{n.id}}">Supprimer</a>
-            {% endif %}
-    {% endfor %}
-</ul>
+{% for n in news %}
+<div id="news">
+    <div id="news_title"><h3 class='title span-11'>{{n.title}}</h3><p>{{ n.pub_date|date:"j F Y" }}</p></div>
+    <div id="news_content">
+        <p>{{n.content_html|safe}}</p>
+        <br/>
+        <p class="prepend-8">écrit par {{n.author}}</p>
+        {% if perms.news.change_news %}
+        <a href="/news/edit/{{n.id}}">Editer</a>
+        {% endif %}
+        {%if perms.news.delete_news %}
+        <a href="/news/delete/{{n.id}}">Supprimer</a>
+        {% endif %}
+    </div>
+</div>    
+{% endfor %}
 {% endblock %} 

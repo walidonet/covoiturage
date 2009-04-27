@@ -7,5 +7,6 @@ urlpatterns = patterns('',
     (r'^profile/$', own_profile),
     (r'^(?P<user_id>\d)+/mail/$', send_email),
     (r'^(?P<user_id>\d)+/$', user_profile),
+    (r'^mail_me/', email_me),
     (r'^$', users_list),
 )

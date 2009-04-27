@@ -1,11 +1,76 @@
+/* TYPOGRAPHY */
+
+
+/* HEADER */
 #header_wrap {
-border-bottom:1px groove #322820;
 height:101px;
 }
-#footer-wrap{
-    border-top:1px groove #322820;
+#header_logo .logo_base{
+    float:left;
+}
+#header_right .logo_right{
+    position:relative;
+    top:10px;
+    float:right;
+}
+
+
+/* HEADER LOGIN */
+#header_login {
+    color:#8cc744;
+}
+#header_login label{
+    position:relative;
+    top:37px;
+    left:60px;
+}
+#header_login a{
+    color:#8cc744;
+    text-decoration:none;
+    position:relative;
+    top:-20px;
+    left:60px;
+}
+#header_login input.login, input.password{
+    position:relative;
+    top:-37px;
+    left:60px;
+    color:#8cc744;
+    border:none;
+    background-color:#000000;
+    width:60px;
+}
+/*#header_login input.password{
+    position:relative;
+    top:-37px;
+    left:60px;
+    color:#8cc744;
+    border:none;
+    background-color:#000000;
+    width:60px;
+}*/
+#header_login input.submit{
+    position:relative;
+       top:-37px;
+       left:57px;
+       color:#8cc744;
+       border:none;
+       background-color:#000000;
+}
+
+
+/* FOOTER*/
+#footer_wrap{
+    bottom:5px;
+    border-top:1px groove #CDBA8D;
     height:51px;
 }
+#footer {
+    text-align:center;
+}
+
+
+/* NAVIGATION_MENU*/
 #navigation_menu_wrap {
     border-bottom:1px groove #322820;
     height:2.5em;
@@ -22,15 +87,12 @@ height:101px;
     list-style-image:none;
     list-style-position:outside;
     list-style-type:none;
-   /* padding-left:28px;*/
-    /*position:absolute;*/
     text-transform:uppercase;
 }
 #nav li {
     float:left;
     margin-left:0.1em;
     display:inline
-    width:6em;
 }
 #nav li a {
     color:#CDBA8D;
@@ -45,6 +107,69 @@ height:101px;
     text-transform:uppercase;
 }
 
+
+/* RIGHT PANEL */
+#right_container{
+    float:right;
+    margin-top:10px;
+    height:270px;
+}
+#inside_right{
+    width:200px;
+    height:250px;
+    position:relative;
+    top:-250px;
+    overflow:hidden;
+}
+#inside_right div.right_title{
+    height:20px;
+    text-align:center;
+    color:#000000;
+    margin-top:8px;
+}
+#inside_right div.right_content{
+    color:#000000;
+    height:180px;
+    margin-top:25px;
+    margin-left:30px;
+}
+#inside_right div.right_content a{
+    text-decoration:none;
+    color:#000000;
+}
+/* CONTENT PANEL */
 #map_canvas {
     display: none;
+}
+#content {
+    width:950px;
+    height:600px;
+}
+#content a {
+    color:#8cc744;
+    text-decoration:none;
+}
+/* NEWS */
+#news {
+    padding-top:12px;
+    padding-left:12px;
+}
+#news_title{
+    border-bottom: 1px solid #FFFFFF;
+    width: 520px;
+}
+#news_title p {
+    margin-bottom:-2px;
+}
+#news_content {
+    
+    color:#FFFFFF;
+}
+#news .title {
+    color:#CDBA8D;
+    float:left;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    height:1.8em;
+    letter-spacing:-0.02em;
+    margin-top:-3px;
 }
