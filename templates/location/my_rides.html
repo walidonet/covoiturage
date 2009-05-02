@@ -9,11 +9,14 @@ Vos Trajets :<br/>
 <ul>
 {% for ride in rides %}
 <li>
-    {{ride.dateTime}}
-    Trajet de : {{ride.start.city_name}} <br/>
-    jusqu'à : {{ride.dest.location}}  <br/>
-    Distance : {{ride.distance}} Km<br/>
-    Durée : {{ride.duration}} Minutes<br/>
+    {{ride.dateTime}}<br/>
+    <label>Trajet de :</label> {{ride.start.city_name}} <br/>
+    {% for stage in ride.stage_set.all %}
+    <label>Etape : </label> {{stage.location.city_name}}<br/>
+    {% endfor %}
+    <label>Jusqu'à :</label> {{ride.dest.location}}  <br/>
+    <label>Distance : </label>{{ride.distance}} Km<br/>
+    <label>Durée : </label>{{ride.duration}} Minutes<br/>
     <a href="/location/ride/edit/{{ride.id}}">Editer</a>
     <a href="/location/ride/delete/{{ride.id}}">Supprimer</a>
 </li>

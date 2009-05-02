@@ -203,34 +203,53 @@ height:101px;
     border-bottom: 1px solid #FFFFFF;
 }
 #profil_photo {
+    margin-top:10px;
     float:left;
     width:250px;
     height:260px;
-    border:1px solid #FFFFFF;
-}
+/*    border:1px solid #FFFFFF;
+*/}
 #profil_info1 {
     float:right;
+    margin-top:10px;
     width:280px;
     height:260px;
-    border:1px solid #FFFFFF;
-}
+/*    border:1px solid #FFFFFF;
+*/}
 #profil_info1 div {
     margin-left:8px;
 }
+
 #profil_info2_left{
     margin-top:5px;
     float:left;
     width:330px;
     height:260px;
-    border:1px solid #FFFFFF;
-}
-#profil_info2_left label {
-    vertical-align:center;
+/*    border:1px solid #FFFFFF;
+*/}
+#profil_info2_left ul{
+    float:right;
+    list-style-type:none;
 }
 #profil_info2_right{
     margin-top:5px;
+    margin-left:10px;
     float:right;
-    width:200px;
+    width:160px;
     height:260px;
-    border:1px solid #FFFFFF;
+    list-style-type:none;
+/*    border:1px solid #FFFFFF;
+*/}
+#profil_info2_right ul{
+    list-style-type:none;
+}
+/*  MATCH_LIST */
+#match{
+    margin-left:100px;
+}
+#accepted {
+    color:#006600;
+}
+#denied {
+    color:#660000;
 }

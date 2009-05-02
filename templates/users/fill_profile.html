@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% block extra_script%}
+<script type="text/javascript">
+    function displayAddress(i){
+        $("loc"+i).display = "block"
+    }
+</script>
+{% endblock %}
 {% block content %}
 <form action="." method="POST">
     <table>

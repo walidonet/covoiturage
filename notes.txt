@@ -44,3 +44,5 @@ Markdown toolbar : http://code.c7.se/js/markdown_toolbar/
 
 --------
 em = taille d'un texte normal (non stylisé)
+-------
+IMAGEFIELD : besoin de la librairie http://www.pythonware.com/products/pil/

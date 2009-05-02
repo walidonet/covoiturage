@@ -1,28 +1,33 @@
 {% extends "base.html" %}
 {% load users_extras %}
 {% block content %}
-<div id="profil">
+<div class="large" id="profil">
     <div id="profil_title"><h3 class='title'>Profil de {{visited_user.username}}</h3></div>
-    <div id="profil_photo">PHOTO</div>
+    <div id="profil_photo"><img src="{{MEDIA_URL}}/img/photo/vert.png"/></div>
     <div id="profil_info1">
-        <div class="large"><label>Nom : </label> {{visited_user.last_name|capfirst}}<br/>
+        <div><label>Nom : </label> {{visited_user.last_name|capfirst}}<br/>
         <label>Prénom : </label> {{visited_user.first_name|capfirst}}<br/>
-        <label>E-mail : </label><a href="/users/{{visited_user.id}}/mail/">Envoyer un mail</a><br/></div>
+        <label>E-mail : </label><a href="/users/{{visited_user.id}}/mail/">Envoyer un mail</a><br/>
+       </div>
     </div>
     <div id="profil_info2_left">
         <label>Adresses : </label>
-        <div id="tab-set">
-        </div>
+        <ul>
+            <li>{{visited_user_profile.location}}</li>
+            <li>{{visited_user_profile.location2}}</li>
+            <li>{{visited_user_profile.location3}}</li>
+        </ul>
     </div>
     <div id="profil_info2_right">
-        <label>Telephone : </label>
-    </div>
+        <label>Contact :</label>
+        <ul>
+            <li>{{visited_user_profile.phone_number1}}</li>
+            <li>{{visited_user_profile.phone_number2}}</li>
+            <li>{{visited_user_profile.phone_number3}}</li>
+        </ul>
+    </div> 
 </div>
 {% endblock %}
-{{visited_user.username}}
-{{visited_user_profile.location.street}}
-{{visited_user_profile.location.house_number}}
-
 <br/>
 
 {% ifnotequal visited_user.id user.id %}

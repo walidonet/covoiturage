@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-
+{% block extra_script%}
+<script type="text/javascript" charset="utf-8"  src="{{MEDIA_URL}}/js/markdown_toolbar.0.0.1.js"></script>
+{% endblock%}
 {% block title%}Ajouter un avis{% endblock %}
 
 {% block content %}

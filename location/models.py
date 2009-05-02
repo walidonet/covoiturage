@@ -12,7 +12,6 @@ class Location(models.Model):
 
     def __unicode__(self):
        return "%d  %s , %s, %d" % (self.house_number, self.street, self.city_name, self.zip_code)
-#ecrire methode update coordinates en fonction du callback
 
 class Arrivals(models.Model):
     location = models.ForeignKey(Location)
@@ -69,6 +68,7 @@ class RideMatches(models.Model):
     newDistance = models.IntegerField()
     newDuration = models.IntegerField()
     accepted = models.BooleanField(blank=True,null=True)
+    contacted = models.BooleanField(default=False,blank=True)
 
     def __unicode__(self):
         return "Conducteur : %s - Passager : %s " % (self.driver_ride.driver.username, self.passenger_ride.passenger.username)
@@ -79,5 +79,5 @@ class Stage(models.Model):
     order = models.IntegerField()
     
     def __unicode__(self):
-        return "%s - %s : %s" %(self.ride.driver.username, self.location)
+        return "%s - %s : %d" %(self.ride.driver.username, self.location, self.order)
 

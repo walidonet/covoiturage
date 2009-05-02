@@ -14,6 +14,43 @@ from location.script import *
 from users.models import *
 
 @login_required
+def confirm_match(request,match_id):
+    try:
+        match = RideMatches.objects.get(pk=match_id)
+        if request.user == match.driver_ride.driver:
+            match.accepted = True;
+            match.save()
+            ride = match.driver_ride
+            ride.distance = match.newDistance
+            ride.duration = match.newDuration
+            ride.freeSeats -= match.passenger_ride.seatsNeeded
+            ride.save()
+            stage = Stage(ride=ride,location=match.passenger_ride.start,order=1)
+            stage.save()
+            request.user.message_set.create(message='Covoiturage confirmé.')
+            return HttpResponseRedirect('/location/ride/matches')
+        else:
+            request.user.message_set.create(message='Vous n\'avez pas le droit d\'accepter ce covoiturage.')
+            return HttpResponseRedirect('/location/ride/matches')
+    except RideMatches.DoesNotExist:
+        request.user.message_set.create(message='Le covoiturage demandé n\'existe pas.')
+        return HttpResponseRedirect('/location/ride/matches')
+def deny_match(request,match_id):
+    request.user.message_set.create(message='Covoiturage refusé.')
+    return HttpResponseRedirect('/location/ride/matches')
+@login_required
+def show_match(request,match_id):
+    try:
+        match = RideMatches.objects.get(pk=match_id)
+        if match.driver_ride.dateTime < match.passenger_ride.dateTime:
+            startDate = match.passenger_ride.dateTime
+        else:
+            startDate = match.driver_ride.dateTime
+        return render_to_response('location/show_match.html', {'match':match,'driver':match.driver_ride.driver,'passenger':match.passenger_ride.passenger,"startDate":startDate}, RequestContext(request))
+    except RideMatches.DoesNotExist:
+        request.user.message_set.create(message='Le covoiturage demandé n\'existe pas')
+        return HttpResponseRedirect('/location/ride/matches')
+@login_required
 def list_matches(request):
     passenger_rides = request.user.passenger_set.filter(dateTime__gte=datetime.today)
     old_rides_matches = request.user.passenger_set.filter(dateTime__lte=datetime.today)

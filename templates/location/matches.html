@@ -1,22 +1,53 @@
 {% extends "base.html"%}
 {% block content %}
-{% for p in passenger_rides %}
-{{p}}
-    <ul>
+<div><b>Vos prochains trajets :</b><br/><br/>
+<div id="match_list">{% for p in passenger_rides %}
+<label>Trajet entre {{p.start}} et {{p.dest}}.<br/> Arrivée prévue à {{p.dateTime|date:"H:i"}}.</label><br/>
+<label> Les conducteurs potentiels sont :</label> 
         {% for match in p.ridematches_set.all %}
-           <li>Conducteur : <a href="/users/{{match.driver_ride.driver.id}}/mail/">{{match.driver_ride.driver.username}}</a> </li>
+        <div id="match">
+            <label> Conducteur : </label> <a href="/users/{{match.driver_ride.driver.id}}">{{match.driver_ride.driver.username}}</a><br/>
+            {% if match.driver_ride.everyDay %}
+            <label>Date : </label>Tous les jours à partir du {{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+            {% else %}
+            <label>Date : </label>{{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+            {% endif %}
+            <label>Trajet : </label>De {{match.driver_ride.start.city_name}} à {{match.driver_ride.dest}}. <br/>
+            <label>Heure d'arrivée : </label>{{match.driver_ride.dateTime|date:"H:i"}} <br/>
+            {% if match.contacted %}
+             <label>Contact : </label> Vous avez déjà contacté cette personne.<br/>
+            {% else %}
+             <label>Contact : </label><a href="/users/{{match.driver_ride.driver.id}}/mail_c/{{match.id}}/">Envoyer un   mail</a><br/>
+            {% endif %}
+            {% if match.accepted %}
+            <label>Confirmé : </label> <label id="accepted">Oui</p>
+            {% else %}
+            <label>Confirmé : </label> <label id="denied">Non</p>
+            {% endif %}
+            
+            
+        </div>
         {% endfor %}
-    </ul>
     {% endfor %}
-
-Vos anciens trajets :
-{% for p in old_rides_matches %}
-{{p}}
-    <ul>
+</div>
+<b>Vos anciens trajets :</b><br/><br/>
+<div id="match_list"> {% for p in old_rides_matches %}
+<label>Trajet du {{p.dateTime|date:"d F Y"}} entre {{p.start}} et {{p.dest}}.</label><br/>
+<label> Les conducteurs potentiels étaient :</label> 
         {% for match in p.ridematches_set.all %}
-           <li>Conducteur : <a href="/users/{{match.driver_ride.driver.id}}/mail/">{{match.driver_ride.driver.username}}</a> </li>
+        <div id="match">
+            <label> Conducteur : </label> <a href="/users/{{match.driver_ride.driver.id}}">{{match.driver_ride.driver.username}}</a><br/>
+            {% if match.driver_ride.everyDay %}
+            <label>Date : </label>Tous les jours à partir du {{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+            {% else %}
+            <label>Date : </label>{{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+            {% endif %}
+            <label>Trajet : </label>de {{match.driver_ride.start.city_name}} à {{match.driver_ride.dest}}. <br/>
+            <label>Heure d'arrivée : </label>{{match.driver_ride.dateTime|date:"H:i"}} <br/>
+            <label>Contact : </label><a href="/users/{{match.driver_ride.driver.id}}/mail_c/{{match.id}}/">Envoyer un mail</a>
+        </div>
         {% endfor %}
-    </ul>
     {% endfor %}
-
+</div>    
+</div>
 {% endblock %}

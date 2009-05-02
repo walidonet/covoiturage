@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load users_extras %}
+{% block content%}
+<div>
+    <p> <h3>Covoiturage à destination de : {{match.driver_ride.dest}}.</h3><br/>
+        {% if match.passenger_ride.seatsNeeded|GT:1%}
+         Le conducteur, {{driver.username}}, a la possibilité de conduire les {{match.passenger_ride.seatsNeeded}} personnes jusqu'à destination. <br/>
+            {% if match.driver_ride.everyDay|AND:match.passenger_ride.everyDay%}
+            Le covoiturage pourra s'effectuer tous les jours à partir du {{startDate|date:"d F Y"}}.
+            {% else %}
+            Le covoiturage pourra s'effectuer lors du trajet du {{startDate|date:"d F Y"}}.
+            {% endif %}
+            <br/><br/>
+            <h4> Informations concernant le conducteur :</h4><br/>
+            Votre trajet initial était de {{match.driver_ride.distance}} Km pour une durée approximative de {{match.driver_ride.duration}} minutes. <br/>
+            Si vous acceptez ce covoiturage, la distance de votre trajet sera de {{match.newDistance}} Km pour une durée de {{match.newDuration}} minutes. <br/>
+            Vous devrez passer prendre ces personnes à l'adresse suivante : <br/>
+            {{match.passenger_ride.start}}. <br/>
+            L'heure d'arrivée à la destination devra être dans les environs de {{match.driver_ride.dateTime|date:"H:i"}} afin qu'aucun de vous ne soit en retard.
+        {% else %}
+            Le conducteur, {{driver.username}}, a la possibilité de conduire {{passenger}} jusqu'à destination. <br/>
+            {% if match.driver_ride.everyDay|AND:match.passenger_ride.everyDay%}
+            Le covoiturage pourra s'effectuer tous les jours à partir du {{startDate|date:"d F Y"}}.
+            {% else %}
+            Le covoiturage pourra s'effectuer lors du trajet du {{startDate|date:"d F Y"}}.
+            {% endif %}
+            <br/><br/>
+            <h4> Informations concernant le conducteur :</h4><br/>
+            Votre trajet initial était de {{match.driver_ride.distance}} Km pour une durée approximative de {{match.driver_ride.duration}} minutes. <br/>
+            Si vous acceptez ce covoiturage, la distance de votre trajet sera de {{match.newDistance}} Km pour une durée de {{match.newDuration}} minutes. <br/>
+            Vous devrez passer prendre cette personne à l'adresse suivante : <br/>
+            {{match.passenger_ride.start}}. <br/>
+            L'heure d'arrivée à la destination devra être dans les environs de {{match.driver_ride.dateTime|date:"H:i"}} afin qu'aucun de vous ne soit en retard. 
+        {% endif %}               
+    </p>
+    {% if user.username|EQ:driver.username %}
+    <a href="/location/confirm/{{match.id}}">J'accepte cette demande de covoiturage</a><br/>
+    <a href="/location/deny/{{match.id}}">Je refuse cette demande de covoiturage</a>
+    {% endif %}
+</div>
+{% endblock %}

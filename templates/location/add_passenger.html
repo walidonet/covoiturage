@@ -8,28 +8,43 @@
 	// Create a directions object and register a map and DIV to hold the 
     // resulting computed directions
     function addAddressAsStart(){
-        start_house_number_panel = document.getElementById("id_start_house_number");
-        start_house_number_panel.value = '{{user_profile.location.house_number}}';
-        start_street_panel = document.getElementById("id_start_street");
-        start_street_panel.value = '{{user_profile.location.street}}';
-        start_city_panel = document.getElementById("id_start_city_name");
-        start_city_panel.value = '{{user_profile.location.city_name}}';
-        start_zip_panel = document.getElementById("id_start_zip_code");
-        start_zip_panel.value = '{{user_profile.location.zip_code}}';
+        mySelect = $("startSelect");
+        startValue = mySelect.options[mySelect.selectedIndex].value
+        if(startValue == "none"){
+            $("id_start_house_number").value = "";
+            $("id_start_street").value = "";
+            $("id_start_city_name").value = "";
+            $("id_start_zip_code").value= "";
+        } else if (startValue == "1"){
+            $("id_start_house_number").value = "{{user_profile.location.house_number}}";
+            $("id_start_street").value = "{{user_profile.location.street}}";
+            $("id_start_city_name").value = "{{user_profile.location.city_name}}";
+            $("id_start_zip_code").value= "{{user_profile.location.zip_code}}";
+        }else if (startValue == "2"){
+            $("id_start_house_number").value = "{{user_profile.location2.house_number}}";
+            $("id_start_street").value = "{{user_profile.location2.street}}";
+            $("id_start_city_name").value = "{{user_profile.location2.city_name}}";
+            $("id_start_zip_code").value= "{{user_profile.location2.zip_code}}";
+        }else{
+            $("id_start_house_number").value = "{{user_profile.location3.house_number}}";
+            $("id_start_street").value = "{{user_profile.location3.street}}";
+            $("id_start_city_name").value = "{{user_profile.location3.city_name}}";
+            $("id_start_zip_code").value= "{{user_profile.location3.zip_code}}";
+        }
     }
-    var distPanel;
-    var durPanel;
-    var directions;
     </script>
 {% endblock %}
 
 {% block content %}
     <input type="submit" onclick="addAddressAsStart()" value="Utiliser votre adresse comme addresse de départ">
     <div id="map_canvas" style="width: 0px; height: 0px;"></div>
-    <div id="route" style="width: 25%; height:480px; float:left; border; 1px solid black;">
-        
-    </div>
     <form action="." method="POST" >
+        <select id="startSelect" onchange="addAddressAsStart()">
+          <option value="none">-</option>
+          <option value="1">{{user_profile.location}}</option>
+          <option value="2">{{user_profile.location2}}</option>
+          <option value="3">{{user_profile.location3}}</option>
+        </select>
         <table>
             {{form.as_table}}
         </table>
