@@ -69,7 +69,7 @@ class RideMatches(models.Model):
     newDuration = models.IntegerField()
     accepted = models.BooleanField(blank=True,null=True)
     contacted = models.BooleanField(default=False,blank=True)
-
+    
     def __unicode__(self):
         return "Conducteur : %s - Passager : %s " % (self.driver_ride.driver.username, self.passenger_ride.passenger.username)
         

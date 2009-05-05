@@ -46,3 +46,17 @@ Markdown toolbar : http://code.c7.se/js/markdown_toolbar/
 em = taille d'un texte normal (non stylisé)
 -------
 IMAGEFIELD : besoin de la librairie http://www.pythonware.com/products/pil/
+sudo /opt/local/bin/easy_install-2.6 --find-links http://www.pythonware.com/products/pil/ Imaging
+
+-------
+
+FlatPage :
+<div id="contact">
+Voué à un enseignement basé sur le principe de la neutralité, l'Athénée Royal Marguerite Bervoets veut amener tous ses élèves à des performances personnelles optimales et non forcément élitistes <br/><br/>
+<ul>
+<li>  La section fondamentale est choisie par les parents pour la qualité de ses enseignants, l'atmosphère sereine et épanouissante qui y règne, le cadre soigné et agréable de ses locaux, la préparation sérieuse aux études secondaires.</li>
+ <li> La section secondaire dispense un savoir dont l'acquisition est certes tributaire d'exigences sérieuses mais parfaitement compatibles avec les possibilités intellectuelles, la volonté de réussite et l'application au travail que l'on peut raisonnablement attendre d'un jeune adolescent engagé dans les études générales : ÉDUCATION.</li>
+</ul>
+ L'Athénée Royal Marguerite Bervoets doit amener ses étudiants à être des femmes et des hommes responsables, libres, respectueux, tolérants : HUMANISME<br/>
+ L'Athénée Royal Marguerite Bervoets veut aussi introduire la composante culturelle. Il est évident que l'École ne détient plus le monopole du savoir. Les Multi-Média pourraient y pourvoir seuls mais sans la relation proche, enrichissante professeurs-élèves : CULTURE<br/>
+</div>

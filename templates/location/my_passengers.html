@@ -1,0 +1,27 @@
+{% extends "base_location.html" %}
+{% block title %}Mes demandes{% endblock %}
+{% block content %}
+<div id="rides">
+<a href="/location/passenger/add">Ajouter une demande de covoiturage</a>
+<br/><br/>
+Vos demandes de covoiturage :<br/>
+<ul>
+{% for passenger in passengers %}
+<li>
+    {% if passenger.everyDay%}
+    <label>Date : </label>Tous les jours à partir du {{passenger.dateTime|date:"d F Y"}}<br/>
+    {% else %}
+    <label>Date : </label>Le {{passenger.dateTime|date:"d F Y"}}<br/>
+    {% endif %}
+    <label> Heure d'arrivée : </label>{{passenger.dateTime|date:"H:i"}}<br/>
+    Trajet de : {{passenger.start}} <br/>
+    jusqu'à : {{passenger.dest.location }}<br/>
+    <a id="link_list" href="/location/passenger/edit/{{passenger.id}}">Editer</a>
+    <a id="link_list" href="/location/passenger/delete/{{passenger.id}}">Supprimer</a><br/>
+    <a href="/location/passenger/search/{{passenger.id}}"> Trouver covoiturage</a>
+</li>
+{% endfor %}
+</ul>
+</div>
+<div id="news_old"><a class="small" href="/location/passenger/archives">Consulter vos anciennes demandes</a></div>
+{% endblock %}

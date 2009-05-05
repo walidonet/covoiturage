@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{%block header%}{%endblock%}
+{% block footer %}{%endblock%}
+{% block content%}
+<div id="show">
+<form action="." method="post">
+<div>
+    <div id="fieldWrapper">
+            {{ form.street.errors }}
+            <p id="right"><label id="left"for="id_street">Rue :</label>
+            {{ form.street }}</p>
+    </div>
+    <div id="fieldWrapper">
+            {{ form.house_number.errors }}
+            <p id="right"><label id="left">Numéro :</label>
+            {{ form.house_number }}</p>
+    </div>
+    <div id="fieldWrapper">
+            {{ form.zip_code.errors }}
+            <p id="right"><label id="left">Code postal :</label>
+            {{ form.zip_code }}</p>
+    </div>
+    <div id="fieldWrapper">
+            {{ form.city_name.errors }}
+            <p id="right"><label id="left">Ville :</label>
+            {{ form.city_name }}</p>
+    </div>
+</div>
+    <div id="fieldWrapper"><p id="submit"><input type="submit" value="Valider"></p></div>
+</form>
+</div>
+{% endblock %}

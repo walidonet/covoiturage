@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_location.html" %}
 {% block title%}Editer un trajet{% endblock %}
 {% block extra_script%}
     <script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw"
@@ -14,22 +14,12 @@
             $("id_start_street").value = "";
             $("id_start_city_name").value = "";
             $("id_start_zip_code").value= "";
-        } else if (startValue == "1"){
-            $("id_start_house_number").value = "{{user_profile.location.house_number}}";
-            $("id_start_street").value = "{{user_profile.location.street}}";
-            $("id_start_city_name").value = "{{user_profile.location.city_name}}";
-            $("id_start_zip_code").value= "{{user_profile.location.zip_code}}";
-        }else if (startValue == "2"){
-            $("id_start_house_number").value = "{{user_profile.location2.house_number}}";
-            $("id_start_street").value = "{{user_profile.location2.street}}";
-            $("id_start_city_name").value = "{{user_profile.location2.city_name}}";
-            $("id_start_zip_code").value= "{{user_profile.location2.zip_code}}";
-        }else{
-            $("id_start_house_number").value = "{{user_profile.location3.house_number}}";
-            $("id_start_street").value = "{{user_profile.location3.street}}";
-            $("id_start_city_name").value = "{{user_profile.location3.city_name}}";
-            $("id_start_zip_code").value= "{{user_profile.location3.zip_code}}";
-        }
+        }{% for address in user.address_set.all %}else if (startValue == "{{forloop.counter0}}"){
+                $("id_start_house_number").value = "{{address.location.house_number}}";
+                $("id_start_street").value = "{{address.location.street}}";
+                $("id_start_city_name").value = "{{address.location.city_name}}";
+                $("id_start_zip_code").value= "{{address.location.zip_code}}";
+            }{% endfor %}
     }
     var distPanel;
     var durPanel;
@@ -79,15 +69,16 @@
     <form action="." method="POST" >
         <select id="startSelect" onchange="addAddressAsStart()">
           <option value="none">-</option>
-          <option value="1">{{user_profile.location}}</option>
-          <option value="2">{{user_profile.location2}}</option>
-          <option value="3">{{user_profile.location3}}</option>
+          {% for address in user.address_set.all %}
+            <option value="{{forloop.counter0}}">{{address}}</option>
+            {% endfor %}
         </select>
         <table>
             {{form.as_table}}
         </table>
         <p>
             <input type="button" value="Submit" id="id_button" onclick="initialize()"/>
+            <a href="/location/ride/">Annuler</a>
         </p>
     </form>
 {% endblock %}

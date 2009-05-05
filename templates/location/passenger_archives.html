@@ -1,0 +1,16 @@
+{% extends "base_location.html" %}
+{% block content %}
+<div id="rides">
+Vos anciennes demandes de covoiturage :<br/>
+<ul>
+{% for passenger in passengers %}
+<li>
+    <label>Date : </label>Le {{passenger.dateTime|date:"d F Y"}}<br/>
+    <label> Heure d'arrivée : </label>{{passenger.dateTime|date:"H:i"}}<br/>
+    Trajet de : {{passenger.start}} <br/>
+    jusqu'à : {{passenger.dest.location }}<br/>
+</li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

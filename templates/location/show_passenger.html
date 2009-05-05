@@ -1,0 +1,18 @@
+{% extends "base_location.html" %}
+{% block content%}
+<div id="show">
+    <h4>Demande de covoiturage : </h4>
+    <div id="show">{% if passenger.everyDay%}
+    <label>Date : </label>Tous les jours à partir du {{passenger.dateTime|date:"d F Y"}}<br/>
+    {% else %}
+    <label>Date : </label>Le {{passenger.dateTime|date:"d F Y"}}<br/>
+    {% endif %}
+    <label> Heure d'arrivée : </label>{{passenger.dateTime|date:"H:i"}}<br/>
+    Trajet de : {{passenger.start}} <br/>
+    jusqu'à : {{passenger.dest.location }}<br/>
+    <a id="link_list" href="/location/passenger/edit/{{passenger.id}}">Editer</a>
+    <a id="link_list" href="/location/passenger/delete/{{passenger.id}}">Supprimer</a><br/>
+    <a href="/location/passenger/search/{{passenger.id}}"> Trouver covoiturage</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,53 +1,85 @@
-{% extends "base.html"%}
+{% extends "base_location.html"%}
+
 {% block content %}
-<div><b>Vos prochains trajets :</b><br/><br/>
-<div id="match_list">{% for p in passenger_rides %}
-<label>Trajet entre {{p.start}} et {{p.dest}}.<br/> Arrivée prévue à {{p.dateTime|date:"H:i"}}.</label><br/>
-<label> Les conducteurs potentiels sont :</label> 
-        {% for match in p.ridematches_set.all %}
-        <div id="match">
-            <label> Conducteur : </label> <a href="/users/{{match.driver_ride.driver.id}}">{{match.driver_ride.driver.username}}</a><br/>
-            {% if match.driver_ride.everyDay %}
-            <label>Date : </label>Tous les jours à partir du {{match.driver_ride.dateTime|date:"d F Y"}} <br/>
-            {% else %}
-            <label>Date : </label>{{match.driver_ride.dateTime|date:"d F Y"}} <br/>
-            {% endif %}
-            <label>Trajet : </label>De {{match.driver_ride.start.city_name}} à {{match.driver_ride.dest}}. <br/>
-            <label>Heure d'arrivée : </label>{{match.driver_ride.dateTime|date:"H:i"}} <br/>
-            {% if match.contacted %}
-             <label>Contact : </label> Vous avez déjà contacté cette personne.<br/>
-            {% else %}
-             <label>Contact : </label><a href="/users/{{match.driver_ride.driver.id}}/mail_c/{{match.id}}/">Envoyer un   mail</a><br/>
-            {% endif %}
-            {% if match.accepted %}
-            <label>Confirmé : </label> <label id="accepted">Oui</p>
-            {% else %}
-            <label>Confirmé : </label> <label id="denied">Non</p>
-            {% endif %}
-            
-            
-        </div>
-        {% endfor %}
-    {% endfor %}
-</div>
-<b>Vos anciens trajets :</b><br/><br/>
-<div id="match_list"> {% for p in old_rides_matches %}
-<label>Trajet du {{p.dateTime|date:"d F Y"}} entre {{p.start}} et {{p.dest}}.</label><br/>
-<label> Les conducteurs potentiels étaient :</label> 
-        {% for match in p.ridematches_set.all %}
-        <div id="match">
-            <label> Conducteur : </label> <a href="/users/{{match.driver_ride.driver.id}}">{{match.driver_ride.driver.username}}</a><br/>
-            {% if match.driver_ride.everyDay %}
-            <label>Date : </label>Tous les jours à partir du {{match.driver_ride.dateTime|date:"d F Y"}} <br/>
-            {% else %}
-            <label>Date : </label>{{match.driver_ride.dateTime|date:"d F Y"}} <br/>
-            {% endif %}
-            <label>Trajet : </label>de {{match.driver_ride.start.city_name}} à {{match.driver_ride.dest}}. <br/>
-            <label>Heure d'arrivée : </label>{{match.driver_ride.dateTime|date:"H:i"}} <br/>
-            <label>Contact : </label><a href="/users/{{match.driver_ride.driver.id}}/mail_c/{{match.id}}/">Envoyer un mail</a>
-        </div>
-        {% endfor %}
-    {% endfor %}
-</div>    
-</div>
-{% endblock %}
+<div><b>Vos demandes de covoiturage :</b><br/><br/>
+    <div id="match_list">{% for p in passenger_rides %}
+        <ul>
+            <li><label>Trajet entre {{p.start}} et {{p.dest}}.<br/> Arrivée prévue à {{p.dateTime|date:"H:i"}}.</label><br/>
+                <label> Les conducteurs potentiels sont :</label> 
+                <ul>
+                    {% for match in p.ridematches_set.all %}
+                    <div id="match">
+                        <li><label> Conducteur : </label> <a href="/users/{{match.driver_ride.driver.id}}">{{match.driver_ride.driver.username}}</a><br/>
+                            {% if match.driver_ride.everyDay %}
+                            <label>Date : </label>Tous les jours à partir du {{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+                            {% else %}
+                            <label>Date : </label>{{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+                            {% endif %}
+                            <label>Trajet : </label>De {{match.driver_ride.start.city_name}} à {{match.driver_ride.dest}}. <br/>
+                            <label>Heure d'arrivée : </label>{{match.driver_ride.dateTime|date:"H:i"}} <br/>
+                            {% if match.contacted %}
+                            <label>Contact : </label> Vous avez déjà contacté cette personne.<br/>
+                            {% else %}
+                            <label>Contact : </label><a href="/users/{{match.driver_ride.driver.id}}/mail_c/{{match.id}}/">Envoyer un   mail</a><br/>
+                            {% endif %}
+                            {% if match.accepted %}
+                            <label>Confirmé : </label> <label id="accepted">Oui</label><br/>
+                            <a href="/location/ride/matches/{{match.id}}/">Détails</a> - <a href="/location/cancel/{{match.id}}">Annuler ce covoiturage</a>
+                            {% else %}
+                            <label>Confirmé : </label> <label id="denied">Non</label><br/>
+                            <a href="/location/ride/matches/{{match.id}}/">Détails </a>
+                            {% endif %}
+                        </li>
+                    </div>
+                    {% endfor %}
+                </ul>    
+            </li>
+            {% endfor %}
+        </ul>    
+    </div>
+    <br/>
+    <b>Vos covoiturages en temps que conducteur: </b><br/><br/>
+    <div id="match_list">
+        <ul>
+            {% for r in rides  %}
+            {% if r.everyDay%}
+                <li><label>Trajet entre {{r.start}} et {{r.dest}}.<br/> Arrivée prévue à {{r.dateTime|date:"H:i"}} tous les jours à partir de {{r.dateTime|date:"d F Y"}}.</label><br/>
+                <label>Vos passagers potentiels : </label>
+                <ul>{% for match in r.ridematches_set.all %}
+                <div id="match"><li>
+                    <label> Passager : </label> <a href="/users/{{match.passenger_ride.passenger.id}}">{{match.passenger_ride.passenger.username}}</a><br/>
+                    {% if match.passenger_ride.everyDay %}
+                    <label>Date : </label>Tous les jours à partir du {{match.passenger_ride.dateTime|date:"d F Y"}} <br/>
+                    {% else %}
+                    <label>Date : </label>{{match.passenger_ride.dateTime|date:"d F Y"}} <br/>
+                    {% endif %}
+                    <label>Etape : </label> {{match.passenger_ride.start.city_name}} <br/>
+                    {% if match.accepted %}
+                    <label>Confirmé : </label> <label id="accepted">Oui</label><br/>
+                    <a href="/location/ride/matches/{{match.id}}/">Détails</a> - <a href="/location/cancel/{{match.id}}">Annuler ce covoiturage</a>
+                    {% else %}
+                    <label>Confirmé : </label> <label id="denied">Non</label><br/>
+                    <a href="/location/ride/matches/{{match.id}}/">Détails </a>
+                    {% endif %}</li></div>
+                    {% endfor %}</li></ul>
+                    {% else %}
+                    <li><label>Trajet entre {{r.start}} et {{r.dest}}.<br/> Arrivée prévue le {{r.dateTime|date:"d F Y"}} à {{r.dateTime|date:"H:i"}}.</label><br/>
+                    <label>Vos passagers potentiels : </label><ul>
+                    {% for match in r.ridematches_set.all %}
+                    <div id="match"><li>
+                    <label> Passager : </label> <a href="/users/{{match.passenger_ride.passenger.id}}">{{match.passenger_ride.passenger.username}}</a><br/>
+                    <label>Date : </label> {{match.passenger_ride.dateTime|date:"d F Y"}} <br/>
+                    <label>Etape : </label> {{match.passenger_ride.start.city_name}} <br/>
+                    {% if match.accepted %}
+                    <label>Confirmé : </label> <label id="accepted">Oui</label><br/>
+                    <a href="/location/ride/matches/{{match.id}}/">Détails</a> - <a href="/location/cancel/{{match.id}}">Annuler ce covoiturage</a>
+                    {% else %}
+                    <label>Confirmé : </label> <label id="denied">Non</label><br/>
+                    <a href="/location/ride/matches/{{match.id}}/">Détails </a>
+                    {% endif %} </li></div>
+                    {% endfor %}</li></ul>
+                    {% endif %}
+                    {% endfor %}</ul>
+                </div>
+            </div>
+            {% endblock %}

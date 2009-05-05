@@ -3,40 +3,82 @@
 {% block content %}
 <div class="large" id="profil">
     <div id="profil_title"><h3 class='title'>Profil de {{visited_user.username}}</h3></div>
-    <div id="profil_photo"><img src="{{MEDIA_URL}}/img/photo/vert.png"/></div>
+    <div id="profil1_container"><div id="profil_photo"><img src="{{MEDIA_URL}}/img/photo/vert.png"/></div>
     <div id="profil_info1">
-        <div><label>Nom : </label> {{visited_user.last_name|capfirst}}<br/>
-        <label>Prénom : </label> {{visited_user.first_name|capfirst}}<br/>
-        <label>E-mail : </label><a href="/users/{{visited_user.id}}/mail/">Envoyer un mail</a><br/>
-       </div>
-    </div>
-    <div id="profil_info2_left">
-        <label>Adresses : </label>
-        <ul>
-            <li>{{visited_user_profile.location}}</li>
-            <li>{{visited_user_profile.location2}}</li>
-            <li>{{visited_user_profile.location3}}</li>
-        </ul>
-    </div>
-    <div id="profil_info2_right">
-        <label>Contact :</label>
-        <ul>
-            <li>{{visited_user_profile.phone_number1}}</li>
-            <li>{{visited_user_profile.phone_number2}}</li>
-            <li>{{visited_user_profile.phone_number3}}</li>
-        </ul>
-    </div> 
+        {% if user.username|EQ:visited_user.username %}
+        <form action="/users/edit/" method="post">
+            <div class="fieldWrapper" id="right">
+                    {{ form.last_name.errors }}
+                    <label>Nom :</label>
+                    {{ form.last_name }}
+            </div>
+            <div class="fieldWrapper" id="right">
+                    {{ form.first_name.errors }}
+                    <label>Prénom :</label>
+                    {{ form.first_name }}
+            </div>
+            <div class="fieldWrapper" id="right">
+                    {{ form.email.errors }}
+                    <label for="id_subject">E-mail</label>
+                    {{ form.email }}
+            </div>
+            <div id="right">
+                <input type="submit" value="Valider"><br/>
+                <a href="{{ref}}">Retour a la page precedente</a>
+            </div>
+         </form>
+        {% else %}
+            <label>Nom : </label> {{visited_user.last_name|capfirst}}<br/>
+            <label>Prénom : </label> {{visited_user.first_name|capfirst}}<br/>
+            <label>E-mail : </label><a href="/users/{{visited_user.id}}/mail/">Envoyer un mail</a><br/>
+            {% ifnotequal visited_user.id user.id %}
+            	{% if fav %}
+            	<a href="/users/delete_favorite/{{visited_user.id}}/">Retirer des favoris</a><br/>
+            	{% else %}
+            	<a href="/users/add_favorite/{{visited_user.id}}/">Ajouter aux favoris</a><br/>
+            	{% endif %}
+            {% endifnotequal %}
+            <a href="{{ref}}">Retour a la page precedente</a>
+        {% endif %}
+    </div></div>
+
+        <div id="profil_info2_left">
+            <label>Adresses : 
+            {% if user.username|EQ:visited_user.username %}
+            </label><a class="small" id="link_list" href="javascript: window.open('/users/address/add/',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter une adresse</a>
+            <ul>
+                {% for address in user.address_set.all %}
+                <li>{{address.location.street|capfirst}}, {{address.location.house_number}}<br/>
+                    {{address.location.zip_code}} - {{address.location.city_name}}<br/> <a class="small" id="link_list" href="javascript: window.open('/users/address/edit/{{address.id}}',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Modifier</a><a class="small" id="link_list" href="/users/address/delete/{{address.id}}">Supprimer</a></li>
+                {% endfor %}            
+            </ul>
+            {% else %}
+            <ul>
+                {% for address in user.address_set.all %}
+                <li>{{address}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div id="profil_info2_right">
+            <label>Contact :</label> 
+            {% if user.username|EQ:visited_user.username %}
+            <a class="small" id="link_list" href="javascript: window.open('/users/phone/add/',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter un numéro de téléphone</a>
+            <ul>
+                {% for phone in user.phonenumber_set.all %}
+                <li> {{phone.number}} <a class="small" id="link_list" href="javascript: window.open('/users/phone/edit/{{phone.id}}',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Modifier</a><a class="small" id="link_list" href="/users/phone/delete/{{phone.id}}">Supprimer</a></li> 
+                {% endfor %}
+            </ul>
+            {% else %}
+            <ul>
+                {% for phone in user.phonenumber_set.all %}
+                <li> {{phone.number}} </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
 </div>
-{% endblock %}
 <br/>
+{% endblock %}
 
-{% ifnotequal visited_user.id user.id %}
-	{% if visited_user|IN:favorites %}
-	<a href="/users/delete_favorite/{{visited_user.id}}/">-</a>
-	{% else %}
-	<a href="/users/add_favorite/{{visited_user.id}}/">+</a>
-	{% endif %}
-{% endifnotequal %}
-
-<a href='/users/{{visited_user.id}}/mail/'>Envoyer un mail à cette personne</a>
-<a href="/users/">Retour a la page precedente</a>

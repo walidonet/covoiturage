@@ -17,10 +17,10 @@
     </div>
     <div id="news_footer">
         {% if perms.news.change_news %}
-        <a href="/news/edit/{{n.id}}">Editer</a>
+        <a id="link_list" href="/news/edit/{{n.id}}">Editer</a>
         {% endif %}
         {%if perms.news.delete_news %}
-        <a href="/news/delete/{{n.id}}">Supprimer</a>
+        <a id="link_list" href="/news/delete/{{n.id}}">Supprimer</a>
         {% endif %}
         <p>écrit par <a href="/users/{{n.author.id}}/">{{n.author.username}}</a></p>
     </div>

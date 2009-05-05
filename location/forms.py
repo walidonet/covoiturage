@@ -7,6 +7,18 @@ class LocationForm(ModelForm):
     class Meta:
         model = Location
         fields = ('house_number', 'street', 'city_name', 'zip_code')
+class ArrivalForm(forms.Form):
+    house_number = forms.IntegerField()
+    street = forms.CharField(max_length=255)
+    city_name = forms.CharField(max_length=255)
+    zip_code = forms.IntegerField()
+    arr_name = forms.CharField(max_length=255)
+
+def pre_fill_arrival(arrival):
+    return {'house_number':arrival.location.house_number,
+            'street':arrival.location.street,
+            'city_name':arrival.location.city_name,
+            'zip_code':arrival.location.zip_code}
 
 class PassengerForm(forms.Form):
     date = forms.DateField(required=False,initial=datetime.date.today)

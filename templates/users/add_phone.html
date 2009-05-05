@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{%block header%}{%endblock%}
+{% block footer %}{%endblock%}
+{% block content%}
+<div id="show">
+<form action="." method="post">
+<div>
+    <div id="fieldWrapper">
+            {{ form.phone.errors }}
+            <p id="right"><label id="left">Numéro :</label>
+            {{ form.phone }}</p>
+    </div>
+</div>
+    <div id="fieldWrapper"><p id="submit"><input type="submit" value="Valider"></p></div>
+</form>
+</div>
+{% endblock %}

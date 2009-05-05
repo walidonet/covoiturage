@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content%}
+<div id="arrivals">
+    <a href="/location/arrivals/add/">Ajouter une destination</a>
+    <br/><br/>
+    <h4>Liste des destinations actuelles :</h4><br\>
+    <ul>
+    {% for arrival in arrivals %}
+        <li> 
+            {{arrival.name}} <br/>
+            <a id="link_list"href="/location/arrivals/edit/{{arrival.id}}">Modifier</a><a id="link_list" href="/location/arrivals/delete/{{arrival.id}}">Supprimer</a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

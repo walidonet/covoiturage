@@ -8,10 +8,10 @@
     </div>
     <div id="news_footer">
         {% if perms.news.change_news %}
-        <a href="/news/edit/{{news.id}}">Editer</a>
+        <a id="link_list" href="/news/edit/{{news.id}}">Editer</a>
         {% endif %}
         {%if perms.news.delete_news %}
-        <a href="/news/delete/{{news.id}}">Supprimer</a>
+        <a id="link_list" href="/news/delete/{{news.id}}">Supprimer</a>
         {% endif %}
         <p>écrit par <a href="/users/{{news.author.id}}/">{{news.author.username}}</p>
         </div>
@@ -24,10 +24,10 @@
         </div>
         <div id="news_footer">
             {% if perms.news.change_news %}
-            <a href="/news/edit/{{news.id}}">Editer</a>
+            <a id="link_list" href="/news/edit/{{news.id}}">Editer</a>
             {% endif %}
             {%if perms.news.delete_news %}
-            <a href="/news/delete/{{news.id}}">Supprimer</a>
+            <a id="link_list" href="/news/delete/{{news.id}}">Supprimer</a>
             {% endif %}
             <p>écrit par <a href="/users/{{news.author.id}}/">{{news.author.username}}</p>
             </div>

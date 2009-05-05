@@ -1,18 +1,11 @@
 {% extends "base_location.html" %}
-{% block title %}Mes trajets{% endblock %}
-{% block content %}
+{% block content%}
 <div id="rides">
-<a href="/location/ride/add">Ajouter un trajet</a><br/>
-<br/><br/>
-Vos trajets en tant que conducteur :<br/>
+Vos anciens trajets en tant que conducteur :<br/>
 <ul>
 {% for ride in rides %}
 <li>
-    {% if ride.everyDay%}
-    <label>Date : </label>Tous les jours à partir du {{ride.dateTime|date:"d F Y"}}<br/>
-    {% else %}
     <label>Date : </label>Le {{ride.dateTime|date:"d F Y"}}<br/>
-    {% endif %}
     <label> Heure d'arrivée : </label>{{ride.dateTime|date:"H:i"}}<br/>
     <label>Trajet de :</label> {{ride.start}} <br/>
     {% for stage in ride.stage_set.all %}
@@ -21,11 +14,8 @@ Vos trajets en tant que conducteur :<br/>
     <label>Jusqu'à :</label> {{ride.dest.location}}  <br/>
     <label>Distance : </label>{{ride.distance}} Km<br/>
     <label>Durée : </label>{{ride.duration}} Minutes<br/>
-    <a id="link_list" href="/location/ride/edit/{{ride.id}}">Editer</a>
-    <a id="link_list" href="/location/ride/delete/{{ride.id}}">Supprimer</a>
 </li>
 {% endfor %}
 </ul>
 </div>
-<div id="news_old"><a class="small" href="/location/ride/archives">Consulter vos anciens trajets</a></div>
-{% endblock %} 
+{% endblock %}

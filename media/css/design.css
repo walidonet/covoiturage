@@ -1,6 +1,5 @@
 /* TYPOGRAPHY */
 
-
 /* HEADER */
 #header_wrap {
 height:101px;
@@ -63,11 +62,19 @@ height:101px;
 }
 /* NAVIGATION_MENU*/
 #navigation_menu_wrap {
-    border-bottom:1px groove #322820;
+    /*border-bottom:1px groove #322820;*/
+    min-height:2.5em;
+}
+#sub_nav_menu{
     height:2.5em;
+    width:250px;
+    position:relative;
+    border:1px groove #322820;
+    border-right:1px groove #322820;
+    margin-bottom:20px;
 }
 #nav_menu{
-    border-bottom:1px solid #FFFFFF;
+    border-bottom:1px groove #FFFFFF;
     height:2.5em;
     position:relative;
 }
@@ -97,6 +104,7 @@ height:101px;
     text-decoration:none;
     text-transform:uppercase;
 }
+
 /* RIGHT PANEL */
 #right_container{
     float:right;
@@ -186,7 +194,7 @@ height:101px;
 /*PROFIL*/
 #profil {
     margin-left:10px;
-    width:540px;
+    width:600px;
 }
 #profil_title{
     margin-top:10px;
@@ -209,47 +217,114 @@ height:101px;
     height:260px;
 /*    border:1px solid #FFFFFF;
 */}
+#profil1_container {
+    height:280px;
+}
 #profil_info1 {
     float:right;
     margin-top:10px;
-    width:280px;
-    height:260px;
-/*    border:1px solid #FFFFFF;
-*/}
+    width:240px;
+    height:220px;
+    /*border:1px solid #FFFFFF;*/
+}
 #profil_info1 div {
     margin-left:8px;
 }
-
 #profil_info2_left{
     margin-top:5px;
     float:left;
-    width:330px;
-    height:260px;
+    width:300px;
 /*    border:1px solid #FFFFFF;
 */}
 #profil_info2_left ul{
-    float:right;
-    list-style-type:none;
+    margin-top:-10px;
+    margin-left:90px;
+    list-style-type:circle;
 }
 #profil_info2_right{
     margin-top:5px;
-    margin-left:10px;
+    margin-left:-60px;
     float:right;
-    width:160px;
-    height:260px;
-    list-style-type:none;
+    width:280px;
 /*    border:1px solid #FFFFFF;
 */}
 #profil_info2_right ul{
-    list-style-type:none;
+    list-style-type:circle;
+}
+/* RIDE_LIST */
+#rides ul{
+    list-style-type: circle;
+    margin-left:40px;
 }
 /*  MATCH_LIST */
+#match_list ul{
+    list-style-type: circle;
+}
 #match{
     margin-left:100px;
+    padding-top:5px;
 }
 #accepted {
     color:#006600;
 }
 #denied {
     color:#660000;
+}
+/* CONTACT */
+#contact{
+    width:500px;
+    margin-top:50px;
+    margin-left:40px;
+}
+#contact ul{
+    list-style-type: circle;
+}
+#info_contact {
+    margin-left:80px;
+}
+/* ADMIN */
+#admin {
+    width:500px;
+    margin-top:10px;
+    margin-left:10px;
+}
+#admin ul{
+    list-style-type: circle;
+}
+/* ARRIVALS */
+#arrivals {
+    margin-top:10px;
+    margin-left:10px;
+}
+#arrivals ul{
+    margin-left:40px;
+}
+#link_list {
+    margin-right:20px;
+}
+/* MAP*/
+#map{
+    margin-top:20px;
+    margin-left:40px;
+}
+/* SHOW*/
+#show {
+    margin-top: 20px;
+    margin-left:20px;
+}
+/*ADDRESS*/
+#fieldWrapper{
+    width:240px;
+}
+#left {
+    float:left;
+}
+#right{
+    float:right;
+}
+.errorlist{
+    float:right;
+}
+#submit{
+    margin-left:80px;
 }

@@ -17,19 +17,23 @@ def getDistance(lat1, lon1, lat2, lon2):
 
 
 def isPotentialDriver(ride, passenger):
-    date = (ride.dateTime.date() == passenger.dateTime.date()) | ride.everyDay
-    if  ride.dateTime.time() < passenger.dateTime.time():
-        timedelta = passenger.dateTime - ride.dateTime
+    print "isPotential %d" % ride.stage_set.all().count()
+    if ride.stage_set.all().count() == 0:
+        print "isPotential"
+        date = (ride.dateTime.date() == passenger.dateTime.date()) or ride.everyDay or passenger.everyDay
+        if  ride.dateTime.time() < passenger.dateTime.time():
+            timedelta = passenger.dateTime - ride.dateTime
+        else:
+            timedelta = ride.dateTime - passenger.dateTime
+        time = timedelta.seconds/60.0 <= passenger.maxDelay
+        return date & time & belongsToEllipse(ride.start.latitude, ride.start.longitude,ride.dest.location.latitude,ride.dest.location.longitude,passenger.start.latitude,passenger.start.longitude, ride.driverMaxDistance)
     else:
-        timedelta = ride.dateTime - passenger.dateTime
-    time = timedelta.seconds/60.0 <= passenger.maxDelay
-    return date & time & belongsToEllipse(ride.start.latitude, ride.start.longitude,ride.dest.location.latitude,ride.dest.location.longitude,passenger.start.latitude,passenger.start.longitude, ride.driverMaxDistance)
-
+        return False
 
 def belongsToEllipse(startLat, startLon, endLat, endLon, stageLat, stageLon, driverMaxDist):
     distSE = getDistance(startLat,startLon, endLat, endLon)
-    # *1.8 parce que ce sont des distances à vol d'oiseau et il faut compenser le trajet normal
-    focalAxisLength = distSE*1.8 + driverMaxDist
+    # *2.2 parce que ce sont des distances à vol d'oiseau et il faut compenser le trajet normal
+    focalAxisLength = distSE*2.2 + driverMaxDist
     distSStage = getDistance(startLat,startLon,stageLat,stageLon)
     distEStage = getDistance(stageLat,stageLon,endLat,endLon)
     return (distSStage + distEStage) <= focalAxisLength

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_location.html" %}
 {% block extra_script%}
     <script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw"
       type="text/javascript"></script>
@@ -41,12 +41,21 @@
 {% block bodyBalise%}
 <body onload="initialize(0)">
 {% endblock %}
+{% block sub_nav %}
+<div id="sub_nav_menu">
+    <ul id="nav">
+        <li><a href="/location/ride/">Trajets</a></li>
+        <li><a href="/location/passenger/">Demandes</a></li>
+    </ul>
+</div>
+{%endblock%}
 {% block content %}
 <div id="map_canvas" style="width: 0px; height: 0px;"></div>
+<label>Conducteurs potentiels : </label>
 <form action="." method="POST">
-<ul>    
+<ul>
 {% for ride in rides%}
-    <li>{{ride.driver.username}}<br/>
+    <li><a href="/users/{{ride.driver.id}}">{{ride.driver.username}}</a><br/>
         {{ride.start}}
         <input type="checkbox" id="id_check{{forloop.counter0}}" name="check{{ride.id}}"disabled="true" />
         <input type="hidden" id="id_ride{{forloop.counter0}}_newDist"  name="dist{{ride.id}}" value="0"/>
@@ -55,5 +64,6 @@
 {% endfor %}    
 </ul>
 <input type="submit" value="Confirmez">
+<a href="/location/passenger/">Annuler</a>
 </form>
 {% endblock %}

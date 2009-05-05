@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block extra_script %}
+<script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw"
+  type="text/javascript"></script>
+  <script type="text/javascript">
+  var map;
+  var directionsPanel;
+  var directions;
+  function initialize(){
+      map = new GMap2($("map_canvas"));
+      map.setCenter(new GLatLng({{match.driver_ride.start.latitude}},{{match.driver_ride.start.longitude}}), 15);
+      directionsPanel = $("route");
+      directions = new GDirections(map, directionsPanel);
+      var fr = "{{match.driver_ride.start}}";
+      var to1 = "{{match.passenger_ride.start}}";
+      var to2 = "{{match.driver_ride.dest}}";
+      directions.load("from: "+fr+", Belgique to: "+ to1+", Belgique to: "+to2+", Belgique");
+    }
+  </script>
+{% endblock %}
+{% block bodyBalise%}
+<body onload="initialize()">
+{% endblock %}
+{% block content%}
+<div id="map">
+<a href="/location/ride/matches/{{match.id}}/">Revenir à la page précédente</a>
+<div id="map_canvas" style="width:400px; height:300px; display:block"></div>
+<div id="route" style="width:300px;"></div>
+</div>
+{% endblock %}
