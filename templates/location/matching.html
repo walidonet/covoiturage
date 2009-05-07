@@ -51,9 +51,14 @@
 {%endblock%}
 {% block content %}
 <div id="map_canvas" style="width: 0px; height: 0px;"></div>
-<label>Conducteurs potentiels : </label>
+<div id="show">
+Ci-dessous se trouve la liste des conducteurs potentiels. Les personnes dont la case est cochée sont celles qui pourraient répondre favorablement à votre demande. <br/>
+Ces choix ont été réalisés en fonction de leur trajet et de leur préférences personnelles quand à la distance et durée supplémentaire du trajet qu'ils feraient en passant vous prendre.<br/>
+Vous ne pouvez pas retenir des personnes non compatibles mais vous avez la possibilité d'enlever une des personnes choisies. Pour se faire, il vous suffit juste de décocher la case jouxtant leur nom.<br/><br/>
+<label><strong>Conducteurs potentiels : </strong></label>
 <form action="." method="POST">
-<ul>
+<div id="show">
+    <ul>
 {% for ride in rides%}
     <li><a href="/users/{{ride.driver.id}}">{{ride.driver.username}}</a><br/>
         {{ride.start}}
@@ -62,8 +67,11 @@
         <input type="hidden" id="id_ride{{forloop.counter0}}_newDur"  name="dur{{ride.id}}" value="0"/>
     </li>    
 {% endfor %}    
-</ul>
+</ul></div>
+<br/>
+Vous aurez, pour chacun de ces choix, la possibilité d'envoyer un mail au conducteur reprenant les informations nécessaires au covoiturage. Appuyez sur confirmer pour passer à l'étape suivante.<br/><br/><br/>
 <input type="submit" value="Confirmez">
 <a href="/location/passenger/">Annuler</a>
 </form>
+</div>
 {% endblock %}

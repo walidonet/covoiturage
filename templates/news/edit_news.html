@@ -7,9 +7,22 @@
 {% block content %}
 <h1>Entrez les modifications que vous voulez apporter à l'avis :</h1>
 <form action="." method="POST">
-    <table>
-        {{ form.as_table }}
-    </table>
+    <div id="fieldWrapper">
+        {{ form.title.errors }}
+        <label id="left"for="id_street">Titre : </label><br/>
+        {{ form.title}}
+    </div>
+    <br/>
+    <div id="fieldWrapper">
+        {{ form.content.errors }}
+        <label id="left"for="id_street">Contenu : </label> <br/>
+        {{ form.content}}
+    </div>
+    <div id="fieldWrapper">
+        {{ form.is_public.errors }}
+        <label id="left"for="id_street">Rendre cette news publique : </label>
+        {{ form.is_public}}
+    </div>
     <p><input type="submit" value="Submit"></p>
 </form>
 {% endblock %}

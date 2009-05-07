@@ -47,6 +47,12 @@ height:101px;
        border:none;
        background-color:#000000;
 }
+#header_login .login{
+    position:relative;
+    top:-30px;
+    left:610px;
+    color:#8cc744;
+}
 /* FOOTER*/
 #footer_wrap{
     bottom:5px;
@@ -214,11 +220,11 @@ height:101px;
     margin-top:10px;
     float:left;
     width:250px;
-    height:260px;
+    height:280px;
 /*    border:1px solid #FFFFFF;
 */}
 #profil1_container {
-    height:280px;
+    height:290px;
 }
 #profil_info1 {
     float:right;
@@ -309,6 +315,13 @@ height:101px;
 }
 /* SHOW*/
 #show {
+    margin-top: 20px;
+    margin-left:20px;
+}
+
+/* SHOW*/
+#login {
+    width:600px;
     margin-top: 20px;
     margin-left:20px;
 }

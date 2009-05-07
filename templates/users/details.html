@@ -3,7 +3,14 @@
 {% block content %}
 <div class="large" id="profil">
     <div id="profil_title"><h3 class='title'>Profil de {{visited_user.username}}</h3></div>
-    <div id="profil1_container"><div id="profil_photo"><img src="{{MEDIA_URL}}/img/photo/vert.png"/></div>
+    <div id="profil1_container">
+        <div id="profil_photo">
+            <img src="{{MEDIA_URL}}/img/photo/vert.png"/>
+            {% if user.username|EQ:visited_user.username %}
+            <!-- <img src="{{photo.photo}}"/> -->
+            <a href="javascript: window.open('/users/photo/add/',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();">Modifier votre photo</a>
+            {% endif %}
+        </div>
     <div id="profil_info1">
         {% if user.username|EQ:visited_user.username %}
         <form action="/users/edit/" method="post">
@@ -24,7 +31,8 @@
             </div>
             <div id="right">
                 <input type="submit" value="Valider"><br/>
-                <a href="{{ref}}">Retour a la page precedente</a>
+                <a class="small" href="javascript: window.open('/users/change_password/',null, 'height=330,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();">Changer son mot de passe</a><br/>
+                <a class="small" href="{{ref}}">Retour a la page precedente</a>
             </div>
          </form>
         {% else %}
@@ -45,17 +53,18 @@
         <div id="profil_info2_left">
             <label>Adresses : 
             {% if user.username|EQ:visited_user.username %}
-            </label><a class="small" id="link_list" href="javascript: window.open('/users/address/add/',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter une adresse</a>
+            </label><a class="small" id="link_list" href="javascript: window.open('/users/address/add/',null, 'height=330,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter une adresse</a>
             <ul>
                 {% for address in user.address_set.all %}
                 <li>{{address.location.street|capfirst}}, {{address.location.house_number}}<br/>
-                    {{address.location.zip_code}} - {{address.location.city_name}}<br/> <a class="small" id="link_list" href="javascript: window.open('/users/address/edit/{{address.id}}',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Modifier</a><a class="small" id="link_list" href="/users/address/delete/{{address.id}}">Supprimer</a></li>
+                    {{address.location.zip_code}} - {{address.location.city_name}}<br/> <a class="small" id="link_list" href="javascript: window.open('/users/address/edit/{{address.id}}',null, 'height=330,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Modifier</a><a class="small" id="link_list" href="/users/address/delete/{{address.id}}">Supprimer</a></li>
                 {% endfor %}            
             </ul>
             {% else %}
             <ul>
                 {% for address in user.address_set.all %}
-                <li>{{address}}</li>
+                <li>{{address.location.street|capfirst}}, {{address.location.house_number}}<br/>
+                    {{address.location.zip_code}} - {{address.location.city_name|capfirst}}</li>
                 {% endfor %}
             </ul>
             {% endif %}
@@ -63,10 +72,10 @@
         <div id="profil_info2_right">
             <label>Contact :</label> 
             {% if user.username|EQ:visited_user.username %}
-            <a class="small" id="link_list" href="javascript: window.open('/users/phone/add/',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter un numéro de téléphone</a>
+            <a class="small" id="link_list" href="javascript: window.open('/users/phone/add/',null, 'height=200,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter un numéro de téléphone</a>
             <ul>
                 {% for phone in user.phonenumber_set.all %}
-                <li> {{phone.number}} <a class="small" id="link_list" href="javascript: window.open('/users/phone/edit/{{phone.id}}',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Modifier</a><a class="small" id="link_list" href="/users/phone/delete/{{phone.id}}">Supprimer</a></li> 
+                <li> {{phone.number}} <a class="small" id="link_list" href="javascript: window.open('/users/phone/edit/{{phone.id}}',null, 'height=200,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Modifier</a><a class="small" id="link_list" href="/users/phone/delete/{{phone.id}}">Supprimer</a></li> 
                 {% endfor %}
             </ul>
             {% else %}

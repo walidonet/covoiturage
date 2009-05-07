@@ -60,3 +60,6 @@ Voué à un enseignement basé sur le principe de la neutralité, l'Athénée Ro
  L'Athénée Royal Marguerite Bervoets doit amener ses étudiants à être des femmes et des hommes responsables, libres, respectueux, tolérants : HUMANISME<br/>
  L'Athénée Royal Marguerite Bervoets veut aussi introduire la composante culturelle. Il est évident que l'École ne détient plus le monopole du savoir. Les Multi-Média pourraient y pourvoir seuls mais sans la relation proche, enrichissante professeurs-élèves : CULTURE<br/>
 </div>
+
+------
+ATTENTION : MODIFICATION FAITES DANS django.contrib.auth.models User -> email -> unique=True

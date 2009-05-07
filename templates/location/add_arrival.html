@@ -1,11 +1,38 @@
 {% extends "base.html" %}
 {% block content%}
+<div id="show">
+    <h3>Veuillez remplir ces champs pour ajoutez un lieu d'arrivée</h3>
+    <br/>
+    <br/>
 <form action="." method="post">
-    <table>{{form.as_table}}
-    </table>
+    <table width="100px">
+        <tr>
+            <td width="20px"></td><td width="50px" align="center"></td>
+        </tr>
+        <tr>
+          {{form.arr_name.errors}}
+          <td><label>Appelation du lieu :</label></td><td>{{form.arr_name}}</td>
+        </tr>
+        <tr>
+          {{form.street.errors}}
+          <td><label>Rue :</label></td><td>{{form.street}}</td>
+        </tr>
+        <tr>
+          {{form.house_number.errors}}
+          <td><label>Numéro :</label></td><td>{{form.house_number}}</td>
+        </tr>
+        <tr>
+          {{form.zip_code.errors}}
+          <td><label>Code postal :</label></td><td>{{form.zip_code}}</td>
+        </tr>
+        <tr>
+          {{form.city_name.errors}}
+          <td><label>Ville :</label></td><td>{{form.city_name}}</td>
+        </tr>
+        </table>
     <p>
         <input type="submit" value="Confirmer"/>
         <a href="/administration">Annuler</a>
     </p>
-</form>
+</form></div>
 {% endblock %}

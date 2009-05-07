@@ -5,14 +5,29 @@
 {% block title%}Ajouter un avis{% endblock %}
 
 {% block content %}
+<div id="show">
 {% if perms.news.add_news%}
 <h1>Ecrivez ici le nouvel avis :</h1>
 <form action="add" method="POST">
-    <table>
-        {{ form.as_table }}
-    </table>
-    <p><input type="submit" value="Submit"></p>
+<div id="fieldWrapper">
+    {{ form.title.errors }}
+    <label id="left"for="id_street">Titre : </label><br/>
+    {{ form.title}}
+</div>
+<br/>
+<div id="fieldWrapper">
+    {{ form.content.errors }}
+    <label id="left"for="id_street">Contenu : </label> <br/>
+    {{ form.content}}
+</div>
+<div id="fieldWrapper">
+    {{ form.is_public.errors }}
+    <label id="left"for="id_street">Rendre cette news publique : </label>
+    {{ form.is_public}}
+</div>
+<p><input type="submit" value="Submit"></p>
 </form>
+</div>
 {% endif %}
 {% endblock %}
 {% block extra_head %}

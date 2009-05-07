@@ -37,7 +37,6 @@ def add(request):
 
 @user_passes_test(lambda u: u.has_perm('news.change_news'), login_url='/news/')
 def edit(request, news_id):
-    #lance News.doesnotexist exception
     try:
         ref = request.META.get('HTTP_REFERER')
         n = News.objects.get(pk=news_id)

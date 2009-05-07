@@ -1,0 +1,48 @@
+{% extends "base_matches.html"%}
+
+{% block content %}
+<div id="show">
+    Sur cette page sont rassemblées l'ensemble de vos demandes de covoiturage. Pour chacune d'entre elles, les informations principales sont reprises. Vous pouvez avoir plus d'information en cliquant sur 'Détails'.<br/> <br/>Vous avez la possibilité de contacter le conducteur afin de lui faire part de votre demande. Pour ce faire, appuyez sur 'Envoyer un mail' depuis cette page. En effet, des informations relatives à votre demande seront envoyées en même temps que votre message.<br/>
+    Vous serez prévenu par mail si le conducteur accepte ou refuse votre demande. Nous vous demandons cependant de respecter le choix de l'utilisateur quel qu'il soit.<br/>
+    Le conducteur a la capacité de voir les demandes même si vous ne l'avez pas encore contacté par mail. Il peut donc accepter votre demande directement. 
+    <br/><br/>Pour finir, les deux partis peuvent à n'importe quel moment mettre fin au covoiturage. Dans ce cas, un mail sera envoyé au conducteur et au passager afin que ceux-ci puissent s'arranger dans les plus brefs délais. <br/> <br/>
+    <b>Vos demandes de covoiturage :</b><br/><br/>
+    <div id="match_list">{% for p in passenger_rides %}
+        <ul>
+            <li><label>Trajet entre {{p.start}} et {{p.dest}}.<br/> Arrivée prévue à {{p.dateTime|date:"H:i"}}.</label><br/>
+                <label> Les conducteurs potentiels sont :</label> 
+                <ul>
+                    {% for match in p.ridematches_set.all %}
+                    <div id="match">
+                        <li><label> Conducteur : </label> <a href="/users/{{match.driver_ride.driver.id}}">{{match.driver_ride.driver.username}}</a><br/>
+                            {% if match.driver_ride.everyDay %}
+                            <label>Date : </label>Tous les jours à partir du {{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+                            {% else %}
+                            <label>Date : </label>{{match.driver_ride.dateTime|date:"d F Y"}} <br/>
+                            {% endif %}
+                            <label>Trajet : </label>De {{match.driver_ride.start.city_name}} à {{match.driver_ride.dest}}. <br/>
+                            <label>Heure d'arrivée : </label>{{match.driver_ride.dateTime|date:"H:i"}} <br/>
+                            {% if match.contacted %}
+                            <label>Contact : </label> Vous avez déjà contacté cette personne.<br/>
+                            {% else %}
+                            <label>Contact : </label><a href="/users/{{match.driver_ride.driver.id}}/mail_c/{{match.id}}/">Envoyer un   mail</a><br/>
+                            {% endif %}
+                            {% if match.accepted %}
+                            <label>Confirmé : </label> <label id="accepted">Oui</label><br/>
+                            <a href="/location/ride/matches/{{match.id}}/">Détails</a> - <a href="/location/cancel/{{match.id}}">Annuler ce covoiturage</a>
+                            {% else %}
+                            <label>Confirmé : </label> <label id="denied">Non</label><br/>
+                            <a href="/location/ride/matches/{{match.id}}/">Détails </a>
+                            {% endif %}
+                        </li>
+                    </div>
+                    {% endfor %}
+                </ul>    
+            </li>
+            {% endfor %}
+        </ul>    
+    </div>
+    <br/>
+    
+</div>
+{% endblock %}

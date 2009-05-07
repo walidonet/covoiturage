@@ -18,7 +18,8 @@ def pre_fill_arrival(arrival):
     return {'house_number':arrival.location.house_number,
             'street':arrival.location.street,
             'city_name':arrival.location.city_name,
-            'zip_code':arrival.location.zip_code}
+            'zip_code':arrival.location.zip_code,
+            'arr_name':arrival.name}
 
 class PassengerForm(forms.Form):
     date = forms.DateField(required=False,initial=datetime.date.today)

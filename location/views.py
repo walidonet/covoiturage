@@ -15,6 +15,14 @@ from users.models import *
 from datetime import datetime
 
 @login_required
+def info_rides(request):
+    return render_to_response('location/info_rides.html', RequestContext(request))
+
+@login_required
+def info_matches(request):
+    return render_to_response('location/info_matches.html', RequestContext(request))
+
+@login_required
 def list_passenger(request):
     passengers = Passenger.objects.filter(Q(dateTime__gte=datetime.today) | Q(everyDay=True),passenger=request.user).order_by('dateTime')
     return render_to_response('location/my_passengers.html',{'passengers':passengers}, RequestContext(request))  
@@ -40,11 +48,13 @@ def list_arrivals(request):
     return render_to_response('location/arrivals.html',{'arrivals':arrivals}, RequestContext(request))
 
 @login_required
-def list_matches(request):
-    rides = request.user.ride_set.filter(Q(dateTime__gte=datetime.today) | Q(everyDay=True))
+def list_passenger_matches(request):
     passenger_rides = request.user.passenger_set.filter(Q(dateTime__gte=datetime.today) | Q(everyDay=True))
-    return render_to_response('location/matches.html',{'rides':rides,'passenger_rides':passenger_rides},RequestContext(request))
-
+    return render_to_response('location/passenger_matches.html',{'passenger_rides':passenger_rides},RequestContext(request))
+@login_required
+def list_ride_matches(request):
+    rides = request.user.ride_set.filter(Q(dateTime__gte=datetime.today) | Q(everyDay=True))
+    return render_to_response('location/ride_matches.html', {'rides':rides}, RequestContext(request))
 @login_required
 def add_passenger(request):
     if request.method == 'POST':
@@ -106,56 +116,64 @@ def add_arrival(request):
 def edit_passenger(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        if request.method == 'POST':
-            form = PassengerForm(request.POST)
-            if not form.is_valid():
+        if request.user == passenger.passenger:
+            if request.method == 'POST':
+                form = PassengerForm(request.POST)
+                if not form.is_valid():
+                    return render_to_response('location/add_passenger.html',{'form':form, 'passenger':passenger}, RequestContext(request))
+                else: 
+                    request.user.message_set.create(message=extract(form,passenger))
+                    passenger.maxDelay = form.cleaned_data['maxDelay']
+                    for match in passenger.ridematches_set.all() :
+                        if match.accepted:
+                            send_mail('Modfication du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a modifié ses paramètres. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
+                            match.driver_ride.freeSeats = match.driver_ride.freeSeats + passenger.seatsNeeded
+                            match.driver_ride.save()
+                            match.driver_ride.stage_set.all().delete()
+                        match.delete()
+                    passenger.seatsNeeded = form.cleaned_data['seatsNeeded']
+                    passenger.save()
+                    request.user.message_set.create(message='La demande de covoiturage a bien été modifiée')
+                    return HttpResponseRedirect('/location/passenger/')
+            else:
+                data = pre_fill_passenger(passenger)
+                form = PassengerForm(data)
                 return render_to_response('location/add_passenger.html',{'form':form, 'passenger':passenger}, RequestContext(request))
-            else: 
-                request.user.message_set.create(message=extract(form,passenger))
-                passenger.maxDelay = form.cleaned_data['maxDelay']
-                for match in passenger.ridematches_set.all() :
-                    if match.accepted:
-                        send_mail('Modfication du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a modifié ses paramètres. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
-                        match.driver_ride.freeSeats = match.driver_ride.freeSeats + passenger.seatsNeeded
-                        match.driver_ride.save()
-                        match.driver_ride.stage_set.all().delete()
-                    match.delete()
-                passenger.seatsNeeded = form.cleaned_data['seatsNeeded']
-                passenger.save()
-                request.user.message_set.create(message='La demande de covoiturage a bien été modifiée')
-            return HttpResponseRedirect('/location/ride/')
         else:
-            data = pre_fill_passenger(passenger)
-            form = PassengerForm(data)
-            return render_to_response('location/add_passenger.html',{'form':form, 'passenger':passenger}, RequestContext(request))
+            request.user.message_set.create(message='Vous ne pouvez pas modifier cette demande.')
+            return HttpResponseRedirect('/location/passenger/')
     except Passenger.DoesNotExist:
         request.user.message_set.create(message='La requête de covoiturage demandée n\'existe pas')
-        return HttpResponseRedirect('/location/ride/')
+        return HttpResponseRedirect('/location/passenger/')
 @login_required
 def edit_ride(request, ride_id):
     try:
         ride = Ride.objects.get(pk=ride_id)
-        if request.method == 'POST':
-            form = RideForm(request.POST)
-            if not form.is_valid():
+        if request.user == ride.driver:
+            if request.method == 'POST':
+                form = RideForm(request.POST)
+                if not form.is_valid():
+                    return render_to_response('location/add_ride.html',{'form':form, 'ride':ride}, RequestContext(request))
+                else: 
+                    request.user.message_set.create(message=extract(form,ride))
+                    ride.driverMaxDistance = form.cleaned_data['driverMaxDistance']
+                    ride.driverMaxDuration = form.cleaned_data['driverMaxDuration']
+                    ride.freeSeats = form.cleaned_data['freeSeats']
+                    ride.distance = request.POST.get('distance','')
+                    ride.duration = request.POST.get('duration','')
+                    ride.save()
+                    ride.stage_set.all().delete()
+                    for match in ride.ridematches_set.all() :
+                        send_mail('Modification d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été modifié et donc supprimé pour éviter des informations erronées.\n Rendez vous sur http://127.0.0.1:8000/location/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+                        match.delete()
+                return HttpResponseRedirect('/location/ride/')
+            else:
+                data = pre_fill_ride(ride)
+                form = RideForm(data)
                 return render_to_response('location/add_ride.html',{'form':form, 'ride':ride}, RequestContext(request))
-            else: 
-                request.user.message_set.create(message=extract(form,ride))
-                ride.driverMaxDistance = form.cleaned_data['driverMaxDistance']
-                ride.driverMaxDuration = form.cleaned_data['driverMaxDuration']
-                ride.freeSeats = form.cleaned_data['freeSeats']
-                ride.distance = request.POST.get('distance','')
-                ride.duration = request.POST.get('duration','')
-                ride.save()
-                ride.stage_set.all().delete()
-                for match in ride.ridematches_set.all() :
-                    send_mail('Modification d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été modifié et donc supprimé pour éviter des informations erronées.\n Rendez vous sur http://127.0.0.1:8000/location/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
-                    match.delete()
-            return HttpResponseRedirect('/location/ride/')
         else:
-            data = pre_fill_ride(ride)
-            form = RideForm(data)
-            return render_to_response('location/add_ride.html',{'form':form, 'ride':ride}, RequestContext(request))
+            request.user.message_set.create(message='Vous ne pouvez pas modifier ce trajet.')
+            return HttpResponseRedirect('/location/ride/')
     except Ride.DoesNotExist:
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/')
@@ -194,30 +212,36 @@ def edit_arrival(request,arrival_id):
 def delete_passenger(request, passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        for match in passenger.ridematches_set.all() :
-            if match.accepted:
-                send_mail('Suppression du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a supprimé sa demande de covoiturage. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
-                match.driver_ride.freeSeats = match.driver_ride.freeSeats + passenger.seatsNeeded
-                match.driver_ride.save()
-                match.driver_ride.stage_set.all().delete()
-            match.delete()
-        passenger.delete()
-        request.user.message_set.create(message='La demande de covoiturage a bien été supprimée')
-        return HttpResponseRedirect('/location/ride/')
+        if request.user == passenger.passenger:
+            for match in passenger.ridematches_set.all() :
+                if match.accepted:
+                    send_mail('Suppression du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a supprimé sa demande de covoiturage. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
+                    match.driver_ride.freeSeats = match.driver_ride.freeSeats + passenger.seatsNeeded
+                    match.driver_ride.save()
+                    match.driver_ride.stage_set.all().delete()
+                match.delete()
+            passenger.delete()
+            request.user.message_set.create(message='La demande de covoiturage a bien été supprimée')
+        else:
+            request.user.message_set.create(message='Vous ne pouvez pas supprimer cette demande')
+        return HttpResponseRedirect('/location/passenger/')
     except Passenger.DoesNotExist:
         request.user.message_set.create(message='La requête de covoiturage demandée n\'existe pas')
-        return HttpResponseRedirect('/location/ride/')
+        return HttpResponseRedirect('/location/passenger/')
 
 @login_required    
 def delete_ride(request, ride_id):
     try:
         ride = Ride.objects.get(pk=ride_id)
-        ride.stage_set.all().delete()
-        for match in ride.ridematches_set.all() :
-            send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé.\n Rendez vous sur http://127.0.0.1:8000/location/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
-            match.delete()
-        ride.delete()
-        request.user.message_set.create(message='Le trajet a bien été supprimé')
+        if request.user == ride.driver:
+            ride.stage_set.all().delete()
+            for match in ride.ridematches_set.all() :
+                send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé.\n Rendez vous sur http://127.0.0.1:8000/location/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+                match.delete()
+            ride.delete()
+            request.user.message_set.create(message='Le trajet a bien été supprimé')
+        else:
+            request.user.message_set.create(message='Vous ne pouvez pas supprimer ce trajet')
         return HttpResponseRedirect('/location/ride/')
     except Passenger.DoesNotExist:
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
@@ -240,23 +264,27 @@ def delete_arrival(request,arrival_id):
 def search(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        rides = [ride for ride in Ride.objects.select_related().filter(dest=passenger.dest,freeSeats__gte=passenger.seatsNeeded) if isPotentialDriver(ride, passenger)]
-        if request.method == 'POST':
-            drivers = [ride for ride in rides if request.POST.get('check%d' % ride.id) == "on" if RideMatches.objects.filter(driver_ride=ride,passenger_ride=passenger).count() == 0]
-            for driver in drivers:
-                match = RideMatches(driver_ride=driver,
-                                    passenger_ride=passenger,
-                                    newDistance=request.POST.get('dist%d' % ride.id),
-                                    newDuration=request.POST.get('dur%d' % ride.id),
-                                    accepted=False)
-                match.save()
-            return HttpResponseRedirect('/location/ride/matches')
+        if request.user == passenger.passenger:
+            rides = [ride for ride in Ride.objects.select_related().filter(dest=passenger.dest,freeSeats__gte=passenger.seatsNeeded) if isPotentialDriver(ride, passenger)]
+            if request.method == 'POST':
+                drivers = [ride for ride in rides if request.POST.get('check%d' % ride.id) == "on" if RideMatches.objects.filter(driver_ride=ride,passenger_ride=passenger).count() == 0]
+                for driver in drivers:
+                    match = RideMatches(driver_ride=driver,
+                                        passenger_ride=passenger,
+                                        newDistance=request.POST.get('dist%d' % ride.id),
+                                        newDuration=request.POST.get('dur%d' % ride.id),
+                                        accepted=False)
+                    match.save()
+                return HttpResponseRedirect('/location/passenger/matches')
+            else:
+                to_serialize = [{'start': ride.start_loc, 'driverMaxDistance': ride.driverMaxDistance, 'driverMaxDuration': ride.driverMaxDuration, 'initialDist': ride.distance, 'initialDur': ride.duration} for ride in rides]
+                return render_to_response('location/matching.html',{'rides':rides,'passenger':passenger, 'json': simplejson.dumps(to_serialize)}, RequestContext(request))
         else:
-            to_serialize = [{'start': ride.start_loc, 'driverMaxDistance': ride.driverMaxDistance, 'driverMaxDuration': ride.driverMaxDuration, 'initialDist': ride.distance, 'initialDur': ride.duration} for ride in rides]
-            return render_to_response('location/matching.html',{'rides':rides,'passenger':passenger, 'json': simplejson.dumps(to_serialize)}, RequestContext(request))
+            request.user.message_set.create(message='Vous ne pouvez effectuer de recherche sur cette demande')
+            return HttpResponseRedirect('/location/passenger/')
     except Passenger.DoesNotExist:    
-        request.user.message_set.create(message='Le trajet demandé n\'existe pas')
-        return HttpResponseRedirect('/location/ride/')
+        request.user.message_set.create(message='La demande de covoiturage demandée n\'existe pas')
+        return HttpResponseRedirect('/location/passenger/')
 @login_required
 def confirm_match(request,match_id):
     try:
@@ -325,11 +353,15 @@ def cancel_match(request,match_id):
 def show_match(request,match_id):
     try:
         match = RideMatches.objects.get(pk=match_id)
-        if match.driver_ride.dateTime < match.passenger_ride.dateTime:
-            startDate = match.passenger_ride.dateTime
+        if request.user == match.driver_ride.driver or request.user == match.passenger_ride.passenger:
+            if match.driver_ride.dateTime < match.passenger_ride.dateTime:
+                startDate = match.passenger_ride.dateTime
+            else:
+                startDate = match.driver_ride.dateTime
+            return render_to_response('location/show_match.html', {'match':match,'driver':match.driver_ride.driver,'passenger':match.passenger_ride.passenger,"startDate":startDate}, RequestContext(request))
         else:
-            startDate = match.driver_ride.dateTime
-        return render_to_response('location/show_match.html', {'match':match,'driver':match.driver_ride.driver,'passenger':match.passenger_ride.passenger,"startDate":startDate}, RequestContext(request))
+            request.user.message_set.create(message='Vous ne pouvez pas consulter ce covoiturage')
+            return HttpResponseRedirect('/location/ride/matches')
     except RideMatches.DoesNotExist:
         request.user.message_set.create(message='Le covoiturage demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/matches')
@@ -338,7 +370,11 @@ def show_match(request,match_id):
 def show_passenger(request,passenger_id):
     try:
         passenger = Passenger.objects.get(pk=passenger_id)
-        return render_to_response('location/show_passenger.html', {'passenger':passenger}, RequestContext(request))
+        if request.user == passenger.passenger:
+            return render_to_response('location/show_passenger.html', {'passenger':passenger}, RequestContext(request))
+        else:
+            request.user.message_set.create(message='Vous ne pouvez pas consulter cette demande')
+            return HttpResponseRedirect('/location/passenger/')
     except Ride.DoesNotExist:
         request.user.message_set.create(message='La requête de covoiturage demandée n\'existe pas')
         return HttpResponseRedirect('/location/passenger/')
@@ -347,7 +383,11 @@ def show_passenger(request,passenger_id):
 def show_ride(request,ride_id):
     try:
         ride = Ride.objects.get(pk=ride_id)
-        return render_to_response('location/show_ride.html', {'ride':ride}, RequestContext(request))
+        if request.user == ride.driver:
+            return render_to_response('location/show_ride.html', {'ride':ride}, RequestContext(request))
+        else:    
+            request.user.message_set.create(message='Vous ne pouvez pas consulter ce trajet')
+            return HttpResponseRedirect('/location/ride/')
     except Ride.DoesNotExist:
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/')
@@ -356,7 +396,11 @@ def show_ride(request,ride_id):
 def show_match_map(request,match_id):
     try:
         match = RideMatches.objects.get(pk=match_id)
-        return render_to_response('location/show_match_map.html', {'match':match}, RequestContext(request))
+        if request.user == match.driver_ride.driver or request.user == match.passenger_ride.passenger:
+            return render_to_response('location/show_match_map.html', {'match':match}, RequestContext(request))
+        else:
+            request.user.message_set.create(message='Vous ne pouvez pas consulter ce covoiturage')
+            return HttpResponseRedirect('/location/ride/matches')
     except RideMatches.DoesNotExist:
         request.user.message_set.create(message='Le covoiturage demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/matches')

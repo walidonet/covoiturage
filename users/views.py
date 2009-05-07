@@ -1,16 +1,49 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from forms import ProfileForm, pre_fill_profile, MailForm, AddressForm, pre_fill_address, PhoneForm, pre_fill_phone
+from forms import ProfileForm, pre_fill_profile, MailForm, AddressForm, pre_fill_address, PhoneForm, pre_fill_phone, PhotoForm
 from location.models import Location, RideMatches
 from location.script import find_coordinates
 from users.models import Favorites, Address, PhoneNumber, Photo
+from utils.photo_helper import handle_uploaded_file
+from settings import SIGNUP_PASSWORD
+# modif effectuee dans les views du module registration ! pour tester la variable de session access_granted
+import Image
 
 
+#code repris depuis django.contrib.auth.views modifié pour signaler a l'utilisateur que son mot de passe a ete change
+def password_change(request, template_name='registration/password_change_form.html',
+                    post_change_redirect=None):
+    if post_change_redirect is None:
+        post_change_redirect = reverse('django.contrib.auth.views.password_change_done')
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            request.user.message_set.create(message='Votre mot de passe a été changé')
+            return HttpResponseRedirect(post_change_redirect)
+    else:
+        form = PasswordChangeForm(request.user)
+    return render_to_response(template_name, {
+        'form': form,
+    }, context_instance=RequestContext(request))
+
+def check_signup_password(request):
+    request.session.set_expiry(30)
+    request.session['access_granted'] = False
+    if request.method == 'POST':
+        if SIGNUP_PASSWORD == request.POST.get('signup_password'):
+            request.session['access_granted'] = True
+            return HttpResponseRedirect('/accounts/register/')
+        else:
+            return render_to_response('users/check_signup_password.html', RequestContext(request))
+    else:
+        return render_to_response('users/check_signup_password.html', RequestContext(request))
 def email_me(request):
     if request.method == 'POST':
         mailForm = MailForm(request.POST)
@@ -21,7 +54,6 @@ def email_me(request):
             return render_to_response('mail_me.html',{'mailForm':mailForm}, RequestContext(request))
     else:
         return render_to_response('mail_me.html',{'mailForm':MailForm()}, RequestContext(request))
-
 
 @login_required
 def send_email_covoiturage(request,user_id,match_id):
@@ -44,6 +76,7 @@ def send_email_covoiturage(request,user_id,match_id):
     except  RideMatches.DoesNotExist:
         request.user.message_set.create(message='Le trajet demandé n\'existe pas')
         return HttpResponseRedirect('/location/ride/matches')
+
 @login_required
 def send_email(request, user_id):
     try:
@@ -65,13 +98,14 @@ def send_email(request, user_id):
     except User.DoesNotExist:
         request.user.message_set.create(message='L\'utilisateur demandé n\'existe pas')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 @login_required
 def users_list(request):
     users_list = User.objects.all().order_by('username')
     user_fav_list = request.user.favorites_owner.all()
     favorites = [fav.favorite for fav in user_fav_list]
     return render_to_response('users/user_list.html', {'users_list': users_list,'favorites':favorites}, RequestContext(request))
-    
+
 @login_required    
 def add_favorite(request,user_id):
     ref = request.META.get('HTTP_REFERER')
@@ -103,35 +137,47 @@ def add_phone(request):
     else:
         form = PhoneForm()
         return render_to_response('users/add_phone.html', {'form':form},RequestContext(request))
+
 @login_required
 def edit_phone(request, phone_id):
     try:
         phone = PhoneNumber.objects.get(pk=phone_id)
-        if request.method == 'POST':
-            form = PhoneForm(request.POST)
-            if form.is_valid():
-                phone.number = form.cleaned_data['phone']
-                phone.save()
-                request.user.message_set.create(message="Numéro de téléphone modifié.")
-                return HttpResponseRedirect('/users/phone/edit/%d'% phone.id)
+        if request.user == phone.user:
+            if request.method == 'POST':
+                form = PhoneForm(request.POST)
+                if form.is_valid():
+                    phone.number = form.cleaned_data['phone']
+                    phone.save()
+                    request.user.message_set.create(message="Numéro de téléphone modifié.")
+                    return HttpResponseRedirect('/users/phone/edit/%d'% phone.id)
+                else:
+                    return render_to_response('users/add_phone.html', {'form':form},RequestContext(request))
             else:
+                data = pre_fill_phone(phone)
+                form = PhoneForm(data)
                 return render_to_response('users/add_phone.html', {'form':form},RequestContext(request))
         else:
-            data = pre_fill_phone(phone)
-            form = PhoneForm(data)
-            return render_to_response('users/add_phone.html', {'form':form},RequestContext(request))
+            request.user.message_set.create(message="Vous ne pouvez pas modifier ce numero de telephone.")
+            return HttpResponseRedirect('/users/%d/'% phone.user.id)
     except PhoneNumber.DoesNotExist:
         request.user.message_set.create(message="Le numéro de téléphone demandé n'existe pas.")
-        return HttpResponseRedirect('/users/profile/')
+        return HttpResponseRedirect('/users/%d/'% request.user.id)
+
 @login_required
 def delete_phone(request, phone_id):
     try:
-        PhoneNumber.objects.get(pk=phone_id).delete()
-        request.user.message_set.create(message="Numéro de téléphone supprimé.")
-        return HttpResponseRedirect('/users/%d/'% request.user.id)
+        phone = PhoneNumber.objects.get(pk=phone_id)
+        if request.user == phone.user:
+            phone.delete()
+            request.user.message_set.create(message="Numéro de téléphone supprimé.")
+            return HttpResponseRedirect('/users/%d/'% request.user.id)
+        else:
+            request.user.message_set.create(message="Vous ne pouvez pas supprimer ce numero de telephone.")
+            return HttpResponseRedirect('/users/%d/'% request.user.id)
     except Address.DoesNotExist:
         request.user.message_set.create(message="L'adresse demandée n'existe pas.")
         return HttpResponseRedirect('/users/%d/'% request.user.id)
+
 @login_required
 def add_address(request):
     if request.method == 'POST':
@@ -155,43 +201,77 @@ def add_address(request):
     else:
         form = AddressForm()
         return render_to_response('users/add_address.html', {'form':form},RequestContext(request))
+
 @login_required
 def edit_address(request, address_id):
     try:
         address = Address.objects.get(pk=address_id)
-        if request.method == 'POST':
-            form = AddressForm(request.POST)
-            if form.is_valid():
-                address.location.house_number = form.cleaned_data['house_number']
-                address.location.street = form.cleaned_data['street']
-                address.location.city_name = form.cleaned_data['city_name']
-                address.location.zip_code = form.cleaned_data['zip_code']
-                address.location.save()
-                coord = find_coordinates(address.location.house_number,address.location.street,address.location.zip_code,address.location.city_name)
-                address.location.latitude = float(coord.split(",")[2])
-                address.location.longitude = float(coord.split(",")[3])
-                address.location.save()
-                print address.location.city_name
-                request.user.message_set.create(message="Adresse modifiée.")
-                return HttpResponseRedirect('/users/address/edit/%d'% address.id)
+        if address.user == request.user:
+            if request.method == 'POST':
+                form = AddressForm(request.POST)
+                if form.is_valid():
+                    address.location.house_number = form.cleaned_data['house_number']
+                    address.location.street = form.cleaned_data['street']
+                    address.location.city_name = form.cleaned_data['city_name']
+                    address.location.zip_code = form.cleaned_data['zip_code']
+                    address.location.save()
+                    coord = find_coordinates(address.location.house_number,address.location.street,address.location.zip_code,address.location.city_name)
+                    address.location.latitude = float(coord.split(",")[2])
+                    address.location.longitude = float(coord.split(",")[3])
+                    address.location.save()
+                    print address.location.city_name
+                    request.user.message_set.create(message="Adresse modifiée.")
+                    return HttpResponseRedirect('/users/address/edit/%d'% address.id)
+                else:
+                    return render_to_response('users/add_address.html', {'form':form},RequestContext(request))
             else:
+                data = pre_fill_address(address)
+                form = AddressForm(data)
                 return render_to_response('users/add_address.html', {'form':form},RequestContext(request))
         else:
-            data = pre_fill_address(address)
-            form = AddressForm(data)
-            return render_to_response('users/add_address.html', {'form':form},RequestContext(request))
+            request.user.message_set.create(message="Vous ne pouvez pas modifier cette adresse.")
+            return HttpResponseRedirect('/users/%d/'% address.user.id)
     except Address.DoesNotExist:
         request.user.message_set.create(message="L'adresse demandée n'existe pas.")
-        return HttpResponseRedirect('/users/profile/')
+        return HttpResponseRedirect('/users/%d/'%request.user.id)
+
 @login_required
 def delete_address(request, address_id):
     try:
-        Address.objects.get(pk=address_id).delete()
-        request.user.message_set.create(message="Adresse supprimée.")
+        address = Address.objects.get(pk=address_id)
+        if request.user == address.user:
+            address.delete()
+            request.user.message_set.create(message="Adresse supprimée.")
+        else:
+            request.user.message_set.create(message="Vous ne pouvea pas supprimer cette adresse.")
         return HttpResponseRedirect('/users/%d/'% request.user.id)
     except Address.DoesNotExist:
         request.user.message_set.create(message="L'adresse demandée n'existe pas.")
         return HttpResponseRedirect('/users/%d/'% request.user.id)
+
+@login_required
+def add_photo(request):
+    if request.method == "POST":
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                photo = Photo.objects.get(user=request.user)
+                handle_uploaded_file(request.FILES['photo'],request.user)
+                im = Image.open('./media/user_pics/%s_%s'%(request.user.username,request.FILES['photo'].name))
+                photo.photo = Image.open('./media/user_pics/%s_%s'%(request.user.username,request.FILES['photo'].name))
+                photo.save()
+                request.user.message_set.create(message="Photo modifiée.")
+                return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
+            except Photo.DoesNotExist:
+                photo = Photo(user=request.user,photo=form.cleaned_data['photo'])
+                photo.save()
+                request.user.message_set.create(message="Photo ajoutée.")
+                return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
+        else:
+            return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
+    else:
+        form = PhotoForm()
+        return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
 
 @login_required
 def edit_profile(request):
@@ -202,13 +282,14 @@ def edit_profile(request):
             request.user.last_name = form.cleaned_data['last_name']
             request.user.email = form.cleaned_data['email']
             request.user.save()
+            request.user.message_set.create(message="Vos informations personnelles ont bien été modifiées.")
             return HttpResponseRedirect('/users/%d/'%request.user.id)
         else:
             return render_to_response('users/details.html', {'form':form}, RequestContext(request))
     else:
         data = pre_fill_profile(request.user)
         form = ProfileForm(data)
-        return render_to_response('users/details.html', {'form':form}, RequestContext(request))
+        return render_to_response('users/details.html', {'form':form, 'visited_user':request.user}, RequestContext(request))
 
 @login_required
 def user_profile(request,user_id):
@@ -216,9 +297,15 @@ def user_profile(request,user_id):
     try:
         visited_user = User.objects.get(pk=user_id)
         fav = visited_user in request.user.favorites_owner.all()
-        data = pre_fill_profile(request.user)
-        form = ProfileForm(data)
-        return render_to_response('users/details.html',{'visited_user':visited_user,'fav':fav,'ref':ref,'form':form},RequestContext(request))
+        try:
+            photo = Photo.objects.get(user=visited_user)
+            data = pre_fill_profile(request.user)
+            form = ProfileForm(data)
+            return render_to_response('users/details.html',{'visited_user':visited_user,'fav':fav,'ref':ref,'form':form,'photo':photo},RequestContext(request))
+        except Photo.DoesNotExist:
+            data = pre_fill_profile(request.user)
+            form = ProfileForm(data)
+            return render_to_response('users/details.html',{'visited_user':visited_user,'fav':fav,'ref':ref,'form':form},RequestContext(request))
     except User.DoesNotExist:
         request.user.message_set.create(message="L'utilisateur demandé n'existe pas.")
         return HttpResponseRedirect(ref)

@@ -1,17 +1,17 @@
-{% extends "base_location.html" %}
+{% extends "base_matches.html" %}
 {% load users_extras %}
 {% block content%}
 <div>
     <p> <u><h3 style="color:#FFFFFF">Covoiturage à destination de : {{match.driver_ride.dest}}.</h3></u><br/>
         <label> Conducteur : </label> <a href="/users/{{driver.id}}">{{driver.username}}</a><br/>
         <label> Passager : </label> <a href="/users/{{passenger.id}}">{{passenger.username}}</a><br/>
-        <label> Nombre de places nécessaire : </label> {{match.passenger_ride.seatsNeeded}}<br/>
+        <label> Nombre de places nécessaires : </label> {{match.passenger_ride.seatsNeeded}}<br/>
         {% if match.driver_ride.everyDay|AND:match.passenger_ride.everyDay%}
         <label>Date : </label> Tous les jours à partir du {{startDate|date:"d F Y"}}<br/>
         {% else %}
         <label>Date : </label> {{startDate|date:"d F Y"}}<br/>
         {% endif %}
-        <label>Heure d'arrivée à destination :</label> {{match.driver_ride.dateTime|date:"H:i"}}<br/><br/>
+        <label>Heure d'arrivée à destination :</label> {{match.driver_ride.dateTime|date:"H:i"}}<br/>
         <h4 style="color:#FFFFFF">Informations pour le conducteur :</h4><br/>
         {% if match.accepted %}
         <label>Distance du trajet : </label> {{match.driver_ride.distance}}<br/>
@@ -21,17 +21,23 @@
         <label>Distance du nouveau trajet : </label> {{match.newDistance}}<br/>
         <label>Durée du trajet initial : </label> {{match.driver_ride.duration}}<br/>
         <label>Durée du nouveau trajet : </label> {{match.newDuration}}<br/>
-        {% endif %}
-        <a href="/location/ride/matches/{{match.id}}/map/">Consulter le nouvel itinéraire via GoogleMap</a>
+        {% endif %}<br/>
+        <a href="/location/ride/matches/{{match.id}}/map/">Consulter le nouvel itinéraire via GoogleMap</a><br/>
+    </p>
+    <p> <br/>Si vous acceptez ce covoiturage en tant que <strong>conducteur</strong>, vous vous engager à prendre {{passenger.username}} à l'adresse indiquée et <strong>à l'heure convenue</strong>. Si un problème vous empêchant de mener votre tâche à bien survient, il est de votre responsabilité de prévenir cette personne <strong>le plus tôt possible</strong> afin qu'elle puisse s'arranger autrement pour se rendre à destination.<br/><br/>
+        Si la demande est acceptée, en tant que passager vous vous engager à être présent à l'adresse que vous avez fournie et <strong>à l'heure convenue</strong> avec le conducteur. Il est de votre ressort de vous arranger entre vous à propos de l'heure de rendez-vous. Si vous ne devez plus vous rendre à destination pour une raison ou pour une autre, vous <strong>devez</strong> prévenir le conducteur pour lui éviter un détour.<br/> Si le conducteur vous demande de participer aux frais d'essence, vous êtes tenus d'accepter cette requête sauf si le prix ne vous convient pas. Dans un tel cas, soit vous annuler le covoiturage soit vous convenez d'un prix raisonnable.<br/><br/>
+        Cet arrangement n'est basé que sur le trajet aller. Vous devez vous arranger entre vous pour le retour, en fonction de vos horaires respectifs et du temps que chacun accepte de passer à attendre l'autre.<br/><br/>
+        Nous vous invitons à lire <a href="http://www.luxcovoiturage.be/info_assurances.php">ce petit texte</a>. Il est en relation avec les assurances en cas de covoiturage. Pour plus d'informations, il est cependant conseiller de prendre contact avec votre compagnie d'assurance.
     </p>
     <br/>
     {% if user.username|EQ:driver.username %}
     {% if match.accepted %}
     Vous avez accepté cette demande de covoiturage.<br/>
     {% else %}
-    <a href="/location/confirm/{{match.id}}">J'accepte cette demande de covoiturage.</a><br/>
+    <a id="link_list" href="/location/confirm/{{match.id}}">J'accepte cette demande de covoiturage.</a>
     {% endif %}
     <a href="/location/deny/{{match.id}}">Je refuse cette demande de covoiturage.</a>
     {% endif %}
+    <br/><br/>
 </div>
 {% endblock %}

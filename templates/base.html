@@ -38,6 +38,7 @@
                     <input class="password" id="id_password" type="password" name="password" value="Password"/>
                     <input type="submit" class="submit" value="Go">
                 </form>
+                <a class="login" href="/users/signup/">Vous n'est pas encore inscrit?</a>
                 {% endif %}
             </div>
         </div>
@@ -46,9 +47,10 @@
                 <ul id="nav">
                     <li><a href="/news/">News</a></li>
                     {% if user.is_authenticated %}
-                    <li><a href="/users/{{user.id}}/">Profil</a></li>
+                    <li><a href="/users/edit/">Profil</a></li>
                     {% endif %}
-                    <li><a href="/location/ride/matches/">Covoiturage</a></li>
+                    <li><a href="/location/rides/">Trajets</li>
+                    <li><a href="/location/matches/">Covoiturage</a></li>
                     <li><a href="/users/">Membres</a></li>
                     <li><a href="/contact/">Contact</a></li>
                     {% if user.is_staff %}

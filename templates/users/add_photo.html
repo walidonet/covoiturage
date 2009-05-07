@@ -3,15 +3,11 @@
 {% block footer %}{%endblock%}
 {% block content%}
 <div id="show">
-    Veuillez entrer votre numéro de téléphone : <br/><br/>
-<form action="." method="post">
-<div>
+<form enctype="multipart/form-data" action="." method="post">
     <div id="fieldWrapper">
-            {{ form.phone.errors }}
-            <p id="right"><label id="left">Numéro :</label>
-            {{ form.phone }}</p>
+            {{ form.photo.errors }}
+            {{ form.photo }}
     </div>
-</div>
     <div id="fieldWrapper"><p id="submit"><input type="submit" value="Valider"></p></div>
 </form>
 </div>

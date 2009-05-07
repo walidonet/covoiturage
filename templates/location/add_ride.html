@@ -64,21 +64,76 @@
 {% endblock %}
 
 {% block content %}
-    <input type="submit" onclick="addAddressAsStart()" value="Utiliser votre adresse comme addresse de départ">
+<div id="show">    
     <div id="map_canvas" style="width: 0px; height: 0px;"></div>
+    <h3>Veuillez compléter les champs suivant pour ajouter un trajet.</h3><br/><br/>
     <form action="." method="POST" >
-        <select id="startSelect" onchange="addAddressAsStart()">
-          <option value="none">-</option>
-          {% for address in user.address_set.all %}
-            <option value="{{forloop.counter0}}">{{address}}</option>
-            {% endfor %}
-        </select>
-        <table>
-            {{form.as_table}}
-        </table>
-        <p>
+       <table width="150px"cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="20px"></td><td width="50px" align="center"></td>
+        </tr>
+        <tr>
+          {{form.date.errors}}
+          <td><label>Date du trajet :</label></td><td>{{form.date}}</td>
+        </tr>
+        <tr>
+          {{form.everyDay.errors}}
+          <td><label>Tous les jours? :</label></td><td>{{form.everyDay}}</td>
+        </tr>
+        <tr>
+          {{form.time.errors}}
+          <td><label>Heure d'arrivée :</label></td><td>{{form.time}}</td>
+        </tr>  
+        <tr>
+          <td><label>Adresse de départ :</label></td>
+          <td>
+              <select id="startSelect" onchange="addAddressAsStart()">
+                  <option value="none">-</option>
+                  {% for address in user.address_set.all %}
+                  <option value="{{forloop.counter0}}">{{address}}</option>
+                  {% endfor %}
+              </select>
+         </td>
+        </tr>
+        <tr>
+          {{form.start_street.errors}}
+          <td><label>Rue :</label></td><td>{{form.start_street}}</td>
+        </tr>
+        <tr>
+          {{form.start_house_number.errors}}
+          <td><label>Numéro :</label></td><td>{{form.start_house_number}}</td>
+        </tr>
+        <tr>
+          {{form.start_zip_code.errors}}
+          <td><label>Code postal:</label></td><td>{{form.start_zip_code}}</td>
+        </tr>
+        <tr>
+          {{form.start_city_name.errors}}
+          <td><label>Ville :</label></td><td>{{form.start_city_name}}</td>
+        </tr>
+        <tr>
+          {{form.destination.errors}}
+          <td><label>Adresse d'arrivée :</label></td><td>{{form.destination}}</td>
+        </tr>
+        <tr>
+          {{form.driverMaxDistance.errors}}
+          <td><label>Détour maximum (en km) :</label></td><td>{{form.driverMaxDistance}}</td>
+        </tr>
+        <tr>
+          {{form.driverMaxDuration.errors}}
+          <td><label>Durée supplémentaire maximum (en min) :</label></td><td>{{form.driverMaxDuration}}</td>
+        </tr>
+        <tr>
+          {{form.freeSeats.errors}}
+          <td><label>Nombre de places disponibles:</label></td><td>{{form.freeSeats}}</td>
+        </tr>
+        {{form.distance}}
+        {{form.duration}}
+       </table>
+        <p id="show">
+            <a id="link_list" href="/location/ride/">Annuler</a>
             <input type="button" value="Submit" id="id_button" onclick="initialize()"/>
-            <a href="/location/ride/">Annuler</a>
         </p>
     </form>
+    </div>
 {% endblock %}

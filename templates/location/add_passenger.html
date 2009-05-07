@@ -26,21 +26,68 @@
 {% endblock %}
 
 {% block content %}
-    <input type="submit" onclick="addAddressAsStart()" value="Utiliser votre adresse comme addresse de départ">
-    <div id="map_canvas" style="width: 0px; height: 0px;"></div>
+<div id="show">
+    <h3>Veuillez compléter les champs suivant pour ajouter une demande de covoiturage.</h3><br/><br/>
     <form action="." method="POST" >
-        <select id="startSelect" onchange="addAddressAsStart()">
-          <option value="none">-</option>
-          {% for address in user.address_set.all %}
-          <option value="{{forloop.counter0}}">{{address}}</option>
-          {% endfor %}
-        </select>
-        <table>
-            {{form.as_table}}
-        </table>
-        <p>
-            <input type="submit" value="Submit" id="id_button"/>
-            <a href="/location/passenger/">Annuler</a>
+       <table width="150px"cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="20px"></td><td width="50px" align="center"></td>
+        </tr>
+        <tr>
+          {{form.date.errors}}
+          <td><label>Date du trajet :</label></td><td>{{form.date}}</td>
+        </tr>
+        <tr>
+          {{form.everyDay.errors}}
+          <td><label>Tous les jours? :</label></td><td>{{form.everyDay}}</td>
+        </tr>
+        <tr>
+          {{form.time.errors}}
+          <td><label>Heure d'arrivée :</label></td><td>{{form.time}}</td>
+        </tr>
+        <tr>
+          <td><label>Adresse de départ :</label></td>
+          <td>
+              <select id="startSelect" onchange="addAddressAsStart()">
+                  <option value="none">-</option>
+                  {% for address in user.address_set.all %}
+                  <option value="{{forloop.counter0}}">{{address}}</option>
+                  {% endfor %}
+              </select>
+         </td>
+        </tr>
+        <tr>
+          {{form.start_street.errors}}
+          <td><label>Rue :</label></td><td>{{form.start_street}}</td>
+        </tr>
+        <tr>
+          {{form.start_house_number.errors}}
+          <td><label>Numéro :</label></td><td>{{form.start_house_number}}</td>
+        </tr>
+        <tr>
+          {{form.start_zip_code.errors}}
+          <td><label>Code postal:</label></td><td>{{form.start_zip_code}}</td>
+        </tr>
+        <tr>
+          {{form.start_city_name.errors}}
+          <td><label>Ville :</label></td><td>{{form.start_city_name}}</td>
+        </tr>
+        <tr>
+          {{form.destination.errors}}
+          <td><label>Adresse d'arrivée :</label></td><td>{{form.destination}}</td>
+        </tr>
+        <tr>
+          {{form.maxDelay.errors}}
+          <td><label>Retard maximum:</label></td><td>{{form.maxDelay}}</td>
+        </tr>
+        <tr>
+          {{form.seatsNeeded.errors}}
+          <td><label>Nombre de places:</label></td><td>{{form.seatsNeeded}}</td>
+        </tr>
+       </table>
+        <p id="show">
+            <a id="link_list" href="/location/passenger/">Annuler</a> <input type="submit" value="Ajouter ma demande"/>
         </p>
     </form>
+</div>
 {% endblock %}

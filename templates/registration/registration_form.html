@@ -1,17 +1,22 @@
 {% extends "base.html" %}
-{% block title %} Sign Up Now {% endblock %}
+{% block title %}Enregistrez-vous{% endblock %}
 
-{% block content %} 
+{% block content %}
+<div id="show">
+    <h3>Pour créer un nouveau compte, veuillez remplir les champs suivant</h3><br/><br/>
+    <strong>Veiller à ce que l'adresse e-mail entrée soit correcte.</strong><br/> En effet, un mail vous sera envoyé dans les plus brefs délais pour confirmer votre inscription. <br/>Si vous ne recevez pas le mail, vérifier s'il ne s'est pas placé dans vos courriers indésirables. <br/>Le cas échéant, contactez le <a href="/users/mail_me/">webmaster</a> pour plus d'informations.<br/> <br/>
 <form method="post" action=".">
+	<table style="width:400px">
+		<tr><td>Nom d'utilisateur</td><td>{{form.username}}</td></tr>
+		<tr><td>Adresse e-mail</td><td>{{form.email}}</td></tr>
+		<tr><td>Mot de passe</td><td>{{form.password1}}</td></tr>
+		<tr><td>Confirmer votre mot de passe</td><td>{{form.password2}}</td></tr>
+		<input type="hidden" name="next" value="/news/"/>
+	</table>
 	<table>
-		<tr><td>{{form.username.label_tag }}</td><td>{{form.username}}</td></tr>
-		<tr><td>{{form.email.label_tag}}</td><td>{{form.email}}</td></tr>
-		<tr><td>{{form.password1.label_tag}}</td><td>{{form.password1}}</td></tr>
-		<tr><td>{{form.password2.label_tag}}</td><td>{{form.password2}}</td></tr>
-		
-		<tr><input type="submit" value="Sign Up"/></tr>
-		<input type="hidden" name="next" value="/blog/"/>
+	    <tr><input type="submit" value="S'enregistrer"/></tr>
 	</table>
 </form>
+</div>
 
 {% endblock %}
