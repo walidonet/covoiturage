@@ -1,0 +1,92 @@
+\documentclass[12pt, a4paper, oneside]{article}
+\usepackage{times}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref} 
+\usepackage{times}
+\usepackage{color}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{url}
+
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\ttfamily}}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
+%%%%%%%%%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength{\textheight}{630pt}
+\setlength{\footskip}{30pt}
+\newtheorem{defi}{D\'efinition}[section]
+\newtheorem{note}{Note}[section]
+\newtheorem{propriete}{Propri\'et\'e}[section]
+\newtheorem{exemple}{Exemple}[section]
+\newtheorem{corollaire}{Corollaire}[section]
+\newtheorem{rem}{Remarque}[section]
+\newtheorem{thm}{Th\'eor\`eme}[section]
+\newtheorem{illustration}{Illustration}[section]
+\newenvironment{demonstration}{\begin{proof}[\textnormal{\textbf{Preuve.}}]}{\end{proof}}
+\definecolor{gris}{gray}{0.45}
+\setlength{\parindent}{1cm}
+\newcommand{\textcalli}[1]{{\small{\textbf{$\negmedspace$\calligra #1}}}}
+
+%\renewcommand{\chaptermark}[1]{\markright{\thechapter\ #1}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} % supprime les en-tÍtes et pieds prÈdÈfinis
+\fancyhead[R]{\thepage}% Left Even, Right Odd
+\fancyhead[L]{\textsl{\leftmark}} % Left Odd
+%\fancyhead[RE]{\textsl{\leftmark}} % Right Even
+\renewcommand{\headrulewidth}{0pt}% filet en haut de page
+\renewcommand{\footrulewidth}{0pt} % pas de filet en bas
+\fancypagestyle{plain}{ % pages de tetes de chapitre
+\fancyhead{} % supprime líentete
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt} % et le filet
+}
+%%%%%%%%%
+\pagestyle{headings}
+\title{Création d'un site de covoiturage\\ \bigskip{} Rapport}
+\author{Van Herpe Jérôme}
+
+\begin{document}
+\maketitle
+\newpage
+\null
+\newpage
+\renewcommand{\leftmark}{TABLE DES MATI\`{E}RES}
+\thispagestyle{fancy}
+\tableofcontents
+\newpage
+\section{Introduction}
+    Bien que plus de 15$\%$ de la population belge soit composée d'adolescents de moins de quinze ans, les statistiques ~\cite{stats-mondiale} montrent que plus d'un belge sur deux possède une voiture. A l'échelle du pays, cela représente quelques cinq millions de véhicule. De plus, des études ~\cite{stats-ecologie} ont démontré que le kilométrage moyen des voitures personnelles s'élève à 15.550 kilomètres par an. Ceci ne comprend donc pas les autres types de véhicules tels que les camions ou semi-remorques qui effectuent respectivement plus de 50.000 et 160.000 kilomètres par année. Si l'on regroupe ces chiffres, on arrive dans le meilleur des cas, où tous les véhicules sont des voitures personnelles, à 75 milliards de kilomètres parcourus sur nos routes en 2006. Pour information, la distance entre la Terre et le Soleil est de 150 millions de kilomètres. Nous avons donc effectué en 2006 au sein de notre petit pays, 250 aller-retour entre la Belgique et le Soleil. En sachant qu'en 2002 une voiture rejetait en moyenne 198 grammes de CO2 par kilomètre ~\cite{stats-co2}, le volume d'émission de CO2 par les belges en une année s'élève à 15 millions de tonnes. Il suffit d'imaginer le résultat à l'échelle mondiale pour se rendre compte qu'il est temps de réagir.\\\\
+    \indent Le \textit{covoiturage} ou \textit{ridesharing} en anglais, est un mode de déplacement permettant à plusieurs personnes de rallier leur destination en utilisant qu'un seul véhicule. En effet, si le conducteur effectuant un certain trajet possède des places libres dans sa voiture, celles-ci peuvent être utilisées pour transporter d'autres personnes se rendant par exemple à la même destination, ou presque. Il existe différents types de covoiturage tels que le covoiturage régulier et le covoiturage ponctuel. On retrouve bien souvent le premier dans le cas du travail ou de l'école. En effet, une personne se rend en général tous les jours de la semaine à son travail. Dans ce cas, si un collègue effectue une portion de trajet identique, ou presque, il serait très intéressant d'essayer de mettre en place un covoiturage entre ces deux personnes. Un covoiturage régulier peut donc s'installer entre ces deux personnes. Une technique particulière consiste à se donner rendez-vous sur un parking en bordure d'autoroute. Le conducteur charge alors ses passagers qui laissent leur voiture sur le parking. Cependant, peu de parking comme ceux-là sont disponibles en Belgique. En ce qui concerne les covoiturages ponctuels, ceux-ci se produisent généralement lors de trajets de plus longue distance (Bruxelles-Paris, \dots). Le conducteur et le passager partent alors du même endroit pour se rendre à destination.\\\\
+    \indent Le covoiturage présente beaucoup de bénéfices autant dans le privé que dans le milieu professionnel. Parmi ceux-ci, une diminution non négligeable des émissions de CO2, une réduction du nombre de voitures sur les routes rendant donc le trafic plus fluide ainsi qu'un gain important au niveau de votre porte-monnaie. En effet, dans le cas du passager, puisque sa voiture n'est presque plus utilisée, la consommation en essence est diminuée en proportion, de même que l'usure du véhicule et les frais d'entretiens inhérents à la conformité du véhicule. Des études ont montré que voyager seul entraînait plus facilement des hausses de tensions, des montées de pulsations et même des pertes de mémoire temporaires dues au stress ~\cite{health-study}. Grâce au covoiturage, vous avez la possibilité de vous relaxer, de lire voire même de dormir, en tant que passager bien évidemment. Pour ce qui est du milieu professionnel, les entreprises diminueraient leurs dépenses en frais de déplacement, en places de parking, \dots\\\\
+    \indent Les retombées sont nombreuses et touchent bien plus de personnes que l'on pourrait croire. En effet, une diminution du trafic permet aux routes de se dégrader moins vite et diminue de ce fait les travaux routiers. De même, moins d'espaces doivent être sacrifiés pour la création de parkings. Les routes étant dégagées, les transports de livraisons prendront donc moins de temps faisant économiser de l'argent aux entreprises. Les nuages de pollution se réduiront au dessus des grosses villes empêchant l'effet 'smog' que nous avons connu durant cette année 2009. La consommation générale de carburant va diminuer, réduisant donc notre dépendance envers les pays exportateurs de pétrole, entraînant à son tour une chute des prix. Le covoiturage engendre encore de nombreux avantages mais dont la description sort du cadre de ce projet.\\\\
+    \indent La crise économique actuelle, ainsi que le phénomène de réchauffement climatique ont démocratisé le principe du covoiturage. Certaines maisons d'éditions réservent une plage entièrement dédiée au covoiturage, dans laquelle des personnes peuvent proposer leurs services ou poster une demande, des sites sont également mis en place dans un même but. Certains pays sont déjà très développé dans ce domaine. Ainsi le Canada a mis en place des voies réservées aux véhicules à occupation multiple ou \textit{VOM} ~\cite{article-VOM}. Ces voies ont pour but de permettre un passage plus fluide pour ces véhicules lors des heures de pointe. On en retrouve sur les autoroutes mais également à l'entrée des villes. Certaines de ces voies voient leur sens changer à différents moment de la journée.\\
+\section{Présentation du problème}
+\section{Solutions existantes}
+\section{Présentation des différentes approches possibles}
+\section{Motivation des choix}
+\section{Présentation du travail}
+\subsection{Module utilisateur}
+\subsection{Module d'inscription}
+\subsection{Module de mailing}
+\subsection{Module de news}
+\subsection{Module de covoiturage}
+\subsection{Module d'administration}
+\section{Mise en production}
+\section{Comparaison avec les solutions existantes}
+\section{Conclusion}
+\section{Bibliographie}
+%\bibliographystyle{latex8}
+%Le fichier .bib uitilisé
+%\bibliography{biblio}
+\section{Annexes}
+\end{document}
+

@@ -296,7 +296,7 @@ def user_profile(request,user_id):
     ref = request.META.get('HTTP_REFERER')
     try:
         visited_user = User.objects.get(pk=user_id)
-        fav = visited_user in request.user.favorites_owner.all()
+        fav = Favorites.objects.filter(user=request.user,favorite=visited_user)
         try:
             photo = Photo.objects.get(user=visited_user)
             data = pre_fill_profile(request.user)
