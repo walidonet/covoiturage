@@ -1,7 +1,7 @@
 import os
 # Django settings for covoiturage project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -11,8 +11,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'covoiturage_db'             # Or path to database file if using sqlite3.
+DATABASE_ENGINE = ''           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = ''             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -66,16 +66,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-ROOT_URLCONF = 'covoiturage.urls'
+ROOT_URLCONF = 'urls'
 
 #Settings for registration application
 ACCOUNT_ACTIVATION_DAYS = 15
-EMAIL_HOST = 'mail.gandi.net'
-#avant port 25 mais ne fonctionne plus, note : travailler avec TLS
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'webmaster@iracing-france.com'
-EMAIL_HOST_PASSWORD = 'gnzEVz'
-EMAIL_USE_TLS = True
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -101,3 +95,8 @@ AUTH_PROFILE_MODULE = 'users.userprofile'
 LOGIN_URL = '/accounts/login/'
 
 SIGNUP_PASSWORD = "bervoets2009"
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

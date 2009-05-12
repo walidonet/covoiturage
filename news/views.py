@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from covoiturage.news.models import News
+from news.models import News
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from covoiturage.location.models import Location
+from location.models import Location
 
 class Photo(models.Model):
     user = models.ForeignKey(User, unique=True)

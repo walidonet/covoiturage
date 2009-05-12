@@ -1,4 +1,4 @@
-from covoiturage.location.models import Arrivals,Location
+from location.models import Arrivals,Location
 from django.contrib import admin
 
 class ArrivalsAdmin(admin.ModelAdmin):
