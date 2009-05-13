@@ -65,7 +65,7 @@ def send_email_covoiturage(request,user_id,match_id):
             subject = u'Demande de covoiturage émanant de %s' % match.passenger_ride.passenger.username
             message = u'Vous avez reçu ce mail car il semblerait que vous puissiez répondre à une demande de covoiturage\n\nRendez-vous sur %slocation/ride/matches/%d pour en savoir plus. \n Ci-dessous se trouve le message que vous a laissé la personne ayant initié cette recherche\n --------------------------\n' % (SITE_HOST,match.id)
             message += request.POST.get('message')
-            send_mail(subject, message,'nawak',[dest.email])
+            send_mail(subject, message,'noreply@bervoets.covoiturage',[dest.email])
             match.contacted=True
             match.save()
             return HttpResponseRedirect('/location/ride/matches/')
@@ -88,7 +88,7 @@ def send_email(request, user_id):
             message += request.POST.get('message', '')
             if subject and message:
                 try:
-                    send_mail(subject,message,'nawak@test.com',[dest.email])
+                    send_mail(subject,message,'noreply@bervoets.covoiturage',[dest.email])
                 except  BadHeaderError:
                     request.user.message_set.create(message='Veuillez compléter les champs demandés correctement')
                     return HttpResponseRedirect('/users/'+user_id+'/mail')

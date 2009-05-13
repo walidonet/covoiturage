@@ -67,3 +67,6 @@ ATTENTION : MODIFICATION FAITES DANS django.contrib.auth.models User -> email ->
 ------
 API KEY local : ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw
 API KEY Web : ABQIAAAAgBspmYKlV-K16v3uuTvAVxQXe2j3UScOufxFbDXPZ5pNZgzsBBQoMOr4yD6sylZaeft_0jLUsbqLpA
+
+---
+Serveur : cd /opt/webapps/covoiturage; svn update; sudo /etc/init.d/apache2 reload
