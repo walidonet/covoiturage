@@ -17,9 +17,7 @@ def getDistance(lat1, lon1, lat2, lon2):
 
 
 def isPotentialDriver(ride, passenger):
-    print "isPotential %d" % ride.stage_set.all().count()
     if ride.stage_set.all().count() == 0:
-        print "isPotential"
         date = (ride.dateTime.date() == passenger.dateTime.date()) or ride.everyDay or passenger.everyDay
         if  ride.dateTime.time() < passenger.dateTime.time():
             timedelta = passenger.dateTime - ride.dateTime
@@ -37,7 +35,3 @@ def belongsToEllipse(startLat, startLon, endLat, endLon, stageLat, stageLon, dri
     distSStage = getDistance(startLat,startLon,stageLat,stageLon)
     distEStage = getDistance(stageLat,stageLon,endLat,endLon)
     return (distSStage + distEStage) <= focalAxisLength
-    
-def test():
-    print belongsToEllipse(40,40,42,42,41,41,20)
-    print belongsToEllipse(40,40,42,42,43,43,20)

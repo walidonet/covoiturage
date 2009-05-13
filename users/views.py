@@ -219,7 +219,6 @@ def edit_address(request, address_id):
                     address.location.latitude = float(coord.split(",")[2])
                     address.location.longitude = float(coord.split(",")[3])
                     address.location.save()
-                    print address.location.city_name
                     request.user.message_set.create(message="Adresse modifiée.")
                     return HttpResponseRedirect('/users/address/edit/%d'% address.id)
                 else:

@@ -59,3 +59,11 @@ google-map
 http://maps.google.com/
 Mappy
 http://www.mappy.be/
+SHA-1
+http://en.wikipedia.org/wiki/SHA1
+sha-1-encrypter
+http://sha1r.com/
+django-auth:
+http://docs.djangoproject.com/en/dev/topics/auth/
+django-mail
+http://docs.djangoproject.com/en/dev/topics/email/
