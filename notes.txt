@@ -63,3 +63,7 @@ Voué à un enseignement basé sur le principe de la neutralité, l'Athénée Ro
 
 ------
 ATTENTION : MODIFICATION FAITES DANS django.contrib.auth.models User -> email -> unique=True
+
+------
+API KEY local : ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0y8bYKQLn4ZrAjLWukCYdBw
+API KEY Web : ABQIAAAAgBspmYKlV-K16v3uuTvAVxQXe2j3UScOufxFbDXPZ5pNZgzsBBQoMOr4yD6sylZaeft_0jLUsbqLpA
