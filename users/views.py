@@ -12,6 +12,7 @@ from location.script import find_coordinates
 from users.models import Favorites, Address, PhoneNumber, Photo
 from utils.photo_helper import handle_uploaded_file
 from settings import SIGNUP_PASSWORD
+from settings import SITE_HOST
 # modif effectuee dans les views du module registration ! pour tester la variable de session access_granted
 import Image
 
@@ -62,7 +63,7 @@ def send_email_covoiturage(request,user_id,match_id):
         match = RideMatches.objects.get(pk=match_id)
         if request.method == 'POST':
             subject = u'Demande de covoiturage émanant de %s' % match.passenger_ride.passenger.username
-            message = u'Vous avez reçu ce mail car il semblerait que vous puissiez répondre à une demande de covoiturage\n\nRendez-vous sur http://127.0.0.1:8000/location/ride/matches/%d pour en savoir plus. \n Ci-dessous se trouve le message que vous a laissé la personne ayant initié cette recherche\n --------------------------\n' % (match.id)
+            message = u'Vous avez reçu ce mail car il semblerait que vous puissiez répondre à une demande de covoiturage\n\nRendez-vous sur %slocation/ride/matches/%d pour en savoir plus. \n Ci-dessous se trouve le message que vous a laissé la personne ayant initié cette recherche\n --------------------------\n' % (SITE_HOST,match.id)
             message += request.POST.get('message')
             send_mail(subject, message,'nawak',[dest.email])
             match.contacted=True
@@ -83,7 +84,7 @@ def send_email(request, user_id):
         dest = User.objects.get(pk=user_id)
         if request.method == 'POST':
             subject = request.POST.get('subject', '')
-            message= ''+request.user.username + u' vous a envoyé ce message. Pour lui répondre, rendez vous sur http://127.0.0.1:8000/users/%d/ .\n\n\n\n' % (request.user.id)
+            message= ''+request.user.username + u' vous a envoyé ce message. Pour lui répondre, rendez vous sur %susers/%d/ .\n\n\n\n' % (SITE_HOST,request.user.id)
             message += request.POST.get('message', '')
             if subject and message:
                 try:

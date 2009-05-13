@@ -1,1 +1,1 @@
-Activation de votre compte sur http://127.0.0.1:8000
+Activation de votre compte sur {{SITE_HOST}}

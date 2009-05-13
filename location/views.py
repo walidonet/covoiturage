@@ -13,6 +13,7 @@ from location.models import *
 from location.script import *
 from users.models import *
 from datetime import datetime
+from settings import SITE_HOST
 
 @login_required
 def info_rides(request):
@@ -126,7 +127,7 @@ def edit_passenger(request,passenger_id):
                     passenger.maxDelay = form.cleaned_data['maxDelay']
                     for match in passenger.ridematches_set.all() :
                         if match.accepted:
-                            send_mail('Modfication du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a modifié ses paramètres. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
+                            send_mail('Modfication du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a modifié ses paramètres. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur %slocation/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,SITE_HOST,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
                             match.driver_ride.freeSeats = match.driver_ride.freeSeats + passenger.seatsNeeded
                             match.driver_ride.save()
                             match.driver_ride.stage_set.all().delete()
@@ -164,7 +165,7 @@ def edit_ride(request, ride_id):
                     ride.save()
                     ride.stage_set.all().delete()
                     for match in ride.ridematches_set.all() :
-                        send_mail('Modification d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été modifié et donc supprimé pour éviter des informations erronées.\n Rendez vous sur http://127.0.0.1:8000/location/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+                        send_mail('Modification d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été modifié et donc supprimé pour éviter des informations erronées.\n Rendez vous sur %slocation/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,SITE_HOST,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
                         match.delete()
                 return HttpResponseRedirect('/location/ride/')
             else:
@@ -215,7 +216,7 @@ def delete_passenger(request, passenger_id):
         if request.user == passenger.passenger:
             for match in passenger.ridematches_set.all() :
                 if match.accepted:
-                    send_mail('Suppression du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a supprimé sa demande de covoiturage. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
+                    send_mail('Suppression du trajet d\'un passager d\'un covoiturage',u'%s, passager de votre trajet entre %s et %s a supprimé sa demande de covoiturage. Vous n\'avez donc plus à aller prendre cette personne.\n Rendez vous sur %slocation/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.passenger_ride.passenger.username,match.driver_ride.start.city_name,match.driver_ride.dest,SITE_HOST,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
                     match.driver_ride.freeSeats = match.driver_ride.freeSeats + passenger.seatsNeeded
                     match.driver_ride.save()
                     match.driver_ride.stage_set.all().delete()
@@ -236,7 +237,7 @@ def delete_ride(request, ride_id):
         if request.user == ride.driver:
             ride.stage_set.all().delete()
             for match in ride.ridematches_set.all() :
-                send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé.\n Rendez vous sur http://127.0.0.1:8000/location/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+                send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé.\n Rendez vous sur %slocation/passenger/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,SITE_HOST,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
                 match.delete()
             ride.delete()
             request.user.message_set.create(message='Le trajet a bien été supprimé')
@@ -300,7 +301,7 @@ def confirm_match(request,match_id):
             stage = Stage(ride=ride,location=match.passenger_ride.start,order=1)
             stage.save()
             request.user.message_set.create(message='Covoiturage confirmé.')
-            send_mail(u'Covoiturage accepté par %s'%match.driver_ride.driver.username, u'%s a accepté la demande de covoiturage suivante : http://127.0.0.1:8000/location/ride/matches/%d/ .\n Veuiller prendre contact avec lui pour conclure l\'arrangement.'%(match.driver_ride.driver.username,match.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+            send_mail(u'Covoiturage accepté par %s'%match.driver_ride.driver.username, u'%s a accepté la demande de covoiturage suivante : %slocation/ride/matches/%d/ .\n Veuiller prendre contact avec lui pour conclure l\'arrangement.'%(match.driver_ride.driver.username,SITE_HOST,match.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
             return HttpResponseRedirect('/location/ride/')
         else:
             request.user.message_set.create(message='Vous n\'avez pas le droit d\'accepter ce covoiturage.')
@@ -313,7 +314,7 @@ def confirm_match(request,match_id):
 def deny_match(request,match_id):
     try:
         match = RideMatches.objects.get(pk=match_id)
-        send_mail(u'Covoiturage refusé par %s'%match.driver_ride.driver.username, u'%s a refusé la demande de covoiturage suivante : http://127.0.0.1:8000/location/passenger/%d/ .'%(match.driver_ride.driver.username,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+        send_mail(u'Covoiturage refusé par %s'%match.driver_ride.driver.username, u'%s a refusé la demande de covoiturage suivante : %slocation/passenger/%d/ .'%(match.driver_ride.driver.username,SITE_HOST,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
         if request.user == match.driver_ride.driver:
             if match.accepted:
                 match.driver_ride.freeSeats = match.driver_ride.freeSeats + match.passenger_ride.seatsNeeded
@@ -339,8 +340,8 @@ def cancel_match(request,match_id):
             match.driver_ride.stage_set.all().delete()
             match.accepted = False
             match.save()
-            send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé par un des deux partis.\n Rendez vous sur http://127.0.0.1:8000/location/ride/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
-            send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé par un des deux partis. Vous n\'avez donc plus à aller prendre %s.\n Rendez vous sur http://127.0.0.1:8000/location/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.driver_ride.start.city_name,match.driver_ride.dest,match.passenger_ride.passenger.username,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
+            send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé par un des deux partis.\n Rendez vous sur %slocation/ride/search/%d/ pour refaire une recherche afin de trouver de nouvelles opportunités de covoiturage' % (match.passenger_ride.start.city_name,match.passenger_ride.dest,SITE_HOST,match.passenger_ride.id),'nawak',[u'%s'%match.passenger_ride.passenger.email])
+            send_mail('Suppression d\'un covoiturage',u'Un covoiturage concernant votre trajet entre %s et %s a été supprimé par un des deux partis. Vous n\'avez donc plus à aller prendre %s.\n Rendez vous sur %slocation/ride/edit/%d/ pour mettre à jour vos informations. Vous devez enregistrer les modifications afin que les renseignements concernant les distances soient mis à jour.' % (match.driver_ride.start.city_name,match.driver_ride.dest,match.passenger_ride.passenger.username,SITE_HOST,match.driver_ride.id),'nawak',[u'%s'%match.driver_ride.driver.email])
             return HttpResponseRedirect('/location/ride/matches/')
         else:
             request.user.message_set.create(message='Vous n\'avez pas le droit de supprimer ce covoiturage.')

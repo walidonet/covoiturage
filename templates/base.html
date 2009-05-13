@@ -92,7 +92,7 @@
                                     {% endfor %}
                                 </ul>
                                 {% else %}
-                                Vous n'êtes pas loggué.<br/>
+                                Vous n'êtes pas connecté.<br/>
                                 {% endif %}
                             </div>
                             {% endblock %}
@@ -107,11 +107,11 @@
                                 {% if user.is_authenticated %}
                                 <ul>
                                     {% for fav in user.favorites_owner.all%}
-                                    <li><a href="/users/{{fav.favorite.id}}/">{{fav.favorite.username}}</a> - <a href="/users/delete_favorite/{{fav.favorite.id}}/">enlever</a></li>
+                                    <li><a href="/users/{{fav.favorite.id}}/">{{fav.favorite.username}}</a> - <a href="/users/delete_favorite/{{fav.favorite.id}}/">retirer</a></li>
                                     {% endfor %}
                                 </ul>
                                 {% else %}
-                                Vous n'êtes pas loggué.<br/>
+                                Vous n'êtes pas connecté.<br/>
                                 {% endif %}
                             </div>
                             {% endblock %}
