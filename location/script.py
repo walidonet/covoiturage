@@ -18,7 +18,7 @@ def getDistance(lat1, lon1, lat2, lon2):
 
 def isPotentialDriver(ride, passenger):
     if ride.stage_set.all().count() == 0:
-        date = (ride.dateTime.date() == passenger.dateTime.date()) or ride.everyDay or passenger.everyDay
+        date = (ride.dateTime.date() == passenger.dateTime.date()) or (ride.everyDay and ride.dateTime.date() <= passenger.dateTime.date()) or (passenger.everyDay and ride.dateTime.date() >= passenger.dateTime.date())
         if  ride.dateTime.time() < passenger.dateTime.time():
             timedelta = passenger.dateTime - ride.dateTime
         else:

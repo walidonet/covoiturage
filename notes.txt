@@ -22,7 +22,7 @@ Soit A et B les deux foyers de l'ellipse, et dans mon cas les deux extrémités 
 Soit [AB] la distance à vol d oiseau entre ces deux points.
 Soit DMAX la distance supplémentaire que le conducteur veuille bien effectuer
 
-Tout point M tel que : [AM]+[MB] <= [AB] + DMAX appartient à l'ellipse et sera donc un choix possible pour l'algorithme
+Tout point M tel que : [AM]+[MB] <= [AB] * coeff + DMAX appartient à l'ellipse et sera donc un choix possible pour l'algorithme
 Il suffira de passer ce point par google map et comparer les distances/durées avec et sans cette étape pour savoir si cette personne est potentiellement capable de répondre au besoin du demandeur.
 
 http://fr.wikipedia.org/wiki/Ellipse_(mathématiques)
@@ -69,4 +69,5 @@ API KEY local : ABQIAAAAgBspmYKlV-K16v3uuTvAVxRi_j0U6kJrkFvY4-OX2XYmEAa76BSgsjX0
 API KEY Web : ABQIAAAAgBspmYKlV-K16v3uuTvAVxQXe2j3UScOufxFbDXPZ5pNZgzsBBQoMOr4yD6sylZaeft_0jLUsbqLpA
 
 ---
-Serveur : cd /opt/webapps/covoiturage; svn update; sudo /etc/init.d/apache2 reload
+Serveur : 
+cd /opt/webapps/covoiturage; svn update; sudo /etc/init.d/apache2 reload
