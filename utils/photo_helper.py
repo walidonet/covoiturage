@@ -4,6 +4,7 @@ import os
 def handle_uploaded_file(f,user):
     t, e = splitext(f.name)
     string = os.path.join(MEDIA_ROOT, 'users_pics', '%s%s' % (user.username, e))
+    dot = os.path.abspath(.)
     destination = open(string, 'wb+')
     for chunk in f.chunks():
         destination.write(chunk)
