@@ -86,9 +86,15 @@
                         <div class="right_content">
                             {% if user.is_authenticated %}
                             <ul>
-                                {% for ride in user.ride_set.all %}
+                                <u>Conducteur :</u><br/>
+                                {% for ride in rides_for_right %}
                                 <li><a href="/location/ride/edit/{{ride.id}}">{{ride.dateTime|date:"j F Y"}}<br/>
                                     {{ride.dest.name}}</a></li>
+                                    {% endfor %}
+                                <u>Passager :</u><br/>
+                                {% for passenger in passengers_for_right %}
+                                <li><a href="/location/passenger/edit/{{passenger.id}}">{{passenger.dateTime|date:"j F Y"}}<br/>
+                                    {{passenger.dest.name}}</a></li>
                                     {% endfor %}
                                 </ul>
                                 {% else %}
@@ -102,7 +108,7 @@
                         <img src="{{MEDIA_URL}}/img/right_panel/vert.png"/>
                         <div id="inside_right">
                             {% block right_lower %}
-                            <div class="right_title">Vos membres favoris</div>
+                            <div class="right_title">Vos prochaines demandes</div>
                             <div class="right_content">
                                 {% if user.is_authenticated %}
                                 <ul>
