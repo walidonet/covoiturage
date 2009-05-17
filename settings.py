@@ -49,7 +49,11 @@ MEDIA_URL = '/media/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
-TEMPLATE_CONTEXT_PROCESSORS += ("location.context_processors.rides")
+TEMPLATE_CONTEXT_PROCESSORS = ("django.core.context_processors.auth",
+                                "django.core.context_processors.debug",
+                                "django.core.context_processors.i18n",
+                                "django.core.context_processors.media",
+                                "location.context_processors.rides")
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ewfa^x7_hgpf3hc7^he$m7o=qkck!x-xio%_2gi&6c5@egu!xj'
