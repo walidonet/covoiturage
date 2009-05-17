@@ -5,6 +5,7 @@ from location.models import Location
 class Photo(models.Model):
     user = models.ForeignKey(User, unique=True)
     photo = models.ImageField(upload_to='user_pics')
+    extension = models.CharField()
 
 class PhoneNumber(models.Model):
     user = models.ForeignKey(User)

@@ -15,6 +15,7 @@ from settings import SIGNUP_PASSWORD
 from settings import SITE_HOST
 # modif effectuee dans les views du module registration ! pour tester la variable de session access_granted
 import Image
+from os.path import splitext
 
 
 #code repris depuis django.contrib.auth.views modifié pour signaler a l'utilisateur que son mot de passe a ete change
@@ -257,13 +258,18 @@ def add_photo(request):
             try:
                 photo = Photo.objects.get(user=request.user)
                 handle_uploaded_file(request.FILES['photo'],request.user)
-                im = Image.open('./media/user_pics/%s_%s'%(request.user.username,request.FILES['photo'].name))
-                photo.photo = Image.open('./media/user_pics/%s_%s'%(request.user.username,request.FILES['photo'].name))
+                t, e = splitext(request.FILES['photo'].name)
+                #im = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
+                photo.photo = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
+                photo.extension = e
                 photo.save()
                 request.user.message_set.create(message="Photo modifiée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
             except Photo.DoesNotExist:
-                photo = Photo(user=request.user,photo=form.cleaned_data['photo'])
+                handle_uploaded_file(request.FILES['photo'],request.user)
+                t, e = splitext(request.FILES['photo'].name)
+                img = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
+                photo = Photo(user=request.user,photo=img,extension=e)
                 photo.save()
                 request.user.message_set.create(message="Photo ajoutée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
