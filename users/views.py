@@ -296,11 +296,19 @@ def edit_profile(request):
             request.user.message_set.create(message="Vos informations personnelles ont bien été modifiées.")
             return HttpResponseRedirect('/users/%d/'%request.user.id)
         else:
-            return render_to_response('users/details.html', {'form':form}, RequestContext(request))
+            try:
+                photo = Photo.objects.get(user=request.user)
+                return render_to_response('users/details.html', {'form':form,'photo':photo,'visited_user':request.user}, RequestContext(request))
+            except Photo.DoesNotExist:
+                return render_to_response('users/details.html', {'form':form,'visited_user':request.user}, RequestContext(request))
     else:
         data = pre_fill_profile(request.user)
         form = ProfileForm(data)
-        return render_to_response('users/details.html', {'form':form, 'visited_user':request.user}, RequestContext(request))
+        try:
+            photo = Photo.objects.get(user=request.user)
+            return render_to_response('users/details.html', {'form':form,'photo':photo,'visited_user':request.user}, RequestContext(request))
+        except Photo.DoesNotExist:
+            return render_to_response('users/details.html', {'form':form, 'visited_user':request.user}, RequestContext(request))
 
 @login_required
 def user_profile(request,user_id):
