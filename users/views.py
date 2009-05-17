@@ -256,21 +256,23 @@ def add_photo(request):
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             try:
-                photo = Photo.objects.get(user=request.user)
-                handle_uploaded_file(request.FILES['photo'],request.user)
+                #photo = Photo.objects.get(user=request.user)
+                #handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
+                request.user.message_set.create(message="Extension %s"%e)
                 #im = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
-                photo.photo = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
-                photo.extension = e
-                photo.save()
+                #photo.photo = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
+                #photo.extension = e
+                #photo.save()
                 request.user.message_set.create(message="Photo modifiée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
             except Photo.DoesNotExist:
-                handle_uploaded_file(request.FILES['photo'],request.user)
+                #handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
-                img = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
-                photo = Photo(user=request.user,photo=img,extension=e)
-                photo.save()
+                request.user.message_set.create(message="Extension %s"%e)
+                #img = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
+                #photo = Photo(user=request.user,photo=img,extension=e)
+                #photo.save()
                 request.user.message_set.create(message="Photo ajoutée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
         else:
