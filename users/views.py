@@ -38,7 +38,7 @@ def password_change(request, template_name='registration/password_change_form.ht
     }, context_instance=RequestContext(request))
 
 def check_signup_password(request):
-    request.session.set_expiry(30)
+    request.session.set_expiry(300)
     request.session['access_granted'] = False
     if request.method == 'POST':
         if SIGNUP_PASSWORD == request.POST.get('signup_password'):
