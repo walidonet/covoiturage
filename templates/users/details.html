@@ -7,7 +7,7 @@
         <div id="profil_photo">
             <img src="{{MEDIA_URL}}/img/photo/vert.png"/>
             {% if user.username|EQ:visited_user.username %}
-            <img src="./media/user_pics/{{user.username}}{{photo.extension}}"/>
+            <img src="./user_pics/{{user.username}}{{photo.extension}}"/>
             <a href="javascript: window.open('/users/photo/add/',null, 'height=400,width=400,status=no,toolbar=no,menubar=no,location=no');self.close();">Modifier votre photo</a>
             {% endif %}
         </div>
