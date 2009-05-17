@@ -13,6 +13,8 @@ from users.models import Favorites, Address, PhoneNumber, Photo
 from utils.photo_helper import handle_uploaded_file
 from settings import SIGNUP_PASSWORD
 from settings import SITE_HOST
+from settings import MEDIA_ROOT
+import os
 # modif effectuee dans les views du module registration ! pour tester la variable de session access_granted
 import Image
 from os.path import splitext
@@ -256,23 +258,23 @@ def add_photo(request):
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             try:
-                #photo = Photo.objects.get(user=request.user)
+                photo = Photo.objects.get(user=request.user)
                 string = handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
                 request.user.message_set.create(message="Extension %s"%string)
                 #im = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
-                #photo.photo = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
-                #photo.extension = e
-                #photo.save()
+                photo.photo = Image.open(os.path.join(MEDIA_ROOT, 'users_pics', '%s%s' % (user.username, e)))
+                photo.extension = e
+                photo.save()
                 request.user.message_set.create(message="Photo modifiée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
             except Photo.DoesNotExist:
                 string = handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
                 request.user.message_set.create(message="Extension %s"%string)
-                #img = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
-                #photo = Photo(user=request.user,photo=img,extension=e)
-                #photo.save()
+                img = Image.open(os.path.join(MEDIA_ROOT, 'users_pics', '%s%s' % (user.username, e)))
+                photo = Photo(user=request.user,photo=img,extension=e)
+                photo.save()
                 request.user.message_set.create(message="Photo ajoutée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
         else:
