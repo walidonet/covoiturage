@@ -50,6 +50,7 @@
 \fancyhead[R]{\thepage}
 \renewcommand{\headrulewidth}{0pt} % et le filet
 }
+
 %%%%%%%%%
 \pagestyle{headings}
 \title{Création d'un site de covoiturage\\ \bigskip{} Rapport}
@@ -160,11 +161,14 @@
 %-------------------------------------------------
 \subsection{Module de covoiturage} \label{covoiturage}
     Cette sous-section a pour but de décrire comment le module principal du système opère pour trouver des opportunités de covoiturage. En effet, à partir des informations rentrées par les utilisateurs, le système doit être capable de trouver des points communs entre les trajets des membres du site regarder si la fusion de ces deux trajets respecte la volonté des personnes mises en cause.\\\\
-    \indent Le module est subdivisé en deux parties, la première concerne les trajets des utilisateurs, la deuxième concerne les covoiturages possibles pour chacun de ces trajets. Chaque partie sépare également les trajets des conducteurs et ceux des passagers. Avant de commencer à détailler chaque partie du module, il est utile de décrire l'élément de base avec lequel interagit chaque fonctionnalité. Cet élément représente la localisation d'un lieu, d'une adresse. Il est donc composé d'un nom de rue, d'un numéro de maison, de la ville ainsi que de son code postal. Toutes ces informations sont nécessaires afin d'exploiter au mieux les possibilités des outils employés tels que le Géocoding et les fonctions de GoogleMaps. En effet, chaque élément comprend aussi les coordonnées en latitude-longitude de sa position. Celles-ci sont obtenues grâce au Webservice Géocoding. Pour ce faire, le serveur émet une requête HTTP spéciale lui permettant de récupérer ces informations. Cette requête doit contenir l'adresse dont les coordonnées sont désirées. L'URL de la requête étant trop longue pour être affichée dans le rapport, un exemple est mis à disposition dans la documentation de Google ~\cite{google-geodoc}. Plusieurs formats de sortie sont disponibles tels que le XML ~\cite{XML}, le CSV ~\cite{CSV}, ... Pour une raison de rapidité de traitement, l'application récupère les résultats au format CSV. En effet, celui-ci est une simple chaîne de caractères dans laquelle les différents éléments de la réponse sont séparés par une virgule. Celle-ci est de la forme :
+    \indent Le module est subdivisé en deux parties, la première concerne les trajets des utilisateurs, la deuxième concerne les covoiturages possibles pour chacun de ces trajets. Chaque partie sépare également les trajets des conducteurs et ceux des passagers.\\\\
+    \underline{\textbf{Pré-requis :}}\\\\
+    \indent Avant de commencer à détailler chaque partie du module, il est utile de décrire l'élément de base avec lequel interagit chaque fonctionnalité. Cet élément représente la localisation d'un lieu, d'une adresse. Il est donc composé d'un nom de rue, d'un numéro de maison, de la ville ainsi que de son code postal. Toutes ces informations sont nécessaires afin d'exploiter au mieux les possibilités des outils employés tels que le Géocoding et les fonctions de GoogleMaps. En effet, chaque élément comprend aussi les coordonnées en latitude-longitude de sa position. Celles-ci sont obtenues grâce au Webservice Géocoding. Pour ce faire, le serveur émet une requête HTTP spéciale lui permettant de récupérer ces informations. Cette requête doit contenir l'adresse dont les coordonnées sont désirées. L'URL de la requête étant trop longue pour être affichée dans le rapport, un exemple est mis à disposition dans la documentation de Google ~\cite{google-geodoc}. Plusieurs formats de sortie sont disponibles tels que le XML ~\cite{XML}, le CSV ~\cite{CSV}, ... Pour une raison de rapidité de traitement, l'application récupère les résultats au format CSV. En effet, celui-ci est une simple chaîne de caractères dans laquelle les différents éléments de la réponse sont séparés par une virgule. Celle-ci est de la forme :
     \begin{center}
         \textit{HTTP status code \textbf{,} précision \textbf{,} latitude \textbf{,} longitude}
     \end{center}
     Dès lors, les coordonnées sont récupérées en utilisant la fonction Python ``split'' ~\cite{python-split} qui permet de séparer une chaîne de caractères selon un séparateur, ici la virgule. Il est également possible de traiter le résultat en XML, mais il faut alors parcourir les différents éléments du document afin d'accéder aux informations désirées, ce qui demande un travail un peu plus important. En résumé, une localisation contient l'adresse et les coordonnées géographique du lieu.\\\\
+    \underline{\textbf{Les trajets :}}\\\\
     \indent Par le biais du module de gestion des trajets, un conducteur peut ajouter un trajet vers un des lieux spécifiques. En effet, rappelons que le système développé à pour but de fournir du covoiturage uniquement pour une série de lieux d'arrivées précis. Ainsi, lorsqu'un membre veut ajouter un trajet, il sélectionne parmi les destinations possible celle de son choix. S'il s'agit d'un trajet occasionnel, il doit ensuite indiquer la date à laquelle il effectuera celui-ci ainsi que l'heure à laquelle il doit arriver à destination. Il est important d'insister que ce n'est pas l'heure de départ car cette information est capitale pour une partie de l'algorithme. Dans le cas où il s'agit d'un trajet quotidien, le conducteur ajoute la date à partir de laquelle il se rendra à cette destination ainsi que l'heure d'arrivée. Pour le lieu de départ, il a le choix d'ajouter les renseignements à la main ou de remplir automatiquement les champs en choisissant une adresses parmi celles que le membre a ajouté à son profil. Les trois derniers champs regroupent les préférences du conducteur à propos du covoiturage. Il y a \\
     \begin{itemize}
         \item le nombre maximum de kilomètres supplémentaires que le conducteur accepte de parcourir en plus du trajet initial pour aller chercher une autre personne. Par exemple si l'utilisateur autorise un détour de 5 kilomètres sur un trajet en faisant 20, il accepte donc d'effectuer un trajet de maximum 25 kilomètres pour se rendre à destination.\\
@@ -172,8 +176,105 @@
         \item le nombre de places disponibles pour le covoiturage dans la voiture du conducteur.\\
     \end{itemize}
     Lorsque l'utilisateur valide le trajet, du code Javascript est exécuté. Ce code a pour but de fournir la distance et la durée du trajet ajouté. GoogleMaps permet l'utilisation de librairies destinées à calculer l'itinéraire le plus court entre deux points. Ce sont des fonctions issues de ces librairies qui ont été utilisées afin d'avoir ces résultats. Le procédé complet est détaillé en Annexe\ref{annexe-GDirections}. Toutes ces informations sont donc stockées dans la base de données afin d'être utilisées ensuite par le logiciel.\\\\
+    \underline{\textbf{Les demandes de covoiturage :}}\\\\
     \indent Un membre peut également ajouter un trajet pour lequel il n'a pas de voiture. Une grande partie des informations demandées sont les mêmes que pour les conducteurs. En effet, il doit également fournir la date, l'heure d'arrivée, l'adresse de départ ainsi que le lieu d'arrivée. Cependant il doit spécifier le nombre de personnes concernée par cette demande de covoiturage, ainsi qu'une fourchette de temps indiquant les heures d'arrivées acceptables. Par exemple, si un passager ajoute un trajet ayant comme heure d'arrivée 8h05 et une fourchette de temps de dix minutes, cela veut dire qu'il accepte d'arriver à la destination entre 7h55 et 8h15. C'est le passager qui doit donc s'adapter à l'horaire du conducteur et non l'inverse. En effet, le détour occasionné par le covoiturage peut être vu comme un fardeau pour le conducteur, et donc ce n'est pas à lui de modifier ses heures d'arrivées.\\\\
-    \indent Une fois la demande de covoiturage ajoutée, l'utilisateur a la possibilité d'effectuer une recherche pour trouver des conducteurs qui seraient capables de le conduire jusqu'à destination. Cette recherche s'effectue en deux parties. La première consiste en un pré-traitement de l'ensemble des trajets pour limiter le travail à réaliser lors de la deuxième partie. Ce pré-traitement effectue d'abord un tri en ne récupérant que les trajets ayant la même destination que la demande de covoiturage et dont le nombre de places est suffisant. Pour chacun de ces trajets, les dates sont ensuite analysées
+    \indent Une fois la demande de covoiturage ajoutée, l'utilisateur a la possibilité d'effectuer une recherche pour trouver des conducteurs qui seraient capables de le conduire jusqu'à destination. Cette recherche s'effectue en deux parties. La première consiste en un pré-traitement de l'ensemble des trajets pour limiter le travail à réaliser lors de la deuxième partie. Ensuite, chaque trajet restant est comparé plus précisément avec la demande.\\\\
+    \underline{\textbf{Pré-traitement :}}\\\\
+     \indent Le pré-traitement s'effectue sur l'ensemble des trajets de la base de données. Au fur et à mesure, une grande partie de ces trajets va être éliminée en fonction de certains paramètres tels que la date, l'heure ou la position géographique. Il permet donc de restreindre la recherche à quelques trajets. Pour ce faire, l'algorithme effectue d'abord un tri en ne récupérant que les trajets ayant la même destination que la demande de covoiturage et dont le nombre de places disponible est suffisant. Pour chacun de ces trajets, les dates sont ensuite analysées.\\
+     Soit \textit{C} la date du trajet du conducteur et \textit{P} celle de la demande, plusieurs cas sont envisageables :\\
+    \begin{itemize}
+        \item C = P $\rightarrow$ Compatible
+        \item Le conducteur effectue le trajet \textit{tous les jours} à partir de C, le passager effectue le trajet le jour P. 
+        \begin{itemize}
+            \item Si C <= P $\rightarrow$ Compatible;
+            \item Si C > P $\rightarrow$ Incompatible.
+        \end{itemize}
+        \item Le conducteur effectue le trajet le jour C, le passager effectue le trajet \textit{tous les jours} à partir de P.
+        \begin{itemize}
+            \item Si C < P $\rightarrow$ Incompatible; 
+            \item Si C >= P $\rightarrow$ Compatible.
+        \end{itemize}
+        \item Le conducteur (respectivement le passager) effectue \textit{tous les jours} le trajet à partir de C (resp. P).
+        \begin{itemize}
+            \item Si C <= P $\rightarrow$ Compatible à partir de la date P;
+            \item Si C > P $\rightarrow$ Compatible à partir de la date C.\\
+        \end{itemize}
+    \end{itemize}
+    Après les dates, ce sont les heures d'arrivées qui sont comparées. On regarde donc l'heure du conducteur notée \textit{C} et celle du passager notée \textit{P}. La fourchette de temps acceptée par le passager est notée \textit{F}. Les heures sont donc compatible si 
+    \begin{equation*}
+        P-F <= C <= P+F
+    \end{equation*}
+    Cette première partie du pré-traitement permet de déjà éliminé beaucoup de trajet. Cependant, dans le cas d'une école, les heures de début des cours sont fixées, ce qui a tendance à regrouper les heures d'arrivées des élèves. Il faudrait donc également permettre d'éliminer des trajets en fonction de la position géographique de l'adresse de départ. En effet, la Figure~\ref{coordonnees-1} illustre un cas de figure où il est évident que le conducteur n'effectuera pas un tel détour pour prendre le passager. 
+    \begin{figure}[!htb]
+        \begin{center}
+         \includegraphics[width=\textwidth]{coordonnees-1.png}
+         \caption{Exemple de détour non compatible}
+         \label{coordonnees-1}
+        \end{center}
+       \end{figure}
+       On peut donc également permettre de diminuer encore le nombre de trajets à examiner. Pour ce faire, l'algorithme se base sur la notion d'ellipse ~\cite{ellipse}.
+    \begin{defi}
+        L'ellipse est le lieu des points dont la somme des distances à deux points fixes F et F', les foyers, est constante.
+    \end{defi}
+     L'idée est donc d'imaginer une ellipse bifocale, possédant donc deux foyers, dont un des foyers est représenté par les coordonnées de l'adresse de départ du trajet examiné, et l'autre par celles du lieu d'arrivée. Un exemple est donné en Figure~\ref{coordonnees-2}.
+     \begin{figure}[!htb]
+      \begin{center}
+       \includegraphics[width=\textwidth]{coordonnees-2.png}
+       \caption{Exemple de pré-traitement utilisant l'ellipse}
+       \label{coordonnees-2}
+      \end{center}
+     \end{figure}
+      Grâce à ces coordonnées et à la formule d'Haversine ~\cite{haversine}, nous allons pouvoir calculer la distance à vol d'oiseau entre ces points. 
+     \begin{defi}
+         La formule d'Haversine est une équation importante dans le domaine de la navigation fournissant la distance entre deux points sur une sphère en se basant sur leur latitude et longitude.
+     \end{defi}
+     \noindent Soit \textit{R} = 6371km, le rayon de la terre. Soit \textit{$lat_{1}$} et \textit{$long_{1}$} (resp. \textit{$lat_{2}$} et \textit{$long_{2}$}) les coordonnées en latitude-longitude du premier (resp. deuxième) lieu. \\
+     La distance \textit{d} à vol d'oiseau est obtenue à l'aide des formules suivantes ~\cite{haversine-script}:
+    \begin{equation*}
+        \Delta_{lat} = lat_{2} - lat_{1}
+    \end{equation*}
+    \begin{equation*}
+        \Delta_{long} = long_{2} - long_{1}
+    \end{equation*}
+    \begin{equation*}
+        a = sin^{2}(\frac{\Delta_{lat}}{2}) + cos(lat_{1}) * cos(lat_{2}) * sin^{2}(\frac{\Delta_{long}}{2})
+    \end{equation*}
+     \begin{equation*}
+         c = 2 * atan2(\sqrt{a},\sqrt{(1-a)})
+     \end{equation*}
+     \begin{equation*}
+        d = R * C
+     \end{equation*}     
+     On vérifie ensuite pour ce trajet, si la distance à vol d'oiseau entre l'adresse de départ (\textit{M}) de la demande de covoiturage et les deux foyers( \textit{F} et \textit{F'})est inférieure à une certaine distance \textit{D}. Cependant les distances à vol d'oiseau ne reflètent pas exactement les distances réelles en voiture, c'est pourquoi ces distances ont été multipliées par un certain ratio afin de se rapprocher de la réalité. Ici, \textit{D} = 2.5 * |FF'| + le détour maximum défini par le conducteur. Le nombre 2.5 ne découle pas d'une étude particulière mais d'une estimation du ratio faite après quelques comparaisons entre les valeurs retournées par ces calculs et celles fournies par GoogleMaps.\\\\
+     \underline{\textbf{Traitement}}\\\\
+     \indent Une fois le pré-traitement terminé, le système connaît désormais un ensemble réduit de conducteurs potentiels pour une certaine demande de covoiturage. Il faut désormais analyser en détail chacun de ces trajets et vérifier que le conducteur ne dépassera ni le temps, ni la distance supplémentaire en effectuant le détour nécessaire au covoiturage. Pour ce faire, les fonctions fournies dans l'API de GoogleMaps sont encore une fois d'un grand secours. En effet, comme auparavant, l'itinéraire entre l'adresse de départ et d'arrivée du trajet est calculé mais, cette fois-ci, l'adresse du passager est ajoutée en tant qu'étape. Ce travail va nous permettre de récupérer pour chacun des trajets la nouvelle distance et nouvelle durée si le covoiturage était accepté. Ces informations sont comparées avec celles des trajets initiaux afin de savoir si les préférences du conducteur sont bien respectées. Si c'est le cas, alors ce conducteur a la possibilité d'aller chercher cette personne en effectuant un petit détour sur le trajet prévu. Une fois l'entièreté des trajets analysés, l'utilisateur peut différencier ceux pour lesquels l'algorithme a trouver une correspondance. En effet, ceux-ci ont une croix cochée juste à côté d'eux. Il est toutefois possible pour le passager de refuser des opportunités de covoiturage pour des raisons personnelles. Pour ce faire, il lui suffit de décocher la case jouxtant le trajet à refuser. A l'inverse, il n'est pas autorisé de marquer des trajets en tant que compatible si l'algorithme ne le considère pas comme tel. En effet, ce covoiturage ne respecterait pas les préférences du conducteur, rien n'empêche par contre le passager de contacter de lui-même ce membre pour essayer de s'arranger directement entre eux.\\\\
+     \indent Une fois que l'utilisateur a confirmé les trajets choisis par l'algorithme, ceux-ci sont sauvegardés dans la base de données pour être réutilisés par la suite. En effet, lorsqu'un utilisateur désire reconsulter les résultats d'une recherche déjà effectuée, il lui suffit de se rendre dans la partie \textit{Covoiturage > Passager}. Pour chacun de ses trajets, la liste des conducteurs potentiels est affichée ainsi que les informations se rapportant aux trajets de ceux-ci. Ces informations sont les suivantes :
+     \begin{itemize}
+        \item Le nom du conducteur, ainsi qu'un lien menant à son profil;
+        \item La date du trajet du conducteur;
+        \item La ville de départ du conducteur ainsi que sa destination;
+        \item L'heure d'arrivée;
+        \item Une information précisant si le trajet a été confirmé par le conducteur;
+        \item Un lien menant à une page affichant toutes les informations relatives à ce covoiturage;
+        \item Un lien permettant d'envoyer par mail la demande de covoiturage au conducteur.\\
+     \end{itemize}
+     Le passager n'a la possibilité de contacter le conducteur qu'une seule fois pour lui envoyer la demande. En effet, ce mail contient des informations en relation directe avec cette demande, il n'est donc pas nécessaire pour le conducteur de les recevoir plusieurs fois. Ci-dessous se trouve un exemple de mail type :
+     \begin{quote}\label{mail-exemple}
+         Vous avez reçu ce mail car il semblerait que vous puissiez répondre à une demande de covoiturage\\
+         Rendez-vous sur http://covoiturage.arnaudrebts.be/location/ride/matches/4 pour en savoir plus.
+          Ci-dessous se trouve le message que vous a laissé la personne ayant initié cette recherche\\
+          --------------------------\\
+            Bonjour,
+            Je vous contacte pour savoir si vous avez la possibilité de passer me prendre lors de votre trajet du 3 juin.
+            Mon pseudo sur le site de covoiturage est Hybrid et vous trouverez mon numéro de téléphone sur mon profil.\\
+            
+            Merci d'avance.\\
+            Jérôme Van Herpe
+        \end{quote}
+        Il peut par contre le contacter ultérieurement en utilisant le système de mailing précédemment décrit.\\\\
+        \indent La page contenant toutes les informations relatives au covoiturage permet à chacune des personnes impliquées de connaître les termes de l'arrangement qu'ils s'engagent à respecter dans le cas où le covoiturage est accepté. En effet, le conducteur s'engage à venir chercher le ou les passagers à l'endroit prévu, le ou les jours prévus. Il s'engage également à prévenir au plus vite le passager en cas de problème l'empêchant de passer le prendre et ce afin que ce dernier puisse s'arranger le plus rapidement possible. De la même manière, si le passager ne doit plus se rendre à destination, il est prié de contacter le conducteur afin que celui-ci ne fasse pas un détour inutile. Bien que le service soit basé sur la gratuité, il est possible que le conducteur demande une compensation financière pour l'essence, dans ce cas, le passager est prié de répondre favorablement à cette requête, sauf si le prix lui semble déraisonnable. En effet, si une personne accepte de faire un détour de dix kilomètres tous les jours de la semaine, il semble correct pour le passager de payer une partie de l'essence du trajet. Les autres informations présentes sur cette page concernent le trajets. En effet, celles-ci reprennent la date, l'heure d'arrivée et le nombre de places nécessaires. \\
+        \indent Certaines informations d'ordre pratique sont mise à la disposition du conducteur telles que une comparaison des distances et durées entre le trajet initial et le trajet à effectuer en cas de covoiturage. Un itinéraire complet et détaillé est aussi présenté comprenant une carte sur lequel le trajet est représenté, ainsi que le chemin décrit étape par étape. Ces derniers renseignements sont obtenus une nouvelle fois grâce à GoogleMaps. De cette manière, le conducteur peut se rendre compte de la route à prendre pour rallier sa destination tout en prenant le ou les passagers. Un texte informatif sur les assurances est fourni, bien qu'il soit fortement conseillé au conducteur de prendre contact avec sa propre société d'assurances afin de connaître les termes de son contrat en matière de covoiturage. Le conducteur a finalement la possibilité d'accepter ou de refuser le covoiturage demandé. Chacune de ces actions engendre l'envoi d'une notification par mail au passager lui signalant la décision prise. Dans le cas où le conducteur accepte la demande, son trajet initial est modifié. En effet, puisqu'il s'engage à passer prendre la personne, une étape est rajoutée et le nombre de kilomètres ainsi que la durée du trajet est mise à jour. Le nombre de places disponibles est décrémenté du nombre de places nécessaires au covoiturage.\\\\
+        \indent Certaines mesures ont été prises afin d'éviter des problèmes de compatibilité dans le cas de modifications de trajets impliqués dans du covoiturage. En effet, si le conducteur décide de modifier l'heure d'arrivée de son trajet et que celle-ci ne rend plus possible le covoiturage, il faut absolument que le passager soit mis au courant. Dès lors, lorsqu'un trajet est modifié, quelque soit la modification effectuée, l'ensemble des éléments de la base de données qui sont en relation avec cette éléments sont supprimés. Ainsi, si une personne (conducteur ou passager) modifie son trajet, le covoiturage sera supprimé d'office et chacun recevra un mail pour mettre à jour leurs informations. En effet, pour le conducteur, la distance et la durée ont été modifiées par le covoiturage, et puisque le mécanisme permettant de calculer ces informations s'effectue du côté client, il faut donc qu'il retourne valider son trajet afin de mettre à jour ces informations. Même dans le cas où aucun covoiturage n'a été accepté, si un passager modifie sa demande, le résultat des précédentes recherches pour cette demande seront supprimée et si un conducteur modifie son trajet, tous les résultats de recherches dans lesquelles ce trajet est impliqué seront également supprimés.
 %-------------------------------------------------
 \subsection{Module d'administration}
 %-------------------------------------------------

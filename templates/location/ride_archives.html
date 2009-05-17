@@ -14,6 +14,8 @@ Vos anciens trajets en tant que conducteur :<br/>
     <label>Jusqu'à :</label> {{ride.dest.location}}  <br/>
     <label>Distance : </label>{{ride.distance}} Km<br/>
     <label>Durée : </label>{{ride.duration}} Minutes<br/>
+    <a id="link_list" href="/location/ride/edit/{{ride.id}}">Editer</a>
+    <a id="link_list" href="/location/ride/delete/{{ride.id}}">Supprimer</a>
 </li>
 {% endfor %}
 </ul>

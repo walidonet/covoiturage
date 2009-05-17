@@ -25,22 +25,22 @@ def info_matches(request):
 
 @login_required
 def list_passenger(request):
-    passengers = Passenger.objects.filter(Q(dateTime__gte=datetime.today) | Q(everyDay=True),passenger=request.user).order_by('dateTime')
+    passengers = Passenger.objects.filter(Q(dateTime__gte=datetime.today.date) | Q(everyDay=True),passenger=request.user).order_by('dateTime')
     return render_to_response('location/my_passengers.html',{'passengers':passengers}, RequestContext(request))  
 
 @login_required
 def list_old_passenger(request):
-    passengers = Passenger.objects.filter(Q(dateTime__lt=datetime.today) & Q(everyDay=False),passenger=request.user).order_by('dateTime')
+    passengers = Passenger.objects.filter(Q(dateTime__lt=datetime.today.date) & Q(everyDay=False),passenger=request.user).order_by('dateTime')
     return render_to_response('location/passenger_archives.html',{'passengers':passengers}, RequestContext(request))
 
 @login_required
 def list_ride(request):
-    rides = Ride.objects.filter(Q(dateTime__gte=datetime.today) | Q(everyDay=True),driver=request.user,).order_by('dateTime')
+    rides = Ride.objects.filter(Q(dateTime__gte=datetime.today.date) | Q(everyDay=True),driver=request.user,).order_by('dateTime')
     return render_to_response('location/my_rides.html',{'rides':rides}, RequestContext(request))
     
 @login_required
 def list_old_ride(request):
-    rides = Ride.objects.filter(Q(dateTime__lt=datetime.today) & Q(everyDay=False),driver=request.user).order_by('dateTime')
+    rides = Ride.objects.filter(Q(dateTime__lt=datetime.today.date) & Q(everyDay=False),driver=request.user).order_by('dateTime')
     return render_to_response('location/ride_archives.html',{'rides':rides}, RequestContext(request))
 
 @user_passes_test(lambda u: u.has_perm('location.arrivals'), login_url='/news/')

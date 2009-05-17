@@ -9,6 +9,8 @@ Vos anciennes demandes de covoiturage :<br/>
     <label> Heure d'arrivée : </label>{{passenger.dateTime|date:"H:i"}}<br/>
     Trajet de : {{passenger.start}} <br/>
     jusqu'à : {{passenger.dest.location }}<br/>
+    <a id="link_list" href="/location/passenger/edit/{{passenger.id}}">Editer</a>
+    <a id="link_list" href="/location/passenger/delete/{{passenger.id}}">Supprimer</a><br/>
 </li>
 {% endfor %}
 </ul>

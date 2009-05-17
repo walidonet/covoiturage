@@ -75,3 +75,9 @@ XML
 xml programming bible (voir bouquin)
 CSV
 http://en.wikipedia.org/wiki/Comma-separated_values
+ellipse
+http://www.mathcurve.com/courbes2d/ellipse/ellipse.shtml
+haversine
+http://en.wikipedia.org/wiki/Haversine_formula
+haversine-script
+http://www.movable-type.co.uk/scripts/latlong.html
