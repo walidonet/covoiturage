@@ -5,3 +5,4 @@ def handle_uploaded_file(f,user):
     for chunk in f.chunks():
         destination.write(chunk)
     destination.close()
+    return "%s%s" %(user.username,e)

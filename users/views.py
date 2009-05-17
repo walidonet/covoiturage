@@ -257,9 +257,9 @@ def add_photo(request):
         if form.is_valid():
             try:
                 #photo = Photo.objects.get(user=request.user)
-                #handle_uploaded_file(request.FILES['photo'],request.user)
+                string = handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
-                request.user.message_set.create(message="Extension %s"%e)
+                request.user.message_set.create(message="Extension %s"%string)
                 #im = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
                 #photo.photo = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
                 #photo.extension = e
@@ -267,9 +267,9 @@ def add_photo(request):
                 request.user.message_set.create(message="Photo modifiée.")
                 return render_to_response('users/add_photo.html',{'form':form}, RequestContext(request))
             except Photo.DoesNotExist:
-                #handle_uploaded_file(request.FILES['photo'],request.user)
+                string = handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
-                request.user.message_set.create(message="Extension %s"%e)
+                request.user.message_set.create(message="Extension %s"%string)
                 #img = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
                 #photo = Photo(user=request.user,photo=img,extension=e)
                 #photo.save()
