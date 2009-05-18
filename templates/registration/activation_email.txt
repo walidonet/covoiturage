@@ -1,6 +1,6 @@
 Bonjour,
 
-Vous avez reçu ce mail suite à votre inscription sur {{ SITE_HOST }}.
+Vous avez reçu ce mail suite à votre inscription sur le site de covoiturage {{SITE_HOST}}.
 Votre compte utilisateur nouvellement créé est actuellement inactif.
 
 Il vous suffit de cliquer sur le lien ci-dessous ou de le copier dans la barre d'adresse votre navigateur web : 
@@ -9,3 +9,8 @@ Il vous suffit de cliquer sur le lien ci-dessous ou de le copier dans la barre d
 	
 Si vous n'avez pas créé de compte sur {{SITE_HOST}}, veuillez nous excuser pour le dérangement occasionné.
 Vous ne recevrez plus d'autres e-mails de notre part et le compte créé avec votre adresse expirera automatiquement dans {{ expiration_days }} jours.
+
+
+Note pour les utilisateurs de la messagerie Hotmail :
+Si le lien ne s'affiche pas, il faut que vous autorisiez l'expéditeur de ce mail pour les prochains envois. Pour activer votre compte, veuillez copier le lien ci-dessus à la fin de l'adresse de notre site web.
+Désolé pour le désagrément occasionné.
