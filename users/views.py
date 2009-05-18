@@ -9,7 +9,7 @@ from django.template import RequestContext
 from forms import ProfileForm, pre_fill_profile, MailForm, AddressForm, pre_fill_address, PhoneForm, pre_fill_phone, PhotoForm
 from location.models import Location, RideMatches
 from location.script import find_coordinates
-from users.models import Favorites, Address, PhoneNumber, Photo
+from users.models import Favorites, Address, PhoneNumber, Photo, Config
 from utils.photo_helper import handle_uploaded_file
 from settings import SIGNUP_PASSWORD
 from settings import SITE_HOST
@@ -17,6 +17,7 @@ from settings import MEDIA_ROOT
 import os
 # modif effectuee dans les views du module registration ! pour tester la variable de session access_granted
 import Image
+import hashlib
 from os.path import splitext
 
 
@@ -37,11 +38,27 @@ def password_change(request, template_name='registration/password_change_form.ht
         'form': form,
     }, context_instance=RequestContext(request))
 
+
+@user_passes_test(lambda u: u.has_perm('users.config'), login_url='/news/')
+def change_signup_password(request):
+    if request.method == 'POST':
+        if len(request.POST.get('signup_password')) >= 6:
+            pw = Config.object.get(key="SIGNUP_PASSWORD")
+            pw.value = hashlib.sha1(request.POST.get('signup_password')).hexdigest()
+            pw.save()
+            request.user.message_set.create(message='Le mot de passe a été changé')
+            return HttpResponseRedirect('/users/signup_pw/')
+        else:
+            request.user.message_set.create(message='Le mot de passe doit contenir au moins 6 caracères.')
+            return HttpResponseRedirect('/users/signup_pw')
+    else:
+        return render_to_response('users/change_signup_pw.html', RequestContext(request))
+
 def check_signup_password(request):
     request.session.set_expiry(300)
     request.session['access_granted'] = False
     if request.method == 'POST':
-        if SIGNUP_PASSWORD == request.POST.get('signup_password'):
+        if Config.objects.get(key="SIGNUP_PASSWORD").value == hashlib.sha1(request.POST.get('signup_password')).hexdigest():
             request.session['access_granted'] = True
             return HttpResponseRedirect('/accounts/register/')
         else:

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{%block header%}{%endblock%}
+{% block footer %}{%endblock%}
+{% block content%}
+<div id="show">
+    Veuillez entrer le nouveau mot de passe : <br/><br/>
+<form action="." method="post">
+<div>
+    <div id="fieldWrapper">
+        <label id="left">Mot de passe :</label><input type="password" id="signup_password" name="signup_password"/> <strong>(6 caractères min.)</strong>
+    </div>
+</div>
+    <div id="fieldWrapper"><p id="submit"><input type="submit" value="Valider"></p></div>
+</form>
+</div>
+{% endblock %}
