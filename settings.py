@@ -100,8 +100,6 @@ INSTALLED_APPS = (
 AUTH_PROFILE_MODULE = 'users.userprofile'
 LOGIN_URL = '/accounts/login/'
 
-SIGNUP_PASSWORD = "bervoets2009"
-
 try:
     from local_settings import *
 except ImportError:

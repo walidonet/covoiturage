@@ -11,7 +11,6 @@ from location.models import Location, RideMatches
 from location.script import find_coordinates
 from users.models import Favorites, Address, PhoneNumber, Photo, Config
 from utils.photo_helper import handle_uploaded_file
-from settings import SIGNUP_PASSWORD
 from settings import SITE_HOST
 from settings import MEDIA_ROOT
 import os
