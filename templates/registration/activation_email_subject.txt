@@ -1,1 +1,1 @@
-Activation de votre compte sur {{SITE_HOST}}
+Activation de votre compte
