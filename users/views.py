@@ -43,7 +43,7 @@ def password_change(request, template_name='registration/password_change_form.ht
 def change_signup_password(request):
     if request.method == 'POST':
         if len(request.POST.get('signup_password')) >= 6:
-            pw = Config.object.get(key="SIGNUP_PASSWORD")
+            pw = Config.objects.get(key="SIGNUP_PASSWORD")
             pw.value = hashlib.sha1(request.POST.get('signup_password')).hexdigest()
             pw.save()
             request.user.message_set.create(message='Le mot de passe a été changé')
