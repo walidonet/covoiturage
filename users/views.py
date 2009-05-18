@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
-from django.core.mail import send_mail, BadHeaderError, send_mass_mail
+from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -81,7 +81,7 @@ def send_newsletter(request):
         subject = request.POST.get('subject','Newsletter Covoiturage')
         message = request.POST.get('message')
         mails = [u.email for u in User.objects.all()]
-        send_mass_mail(subject,message,'noreply@bervoets.covoiturage',mails)
+        send_mail(subject,message,'noreply@bervoets.covoiturage',mails)
         request.user.message_set.create(message='Mails envoyés')
         return HttpResponseRedirect('/administration/')
     else:
