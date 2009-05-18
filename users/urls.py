@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     (r'^(?P<user_id>\d)+/$', user_profile),
     (r'^change_password/$', password_change, {'post_change_redirect': '/users/change_password/'}),
     (r'^mail_me/$', email_me),
-    (r'newsletter/$', send_newsletter)
+    (r'newsletter/$', send_newsletter),
     (r'^signup/$', check_signup_password),
     (r'^signup_pw/$', change_signup_password),
     (r'^$', users_list),
