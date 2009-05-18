@@ -197,6 +197,8 @@ def edit_arrival(request,arrival_id):
                 arrival.location.save()
                 arrival.name = form.cleaned_data['arr_name']
                 arrival.save()
+                Passenger.objects.filter(dest=arrival).delete()
+                Ride.objects.filter(dest=arrival).delete()
                 request.user.message_set.create(message='La destination a bien été modifiée')
                 return HttpResponseRedirect('/location/arrivals/')
             else:

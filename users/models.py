@@ -2,10 +2,20 @@ from django.db import models
 from django.contrib.auth.models import User
 from location.models import Location
 
+class Config(models.Model):
+    key = models.CharField(max_length=50)
+    value = models.CharField(max_length=255)
+    
+    def __unicode__(self):
+        return "%s -> %s" % (self.key, self.value)
+
 class Photo(models.Model):
     user = models.ForeignKey(User, unique=True)
     #photo = models.ImageField(upload_to='user_pics')
     extension = models.CharField(max_length=10)
+    
+    def __unicode__(self):
+        return "%s%s" % (self.user.username,self.extension)
 
 class PhoneNumber(models.Model):
     user = models.ForeignKey(User)
