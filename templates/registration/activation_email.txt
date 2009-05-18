@@ -1,11 +1,11 @@
 Bonjour,
 
-Vous avez reçu ce mail suite à votre inscription sur {{SITE_HOST}}.
+Vous avez reçu ce mail suite à votre inscription sur {{ SITE_HOST }}.
 Votre compte utilisateur nouvellement créé est actuellement inactif.
 
 Il vous suffit de cliquer sur le lien ci-dessous ou de le copier dans la barre d'adresse votre navigateur web : 
 	
-	{{SITE_HOST}}accounts/activate/{{ activation_key }}/
+	{{ SITE_HOST }}accounts/activate/{{ activation_key }}/
 	
 Si vous n'avez pas créé de compte sur {{SITE_HOST}}, veuillez nous excuser pour le dérangement occasionné.
 Vous ne recevrez plus d'autres e-mails de notre part et le compte créé avec votre adresse expirera automatiquement dans {{ expiration_days }} jours.
