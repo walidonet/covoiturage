@@ -11,7 +11,7 @@ urlpatterns = patterns('',
      (r'^users/', include('users.urls')),
      (r'^location/', include('location.urls')),
      (r'^news/', include('news.urls')),
-     (r'^$', 'news.views.news_views'),
+     (r'^$', 'news.views.news_view'),
 )
 
 if settings.DEBUG:
