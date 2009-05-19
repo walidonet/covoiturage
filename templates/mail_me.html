@@ -1,23 +1,29 @@
 {%extends "base.html"%}
 {%block content%}
 <form method="post" action=".">
-    <div>
-        <div id="fieldWrapper">
+    <table>
+        <tr>
+            <td>
                 {{ mailForm.email.errors }}
-                <p id="right"><label id="left">Votre adresse e-mail :</label>
-                {{ mailFor.email }}</p>
-        </div>
-        <div id="fieldWrapper">
+                <label>Votre adresse e-mail :</label><br/>
+                {{ mailForm.email }}
+            </td>
+        </tr>
+        <tr>
+            <td>
                 {{ mailForm.subject.errors }}
-                <p id="right"><label id="left">Sujet du message :</label>
-                {{ mailFor.subject }}</p>
-        </div>
-        <div id="fieldWrapper">
+                <label>Sujet du message :</label><br/>
+                {{ mailForm.subject }}
+            </td>
+        </tr>
+        <tr>
+            <td>
                 {{ mailForm.message.errors }}
-                <p id="right"><label id="left">Votre message :</label>
-                {{ mailFor.message }}</p>
-        </div>
-    </div>
+                <label>Votre message :</label><br/>
+                {{ mailForm.message }}
+            </td>
+        </tr>
+    </table>    
     <input type="submit" value="Envoyer">
 </form>    
 {%endblock%}
