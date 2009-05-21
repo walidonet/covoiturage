@@ -7,9 +7,9 @@
     var durPanel;
     var directions;
     var rides = {{ json|safe }}
+    var item;
     
     function initialize(index) {
-        // rides.each(function(item, index) {
             if(index < {{rides|length}}){
             item = rides[index];
             map = new GMap2($("map_canvas"));
