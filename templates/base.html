@@ -89,7 +89,7 @@
                                 <u>Conducteur :</u><br/>
                                 {% for ride in rides_for_right %}
                                 <li><a href="/location/ride/edit/{{ride.id}}">{{ride.dateTime|date:"j F Y"}}<br/>
-                                    {{ride.dest.name}}</a></li>
+                                    {{ride.dest.name}}</a></li><br/>
                                     {% endfor %}
                                 <u>Passager :</u><br/>
                                 {% for passenger in passengers_for_right %}
