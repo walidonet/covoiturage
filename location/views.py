@@ -52,6 +52,7 @@ def list_arrivals(request):
 def list_passenger_matches(request):
     passenger_rides = request.user.passenger_set.filter(Q(dateTime__gte=datetime.today().date()) | Q(everyDay=True))
     return render_to_response('location/passenger_matches.html',{'passenger_rides':passenger_rides},RequestContext(request))
+
 @login_required
 def list_ride_matches(request):
     rides = request.user.ride_set.filter(Q(dateTime__gte=datetime.today().date()) | Q(everyDay=True))

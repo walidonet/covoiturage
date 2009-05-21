@@ -83,3 +83,11 @@ haversine-script
 http://www.movable-type.co.uk/scripts/latlong.html
 django-flatpage
 http://docs.djangoproject.com/en/dev/ref/contrib/flatpages/
+Markdown
+http://daringfireball.net/projects/markdown/
+Markdown-python:
+http://www.freewisdom.org/projects/python-markdown/News
+john-gruber
+http://en.wikipedia.org/wiki/John_Gruber
+markdown-basics
+http://daringfireball.net/projects/markdown/basics
