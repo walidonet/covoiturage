@@ -7,8 +7,9 @@
     Le conducteur a la capacité de voir les demandes même si vous ne l'avez pas encore contacté par mail. Il peut donc accepter votre demande directement. 
     <br/><br/>Pour finir, les deux partis peuvent à n'importe quel moment mettre fin au covoiturage. Dans ce cas, un mail sera envoyé au conducteur et au passager afin que ceux-ci puissent s'arranger dans les plus brefs délais. <br/> <br/>
     <b>Vos demandes de covoiturage :</b><br/><br/>
-    <div id="match_list">{% for p in passenger_rides %}
+    <div id="match_list">
         <ul>
+            {% for p in passenger_rides %}
             <li><label>Trajet entre {{p.start}} et {{p.dest}}.<br/> Arrivée prévue à {{p.dateTime|date:"H:i"}}.</label><br/>
                 <label> Les conducteurs potentiels sont :</label> 
                 <ul>
