@@ -31,7 +31,7 @@
             <div id="header_login">
                 {% if user.is_authenticated %}
                 <label>{{user.username}}</label><br/>
-                <a href="/accounts/logout">Déconnecter</a>
+                <a href="/accounts/logout/">Déconnecter</a>
                 {% else %}
                 <form action="/accounts/login/?next={{ next|default:"/news/" }}" method="post">
                     <input class="login" id="id_username" type="text" maxlength="255" name="username" value="Username"/><br/>
@@ -55,6 +55,11 @@
                     <li><a href="/contact/">Contact</a></li>
                     {% if user.is_staff %}
                     <li><a href="/administration/">Administration</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li><a href="/accounts/logout/">Déconnexion</a></li>
+                    {% else %}
+                    <li><a href="/accounts/login/">Connexion</a></li>
                     {% endif %}
                 </ul>
             </div>
