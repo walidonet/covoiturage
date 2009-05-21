@@ -22,8 +22,6 @@
                 GEvent.addListener(directions,"load", function() {
                     var dist = Math.round(directions.getDistance().meters/1000.0);
                     var dur = Math.round(directions.getDuration().seconds /60.0);
-                    console.log("Nouvelle distance : "+ dist +" inferieure a : "+ (rides[index].initialDist+rides[index].driverMaxDistance)+"?");
-                    console.log("Nouvelle duree : "+ dur +" inferieure a : "+ (rides[index].initialDur+rides[index].driverMaxDuration)+"?");
                     if(dist <= rides[index].initialDist + rides[index].driverMaxDistance && dur <= rides[index].initialDur + rides[index].driverMaxDuration){
                         var test = $("id_check"+index);
                         test.disabled = false;
