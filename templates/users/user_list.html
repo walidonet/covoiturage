@@ -3,7 +3,7 @@
 {% block content %}
 <ul>
     {% for u in users_list %}
-    <li> <a href="/users/{{u.id}}">{{u.username}} </a 
+    <li> <a href="/users/{{u.id}}">{{u.username}} </a>
         {% ifnotequal u.id user.id %}
             {% if u|IN:favorites %}
             <a href="/users/delete_favorite/{{u.id}}/"> -</a>
