@@ -289,7 +289,6 @@ def add_photo(request):
                 photo = Photo.objects.get(user=request.user)
                 string = handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
-                request.user.message_set.create(message="Extension %s"%string)
                 #im = Image.open('./media/user_pics/%s%s'%(request.user.username,e))
                 #photo.photo = Image.open('./user_pics/%s%s'%(request.user.username,e))
                 photo.extension = e
@@ -299,7 +298,6 @@ def add_photo(request):
             except Photo.DoesNotExist:
                 string = handle_uploaded_file(request.FILES['photo'],request.user)
                 t, e = splitext(request.FILES['photo'].name)
-                request.user.message_set.create(message="Extension %s"%string)
                 #img = Image.open('./user_pics/%s%s'%(request.user.username,e))
                 #photo = Photo(user=request.user,photo=img,extension=e)
                 photo = Photo(user=request.user,extension=e)
