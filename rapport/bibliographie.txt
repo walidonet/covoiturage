@@ -85,9 +85,13 @@ django-flatpage
 http://docs.djangoproject.com/en/dev/ref/contrib/flatpages/
 Markdown
 http://daringfireball.net/projects/markdown/
-Markdown-python:
+Markdown-python
 http://www.freewisdom.org/projects/python-markdown/News
 john-gruber
 http://en.wikipedia.org/wiki/John_Gruber
 markdown-basics
 http://daringfireball.net/projects/markdown/basics
+django-registration
+http://bitbucket.org/ubernostrum/django-registration/wiki/Home
+py-urllib
+http://docs.python.org/library/urllib.html

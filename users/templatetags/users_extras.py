@@ -1,6 +1,6 @@
 from django import template
 register = template.Library()
-# Permet l'utilisation de nouveau block dans les templates
+# Permet l'utilisation de nouveaux tags dans les templates
 # source : http://www.djangosnippets.org/snippets/413/
 @register.filter
 def EQ(value,arg): return value == arg
