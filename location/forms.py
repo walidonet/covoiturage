@@ -29,7 +29,7 @@ class PassengerForm(forms.Form):
     start_city_name = forms.CharField(max_length=255)
     start_zip_code = forms.IntegerField()
     destination = forms.ModelChoiceField(Arrivals.objects.all(),empty_label=None)
-    maxDelay = forms.IntegerField(initial=0,help_text='Ce nombre correspond à la fourchette de temps dans laquelle vous acceptez d\'arrivée à destination. Si vous choisissez 10 minutes, cela signifie que vous acceptez d\'arriver 10 minutes avant ou 10 minutes après l\'heure d\'arrivée rentrée précédemment.')
+    maxDelay = forms.IntegerField(initial=0,help_text=u'Ce nombre correspond à la fourchette de temps dans laquelle vous acceptez d\'arrivée à destination. Si vous choisissez 10 minutes, cela signifie que vous acceptez d\'arriver 10 minutes avant ou 10 minutes après l\'heure d\'arrivée rentrée précédemment.')
     seatsNeeded = forms.IntegerField(initial=1)
     everyDay = forms.BooleanField(required=False)
     
