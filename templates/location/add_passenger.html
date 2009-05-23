@@ -74,9 +74,15 @@
           {{form.destination.errors}}
           <td><label>Adresse d'arrivée :</label></td><td>{{form.destination}}</td>
         </tr>
+        </table>
+        {{form.maxDelay.help_text}}
+        <table width="150px"cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="20px"></td><td width="50px" align="center"></td>
+            </tr>
         <tr>
           {{form.maxDelay.errors}}
-          <td><label>Fourchette de temps :</label>(en minutes)</td><td title="{{form.maxDelay.help_textAA}}">{{form.maxDelay}}</td>
+          <td><label>Fourchette de temps :</label>(en minutes)</td><td title="{{form.maxDelay.help_text}}">{{form.maxDelay}}</td>
         </tr>
         <tr>
           {{form.seatsNeeded.errors}}
