@@ -74,10 +74,10 @@
           {{form.destination.errors}}
           <td><label>Adresse d'arrivée :</label></td><td>{{form.destination}}</td>
         </tr>
+        Ce nombre correspond à la fourchette de temps dans laquelle vous acceptez d'arrivée à destination. Si vous choisissez 10 minutes, cela signifie que vous acceptez d'arriver 10 minutes avant ou 10 minutes après l'heure d'arrivée rentrée précédemment. 
         <tr>
           {{form.maxDelay.errors}}
-          <td>Ce nombre correspond à la fourchette de temps dans laquelle vous acceptez d'arrivée à destination. Si vous choisissez 10 minutes, cela signifie que vous acceptez d'arriver 10 minutes avant ou 10 minutes après l'heure d'arrivée rentrée précédemment. 
-              <label>Fourchette de temps :</label>(en minutes)</td><td>{{form.maxDelay}}</td>
+          <td><label>Fourchette de temps :</label>(en minutes)</td><td>{{form.maxDelay}}</td>
         </tr>
         <tr>
           {{form.seatsNeeded.errors}}
