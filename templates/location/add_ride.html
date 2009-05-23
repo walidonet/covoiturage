@@ -74,7 +74,7 @@
         </tr>
         <tr>
           {{form.date.errors}}
-          <td><label>Date du trajet :</label></td><td>{{form.date}}</td>
+          <td><label>Date du trajet :</label></td><td title="{{form.date.help_text}}">{{form.date}}</td>
         </tr>
         <tr>
           {{form.everyDay.errors}}
@@ -82,7 +82,7 @@
         </tr>
         <tr>
           {{form.time.errors}}
-          <td><label>Heure d'arrivée :</label></td><td>{{form.time}}</td>
+          <td><label>Heure d'arrivée :</label></td><td title="{{form.time.help_text}}">{{form.time}}</td>
         </tr>  
         <tr>
           <td><label>Adresse de départ :</label></td>
@@ -117,11 +117,11 @@
         </tr>
         <tr>
           {{form.driverMaxDistance.errors}}
-          <td><label>Détour maximum (en km) :</label></td><td>{{form.driverMaxDistance}}</td>
+          <td><label>Détour maximum (en km) :</label></td><td title="{{form.driverMaxDistance.help_text}}">{{form.driverMaxDistance}}</td>
         </tr>
         <tr>
           {{form.driverMaxDuration.errors}}
-          <td><label>Durée supplémentaire maximum (en min) :</label></td><td>{{form.driverMaxDuration}}</td>
+          <td><label>Durée supplémentaire maximum (en min) :</label></td><td title="{{form.driverMaxDuration.help_text}}">{{form.driverMaxDuration}}</td>
         </tr>
         <tr>
           {{form.freeSeats.errors}}

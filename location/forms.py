@@ -23,8 +23,8 @@ def pre_fill_arrival(arrival):
             'arr_name':arrival.name}
 
 class PassengerForm(forms.Form):
-    date = forms.DateField(required=False,initial=datetime.date.today)
-    time = forms.TimeField(required=False, initial=datetime.time)
+    date = forms.DateField(required=False,initial=datetime.date.today,help_text=u"Format : Année-Mois-Jour")
+    time = forms.TimeField(required=False, initial=datetime.time, help_text=u"Format : Heure-Minute-Seconde")
     start_house_number = forms.IntegerField()
     start_street = forms.CharField(max_length=255)
     start_city_name = forms.CharField(max_length=255)
@@ -47,15 +47,15 @@ def pre_fill_passenger(passenger):
             'everyDay': passenger.everyDay}
 
 class RideForm(forms.Form):
-    date = forms.DateField(required=False,initial=datetime.date.today)
-    time = forms.TimeField(required=False,initial=datetime.time)
+    date = forms.DateField(required=False,initial=datetime.date.today,help_text=u"Format : Année-Mois-Jour")
+    time = forms.TimeField(required=False,initial=datetime.time, help_text=u"Format : Heure-Minute-Seconde")
     start_house_number = forms.IntegerField()
     start_street = forms.CharField(max_length=255)
     start_city_name = forms.CharField(max_length=255)
     start_zip_code = forms.IntegerField()
     destination = forms.ModelChoiceField(Arrivals.objects.all(),empty_label=None)
-    driverMaxDistance = forms.IntegerField(initial=0)
-    driverMaxDuration = forms.IntegerField(initial=0)
+    driverMaxDistance = forms.IntegerField(initial=0,help_text=u"Ce nombre correspond à la distance maximale du détour en Km que vous acceptez de parcourir pour prendre une personne")
+    driverMaxDuration = forms.IntegerField(initial=0,help_text=u"Ce nombre correspond à la durée maximale du détour en minutes que vous acceptez pour prendre une personne")
     freeSeats = forms.IntegerField(initial=0)
     everyDay = forms.BooleanField(required=False)
     distance = forms.IntegerField(initial=0,required=False,widget=forms.HiddenInput)
