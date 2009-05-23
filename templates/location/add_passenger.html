@@ -41,7 +41,7 @@
         </tr>
         <tr>
           {{form.time.errors}}
-          <td><label>Heure d'arrivée :</label>(HH:MM:SS)</td><td>{{form.time}}</td>
+          <td><label>Heure d'arrivée :</label><br/>(HH:MM:SS)</td><td>{{form.time}}</td>
         </tr>
         <tr>
           <td><label>Adresse de départ :</label></td>
@@ -74,9 +74,9 @@
           {{form.destination.errors}}
           <td><label>Adresse d'arrivée :</label></td><td>{{form.destination}}</td>
         </tr>
-        Ce nombre correspond à la fourchette de temps dans laquelle vous acceptez d'arrivée à destination. Si vous choisissez 10 minutes, cela signifie que vous acceptez d'arriver 10 minutes avant ou 10 minutes après l'heure d'arrivée rentrée précédemment. 
         <tr>
           {{form.maxDelay.errors}}
+          {{form.maxDelay.help_text}}
           <td><label>Fourchette de temps :</label>(en minutes)</td><td>{{form.maxDelay}}</td>
         </tr>
         <tr>
