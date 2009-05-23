@@ -33,7 +33,7 @@
         </tr>
         <tr>
           {{form.date.errors}}
-          <td><label>Date du trajet :</label></td><td>{{form.date}}</td>
+          <td><label>Date du trajet :</label>(AAAA-MM-JJ)</td><td>{{form.date}}</td>
         </tr>
         <tr>
           {{form.everyDay.errors}}
@@ -41,7 +41,7 @@
         </tr>
         <tr>
           {{form.time.errors}}
-          <td><label>Heure d'arrivée :</label></td><td>{{form.time}}</td>
+          <td><label>Heure d'arrivée :</label>(HH:MM:SS)</td><td>{{form.time}}</td>
         </tr>
         <tr>
           <td><label>Adresse de départ :</label></td>
@@ -75,8 +75,9 @@
           <td><label>Adresse d'arrivée :</label></td><td>{{form.destination}}</td>
         </tr>
         <tr>
+            Ce nombre correspond à la fourchette de temps dans laquelle vous acceptez d'arrivée à destination. Si vous choisissez 10 minutes, cela signifie que vous acceptez d'arriver 10 minutes avant ou 10 minutes après l'heure d'arrivée rentrée précédemment. 
           {{form.maxDelay.errors}}
-          <td><label>Retard maximum:</label></td><td>{{form.maxDelay}}</td>
+          <td><label>Fourchette de temps :</label>(en minutes)</td><td>{{form.maxDelay}}</td>
         </tr>
         <tr>
           {{form.seatsNeeded.errors}}
