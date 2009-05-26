@@ -17,6 +17,8 @@ article-Kyoto:
 http://unfccc.int/kyoto_protocol/items/2830.php
 covoiturage.com
 http://www.covoiturage.com/
+allostop
+http://www.allostop.net/
 karzoo.be
 http://www.karzoo.be/
 karzoo.be-entreprise
@@ -95,3 +97,5 @@ django-registration
 http://bitbucket.org/ubernostrum/django-registration/wiki/Home
 py-urllib
 http://docs.python.org/library/urllib.html
+django-context-processor
+http://docs.djangoproject.com/en/dev/ref/templates/api/
