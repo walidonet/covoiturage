@@ -68,8 +68,7 @@ def delete(request, news_id):
 
 def show(request, news_id):
     try:
-        n = News.objects.get(pk=news_id)
-        return render_to_response('news/show.html', {'news':n}, RequestContext(request))
+        return render_to_response('news/show.html', {'news':News.objects.get(pk=news_id),'ref':request.META.get('HTTP_REFERER')}, RequestContext(request))
     except News.DoesNotExist:
         request.user.message_set.create(message='L\'avis demandé n\'existe pas')
         return HttpResponseRedirect('/news/')

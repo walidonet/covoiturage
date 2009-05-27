@@ -2,7 +2,9 @@
 {% block content %}
 <div id="news_one">
     {% if news.is_public %}
-    <div id="news_title"><h3 class='title'>{{news.title}}</h3><p>{{news.pub_date|date:"j F Y"}}</p></div>
+    <div id="news_title">
+        <h3 class='title'>{{news.title}}</h3><p>{{news.pub_date|date:"j F Y"}}</p>
+    </div>
     <div id="news_content">
         {{news.content_html|safe|linebreaksbr}}
     </div>
@@ -13,29 +15,33 @@
         {%if perms.news.delete_news %}
         <a id="link_list" href="/news/delete/{{news.id}}">Supprimer</a>
         {% endif %}
-        <p>écrit par <a href="/users/{{news.author.id}}/">{{news.author.username}}</p>
-        </div>
-        {% else %}
-        {% if user.is_authenticated %}
-        <div id="news_title"><h3 class='title span-11'>{{news.title}}</h3><p>{{news.pub_date|date:"j F Y"}}</p></div>
-        <div id="news_content">
-            {{news.content_html|safe}} <br/>
-            {{news.extra_content_html|safe}}
-        </div>
-        <div id="news_footer">
-            {% if perms.news.change_news %}
-            <a id="link_list" href="/news/edit/{{news.id}}">Editer</a>
-            {% endif %}
-            {%if perms.news.delete_news %}
-            <a id="link_list" href="/news/delete/{{news.id}}">Supprimer</a>
-            {% endif %}
-            <p>écrit par <a href="/users/{{news.author.id}}/">{{news.author.username}}</p>
-            </div>
-            {% else %}
-            <div class="error">
-                Veuillez vous <a href="/accounts/login/">logguer</a> pour accéder à cette news.
-            </div>
-            {% endif %}
-            {% endif %}
-        </div>
-        {% endblock %}
+        <p>écrit par <a href="/users/{{news.author.id}}/">{{news.author.username}}</a></p>
+    </div>
+    {% else %}
+    {% if user.is_authenticated %}
+    <div id="news_title">
+        <h3 class='title span-11'>{{news.title}}</h3><p>{{news.pub_date|date:"j F Y"}}</p>
+    </div>
+    <div id="news_content">
+        {{news.content_html|safe}} <br/>
+        {{news.extra_content_html|safe}}
+    </div>
+    <div id="news_footer">
+        {% if perms.news.change_news %}
+        <a id="link_list" href="/news/edit/{{news.id}}">Editer</a>
+        {% endif %}
+        {%if perms.news.delete_news %}
+        <a id="link_list" href="/news/delete/{{news.id}}">Supprimer</a>
+        {% endif %}
+        <p>écrit par <a href="/users/{{news.author.id}}/">{{news.author.username}}</a></p>
+    </div>
+    {% else %}
+    <div class="error">
+        Veuillez vous <a href="/accounts/login/">connecter</a> pour accéder à cette news.
+    </div>
+    {% endif %}
+    {% endif %}
+    <br/><br/>
+    <a href="{{ref}}"> Retour </a>
+</div>
+{% endblock %}

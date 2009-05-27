@@ -30,8 +30,8 @@ def isPotentialDriver(ride, passenger):
 
 def belongsToEllipse(startLat, startLon, endLat, endLon, stageLat, stageLon, driverMaxDist):
     distSE = getDistance(startLat,startLon, endLat, endLon)
-    # *2.5 parce que ce sont des distances à vol d'oiseau et il faut compenser le trajet normal
-    focalAxisLength = distSE*2.5 + driverMaxDist
+    # *2.2 parce que ce sont des distances à vol d'oiseau et il faut compenser le trajet normal
+    focalAxisLength = distSE*2.2 + driverMaxDist
     distSStage = getDistance(startLat,startLon,stageLat,stageLon)
     distEStage = getDistance(stageLat,stageLon,endLat,endLon)
     return (distSStage + distEStage) <= focalAxisLength
