@@ -159,7 +159,7 @@ def delete_favorite(request,user_id):
 def add_phone(request):
     if request.method == 'POST':
         form = PhoneForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['phone'].isdigit():
             phone = PhoneNumber(number=form.cleaned_data['phone'],user=request.user)
             phone.save()
             request.user.message_set.create(message="Numéro de téléphone ajouté.")
@@ -177,7 +177,7 @@ def edit_phone(request, phone_id):
         if request.user == phone.user:
             if request.method == 'POST':
                 form = PhoneForm(request.POST)
-                if form.is_valid():
+                if form.is_valid() and form.cleaned_data['phone'].isdigit():
                     phone.number = form.cleaned_data['phone']
                     phone.save()
                     request.user.message_set.create(message="Numéro de téléphone modifié.")
