@@ -6,7 +6,7 @@
     <div id="profil1_container">
         <div id="profil_photo">
             {% if photo %}
-            <img src="{{MEDIA_URL}}/user_pics/{{user.username}}{{photo.extension}}"></img>
+            <img src="{{MEDIA_URL}}/user_pics/{{visited_user.username}}{{photo.extension}}"></img>
             {% else %}
             <img src="{{MEDIA_URL}}/img/photo/vert.png"></img>
             {% endif %}
