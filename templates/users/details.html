@@ -75,7 +75,7 @@
         <div id="profil_info2_right">
             <label>Contact :</label> 
             {% if user.username|EQ:visited_user.username %}
-            <a class="small" id="link_list" href="javascript: window.open('/users/phone/add/',null, 'height=200,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter un numéro de téléphone</a>
+            <a class="small" id="link_list" href="javascript: window.open('/users/phone/add/',null, 'height=200,width=300,toolbar=0,location=0,directories=0,status=0, scrollbars=0,resizable=0,menubar=0');" >Ajouter un numéro de téléphone</a>
             <ul>
                 {% for phone in visited_user.phonenumber_set.all %}
                 <li> {{phone.number}} <a class="small" id="link_list" href="javascript: window.open('/users/phone/edit/{{phone.id}}',null, 'height=200,width=300,status=no,toolbar=no,menubar=no,location=no');self.close();" >Modifier</a><a class="small" id="link_list" href="/users/phone/delete/{{phone.id}}">Supprimer</a></li> 
