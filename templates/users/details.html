@@ -58,14 +58,14 @@
             {% if user.username|EQ:visited_user.username %}
             </label><a class="small" id="link_list" href="javascript: window.open('/users/address/add/',null, 'height=330,width=300,status=no,toolbar=no,menubar=no,location=no');self.close();" >Ajouter une adresse</a>
             <ul>
-                {% for address in user.address_set.all %}
+                {% for address in visited_user.address_set.all %}
                 <li>{{address.location.street|capfirst}}, {{address.location.house_number}}<br/>
                     {{address.location.zip_code}} - {{address.location.city_name}}<br/> <a class="small" id="link_list" href="javascript: window.open('/users/address/edit/{{address.id}}',null, 'height=330,width=300,status=no,toolbar=no,menubar=no,location=no');self.close();" >Modifier</a><a class="small" id="link_list" href="/users/address/delete/{{address.id}}">Supprimer</a></li>
                 {% endfor %}            
             </ul>
             {% else %}
             <ul>
-                {% for address in user.address_set.all %}
+                {% for address in visited_user.address_set.all %}
                 <li>{{address.location.street|capfirst}}, {{address.location.house_number}}<br/>
                     {{address.location.zip_code}} - {{address.location.city_name|capfirst}}</li>
                 {% endfor %}
@@ -77,13 +77,13 @@
             {% if user.username|EQ:visited_user.username %}
             <a class="small" id="link_list" href="javascript: window.open('/users/phone/add/',null, 'height=200,width=300,status=no,toolbar=no,menubar=no,location=no'); self.close();" >Ajouter un numéro de téléphone</a>
             <ul>
-                {% for phone in user.phonenumber_set.all %}
+                {% for phone in visited_user.phonenumber_set.all %}
                 <li> {{phone.number}} <a class="small" id="link_list" href="javascript: window.open('/users/phone/edit/{{phone.id}}',null, 'height=200,width=300,status=no,toolbar=no,menubar=no,location=no');" >Modifier</a><a class="small" id="link_list" href="/users/phone/delete/{{phone.id}}self.close();">Supprimer</a></li> 
                 {% endfor %}
             </ul>
             {% else %}
             <ul>
-                {% for phone in user.phonenumber_set.all %}
+                {% for phone in visited_user.phonenumber_set.all %}
                 <li> {{phone.number}} </li>
                 {% endfor %}
             </ul>
