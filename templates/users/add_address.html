@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {%block header%}{%endblock%}
 {% block footer %}{%endblock%}
+{% block bodyBalise%}
+<body onclose="window.opener.location.reload()">
+{% endblock %}
 {% block content%}
 <div id="show">Veuillez remplir les champs suivants :<br/><br/>
 <form action="." method="post">
