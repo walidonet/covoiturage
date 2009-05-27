@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load users_extras %}
 {% block content %}
+<div id="show">
 <ul>
     {% for u in users_list %}
-    <li> <a href="/users/{{u.id}}">{{u.username}} </a>
+    <li> <a class="large" href="/users/{{u.id}}">{{u.username}} </a>
         {% ifnotequal u.id user.id %}
             {% if u|IN:favorites %}
             <a href="/users/delete_favorite/{{u.id}}/"> -</a>
@@ -14,4 +15,5 @@
     </li>
     {% endfor %}
 </ul>
+</div>
 {% endblock %}
