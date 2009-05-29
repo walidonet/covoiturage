@@ -30,12 +30,12 @@
       map.setCenter(new GLatLng(42.351505,-71.094455), 15);
       directions = new GDirections();
       
-      start_house_number_panel = document.getElementById("id_start_house_number");
-      start_street_panel = document.getElementById("id_start_street");
-      start_city_panel = document.getElementById("id_start_city_name");
-      start_zip_panel = document.getElementById("id_start_zip_code");
+      start_house_number_panel = $("id_start_house_number");
+      start_street_panel = $("id_start_street");
+      start_city_panel = $("id_start_city_name");
+      start_zip_panel = $("id_start_zip_code");
       
-      mySelect = document.getElementById("id_destination");
+      mySelect = $("id_destination");
       dest = mySelect.options[mySelect.selectedIndex].text
       
       directions.load("from: "+start_house_number_panel.value +" "+ start_street_panel.value +" , "+start_city_panel.value+ " ,"+start_zip_panel.value +", Belgique to: "+ dest +", Belgique");
@@ -45,11 +45,11 @@
     function setDistance(){
         var dist = Math.round(directions.getDistance().meters/1000.0);
         var dur = Math.round(directions.getDuration().seconds /60.0);
-        distP = document.getElementById("id_distance");
+        distP = $("id_distance");
         distP.value = dist;
-        distD = document.getElementById("id_duration");
+        distD = $("id_duration");
         distD.value = dur;
-        button = document.getElementById("id_button");
+        button = $("id_button");
         replaceT(button);
     }
     function replaceT(obj){
