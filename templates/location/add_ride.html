@@ -21,13 +21,10 @@
                 $("id_start_zip_code").value= "{{address.location.zip_code}}";
             }{% endfor %}
     }
-    var distPanel;
-    var durPanel;
+
     var directions;
 
     function initialize() {
-      //map = new GMap2(document.getElementById("map_canvas"));
-      //map.setCenter(new GLatLng(42.351505,-71.094455), 15);
       directions = new GDirections();
       
       start_house_number_panel = $("id_start_house_number");
