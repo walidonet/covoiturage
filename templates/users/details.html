@@ -52,7 +52,7 @@
             <a href="{{ref}}">Retour a la page precedente</a>
         {% endif %}
     </div></div>
-
+    <div>
         <div id="profil_info2_left">
             <label>Adresses : 
             {% if user.username|EQ:visited_user.username %}
@@ -89,7 +89,7 @@
             </ul>
             {% endif %}
         </div>
-
+        </div>
 </div>
 <br/>
 {% endblock %}
