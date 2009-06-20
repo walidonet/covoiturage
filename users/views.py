@@ -340,7 +340,7 @@ def edit_profile(request):
 def user_profile(request,user_id):
     ref = request.META.get('HTTP_REFERER')
     try:
-        visited_user = User.objects.get(pk=user_id)
+        visited_user = User.objects.get(pk=int(user_id))
         fav = Favorites.objects.filter(user=request.user,favorite=visited_user)
         try:
             photo = Photo.objects.get(user=visited_user)
