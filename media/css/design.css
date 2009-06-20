@@ -220,11 +220,11 @@ height:101px;
     margin-top:10px;
     float:left;
     width:250px;
-    min-height:280px;
+    height:280px;
 /*    border:1px solid #FFFFFF;
 */}
 #profil1_container {
-    min-height:290px;
+    height:290px;
 }
 #profil_info1 {
     float:right;
