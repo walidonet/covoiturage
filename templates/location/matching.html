@@ -3,8 +3,6 @@
     <script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAgBspmYKlV-K16v3uuTvAVxQXe2j3UScOufxFbDXPZ5pNZgzsBBQoMOr4yD6sylZaeft_0jLUsbqLpA"
       type="text/javascript"></script>
     <script type="text/javascript"> 
-    var distPanel;
-    var durPanel;
     var directions;
     var rides = {{ json|safe }}
     var item;
@@ -13,26 +11,24 @@
             if(index < {{rides|length}}){
             item = rides[index];
             map = new GMap2($("map_canvas"));
-                map.setCenter(new GLatLng(42.351505,-71.094455), 15);
-                directions = new GDirections();
-                var fr = item['start'];
-                var to1 = "{{passenger.start}}";
-                var to2 = "{{passenger.dest}}";
-                directions.load("from: "+ fr +", Belgique to: "+to1+", Belgique to:"+ to2+", Belgique");
-                GEvent.addListener(directions,"load", function() {
-                    var dist = Math.round(directions.getDistance().meters/1000.0);
-                    var dur = Math.round(directions.getDuration().seconds /60.0);
-                    if(dist <= rides[index].initialDist + rides[index].driverMaxDistance && dur <= rides[index].initialDur + rides[index].driverMaxDuration){
-                        var test = $("id_check"+index);
-                        test.disabled = false;
-                        test.checked = true
-                        $("id_ride"+index+"_newDist").value = dist;
-                        $("id_ride"+index+"_newDur").value = dur;
-                    }
-                    initialize(index+1);
-                });}
-
-        // })
+            map.setCenter(new GLatLng(42.351505,-71.094455), 15);
+            directions = new GDirections();
+            var fr = item['start'];
+            var to1 = "{{passenger.start}}";
+            var to2 = "{{passenger.dest}}";
+            directions.load("from: "+ fr +", Belgique to: "+to1+", Belgique to:"+ to2+", Belgique");
+            GEvent.addListener(directions,"load", function() {
+                var dist = Math.round(directions.getDistance().meters/1000.0);
+                var dur = Math.round(directions.getDuration().seconds /60.0);
+                if(dist <= rides[index].initialDist + rides[index].driverMaxDistance && dur <= rides[index].initialDur + rides[index].driverMaxDuration){
+                    var test = $("id_check"+index);
+                    test.disabled = false;
+                    test.checked = true
+                    $("id_ride"+index+"_newDist").value = dist;
+                    $("id_ride"+index+"_newDur").value = dur;
+                }
+                initialize(index+1);
+            });}
     }
     </script>
 {% endblock %}
