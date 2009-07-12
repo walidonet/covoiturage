@@ -23,7 +23,7 @@
                 if(dist <= rides[index].initialDist + rides[index].driverMaxDistance && dur <= rides[index].initialDur + rides[index].driverMaxDuration){
                     var test = $("id_check"+index);
                     test.disabled = false;
-                    test.checked = true
+                    test.checked = true;
                     $("id_ride"+index+"_newDist").value = dist;
                     $("id_ride"+index+"_newDur").value = dur;
                 }
